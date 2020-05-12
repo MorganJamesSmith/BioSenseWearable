@@ -1,0 +1,39 @@
+* University Project ideas
+
+Ideas for a university project to be done by Morgan Smith, Samuel
+Dewan, and Tadhg McDonald-Jensen.
+
+** Skills we want to build/exercise
+   - Embedded development
+   - PCB design
+
+** Ideas
+*** Medical Device
+**** Purpose
+     To produce information to a user that will increase their quality
+     of life or provide valuable information to their health care provider
+**** Possible Features
+     - Heart rate monitor
+     - Breath rate monitor
+     - Blood sugar monitor
+     - Blood pressure monitor
+     - Body temperature monitor
+
+*** Exam Calculator
+**** Purpose
+     A calculator that can be reprogrammed by an invigilator to provide
+     a student with only the features required for the exam they are
+     about to take.
+**** Possible Features
+     - General Calculations
+     - Formula Sheets
+     - Documentation
+*** Drone finding drone
+**** Purpose
+     A drone that can be deployed by authorities to detect and stop
+     unauthorized drones. Could be used to protect public events, or
+     no-fly zones.
+**** Possible Features
+     - Deploy a net to stop other drones
+     - Detect other drones
+     - Identify drones as authorized or not
