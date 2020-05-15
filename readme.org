@@ -18,6 +18,10 @@ Dewan, and Tadhg McDonald-Jensen.
      - Blood sugar monitor
      - Blood pressure monitor
      - Body temperature monitor
+     - Pulse oximeter/heart rate (MAX86141 + MAX32664)
+     - ECG (AD8232)
+     - Could also measure environment such as air quality (BME680) or noise
+       levels
 
 *** Exam Calculator
 **** Purpose
@@ -28,6 +32,17 @@ Dewan, and Tadhg McDonald-Jensen.
      - General Calculations
      - Formula Sheets
      - Documentation
+     - Fully featured scientific calculator with ability for university to
+       provide and enforce profiles that mask out features not allowable for a
+       specific exam
+     - Ability for profiles to provide formulas and macros for specific exams
+     - System for quick and easy provisioning of profiles at beginning of exam
+       (possibly wireless)
+     - Tamper resistance (ability to install keys for signing of profiles, some
+       way to guarantee or verify that unmodified profile is in use during exam)
+     - Ability to provide to exam markers a log of all calculations performed
+       during exam
+
 *** Drone finding drone
 **** Purpose
      A drone that can be deployed by authorities to detect and stop
@@ -37,3 +52,20 @@ Dewan, and Tadhg McDonald-Jensen.
      - Deploy a net to stop other drones
      - Detect other drones
      - Identify drones as authorized or not
+
+*** Optical Wireless Communication System
+**** Purpose
+     A communication system using visible (or near visible) spectrum. This could
+     be a "LiFi" type system that uses a smart light bulb to communicate with a
+     dedicated receiver. Another possible project would be an embedded device
+     which receives data from a smart phone through light from the phone's
+     screen. This would be a low cost alternative to using Bluetooth or NFC to
+     configure an embedded device.
+**** Possible Features
+     - Smart light and client each connected to a computer via USB that allow a
+       simple serial link (could demo with something like file transfer)
+     - Small embedded/IoT device of some kind provisioned with WiFi credentials
+       via light from smartphone screen
+     - Smart light communicating with phone using screen and camera or ambient
+       light sensor
+
