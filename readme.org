@@ -22,6 +22,19 @@ Dewan, and Tadhg McDonald-Jensen.
      - ECG (AD8232)
      - Could also measure environment such as air quality (BME680) or noise
        levels
+**** First Imagining
+***** Form factor
+Watch with large buttons (Final Fantasy Spirits Within Seiko Watch)
+LCD (Not touch)
+USB-C Port
+Looks cool
+***** Use cases in order of priority
+1 - Data logging health stuff to find trends to better your life
+2 - Telling you the time
+3 - Have a generic watch OS (stopwatch, alarms, etc)
+***** Features
+Data export via USB and Bluetooth
+All the sensors
 
 *** Exam Calculator
 **** Purpose
@@ -42,7 +55,13 @@ Dewan, and Tadhg McDonald-Jensen.
        way to guarantee or verify that unmodified profile is in use during exam)
      - Ability to provide to exam markers a log of all calculations performed
        during exam
-
+**** First imagining
+Regular Calculator Form Factor
+USB-C
+Can load programs over USB
+915MHz radio for provisioning
+Visual provisioning indicator
+Some form of firmware integrity check
 *** Drone finding drone
 **** Purpose
      A drone that can be deployed by authorities to detect and stop
@@ -68,4 +87,7 @@ Dewan, and Tadhg McDonald-Jensen.
        via light from smartphone screen
      - Smart light communicating with phone using screen and camera or ambient
        light sensor
-
+**** First Imagining
+Two devices receiver and a transmitter half duplex
+Transmitter will be in a light bulb form factor
+Receiver will be a speaker
