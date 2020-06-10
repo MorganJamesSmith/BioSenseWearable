@@ -1,93 +1,69 @@
-* University Project ideas
+* University Project
 
-Ideas for a university project to be done by Morgan Smith, Samuel
-Dewan, and Tadhg McDonald-Jensen.
+A university project to be done by Morgan Smith, Samuel
+Dewan, Tadhg McDonald-Jensen, and Jason Nyentap.
 
 ** Skills we want to build/exercise
-   - Embedded development
-   - PCB design
+- Embedded firmware development
+- PCB/Hardware design
+- RTOS
 
-** Ideas
-*** Medical Device
-**** Purpose
-     To produce information to a user that will increase their quality
-     of life or provide valuable information to their health care provider
-**** Possible Features
-     - Heart rate monitor
-     - Breath rate monitor
-     - Blood sugar monitor
-     - Blood pressure monitor
-     - Body temperature monitor
-     - Pulse oximeter/heart rate (MAX86141 + MAX32664)
-     - ECG (AD8232)
-     - Could also measure environment such as air quality (BME680) or noise
-       levels
-**** First Imagining
-***** Form factor
+
+** The project: Yet Another Smartwatch (YAS)  (Name subject to change)
+*** Description
+A smart watch type device that would contain a small suite of sensors
+intended to produce information for a user that could in theory help
+to increase their quality of life or provide valuable information to a
+health care provider. We have considered attempting to integrate a
+number of sensors that are commercially available as ICs such as a
+pulse oximeter/heart rate sensor, single lead ECG, air quality sensor
+and temperature sensor. We would aim to use an ARM microcontroller
+with integrated Bluetooth radio (such as the nRF52840) to communicate
+with a simple smartphone or desktop application.
+
+*** Possible Feature List (We can't do everything here, we'll have to prioritize)
+- Accelerometer
+- Heart rate monitor
+- Breath rate monitor
+- Blood sugar monitor
+- Blood pressure monitor
+- Body temperature monitor
+- Pulse oximeter/heart rate (MAX86141 + MAX32664)
+- ECG (AD8232)
+- air quality (BME680)
+- noise levels (maybe a normal microphone?)
+- UV exposure (I think the Microsoft band had this)
+- Use as a security key [[https://github.com/google/OpenSK][OpenSK]] (OpenSK is written for an nRF52 running
+  the RIOT RTOS)
+- Vibration Motor
+- Speaker
+
+*** Form factor
 Watch with large buttons (Final Fantasy Spirits Within Seiko Watch)
-LCD (Not touch)
+LCD (Not touch, or at least usable without touch)
 USB-C Port
 Looks cool
-***** Use cases in order of priority
-1 - Data logging health stuff to find trends to better your life
-2 - Telling you the time
-3 - Have a generic watch OS (stopwatch, alarms, etc)
-***** Features
-Data export via USB and Bluetooth
-All the sensors
 
-*** Exam Calculator
-**** Purpose
-     A calculator that can be reprogrammed by an invigilator to provide
-     a student with only the features required for the exam they are
-     about to take.
-**** Possible Features
-     - General Calculations
-     - Formula Sheets
-     - Documentation
-     - Fully featured scientific calculator with ability for university to
-       provide and enforce profiles that mask out features not allowable for a
-       specific exam
-     - Ability for profiles to provide formulas and macros for specific exams
-     - System for quick and easy provisioning of profiles at beginning of exam
-       (possibly wireless)
-     - Tamper resistance (ability to install keys for signing of profiles, some
-       way to guarantee or verify that unmodified profile is in use during exam)
-     - Ability to provide to exam markers a log of all calculations performed
-       during exam
-**** First imagining
-Regular Calculator Form Factor
-USB-C
-Can load programs over USB
-915MHz radio for provisioning
-Visual provisioning indicator
-Some form of firmware integrity check
-*** Drone finding drone
-**** Purpose
-     A drone that can be deployed by authorities to detect and stop
-     unauthorized drones. Could be used to protect public events, or
-     no-fly zones.
-**** Possible Features
-     - Deploy a net to stop other drones
-     - Detect other drones
-     - Identify drones as authorized or not
+** Similar Projects
+*** [[https://www.pine64.org/pinetime/][PineTime]]
+- Morgan has already ordered a dev kit for one because it's cool and
+  cheap
 
-*** Optical Wireless Communication System
-**** Purpose
-     A communication system using visible (or near visible) spectrum. This could
-     be a "LiFi" type system that uses a smart light bulb to communicate with a
-     dedicated receiver. Another possible project would be an embedded device
-     which receives data from a smart phone through light from the phone's
-     screen. This would be a low cost alternative to using Bluetooth or NFC to
-     configure an embedded device.
-**** Possible Features
-     - Smart light and client each connected to a computer via USB that allow a
-       simple serial link (could demo with something like file transfer)
-     - Small embedded/IoT device of some kind provisioned with WiFi credentials
-       via light from smartphone screen
-     - Smart light communicating with phone using screen and camera or ambient
-       light sensor
-**** First Imagining
-Two devices receiver and a transmitter half duplex
-Transmitter will be in a light bulb form factor
-Receiver will be a speaker
+| Soc      | Dodads        | Battery |
+|----------+---------------+---------|
+| nRF52832 | Heart Rate    | 180 mAh |
+|          | Accelerometer |         |
+
+*** [[https://www.kickstarter.com/projects/gfw/banglejs-the-hackable-smart-watch/description][Bangle.js]]
+- This watch is specifically designed to run javascript, gross.
+
+| Soc      | Dodads     | Battery |
+|----------+------------+---------|
+| nRF52832 | Heart Rate | 350 mAh |
+
+*** [[https://github.com/S-March/smarchWatch_PUBLIC][This random dude who made his own smartwatch]]
+- imgur link with lots of pretty pictures: [[https://imgur.com/a/FSBwD3g][link]]
+
+| Soc     | Dodads        | Battery |
+|---------+---------------+---------|
+| DA14683 | Accelerometer |         |
