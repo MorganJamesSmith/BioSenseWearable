@@ -39,10 +39,10 @@ with a simple smartphone or desktop application.
 - Speaker
 
 *** Form factor
-Watch with large buttons (Final Fantasy Spirits Within Seiko Watch)
-LCD (Not touch, or at least usable without touch)
-USB-C Port
-Looks cool
+- Watch with large buttons (Final Fantasy Spirits Within Seiko Watch)
+- LCD (Not touch, or at least usable without touch)
+- USB-C Port
+- Looks cool
 
 ** Similar Projects
 *** [[https://www.pine64.org/pinetime/][PineTime]]
