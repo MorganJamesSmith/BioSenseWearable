@@ -45,10 +45,10 @@ with a simple smartphone or desktop application.
 - Looks cool
 
 ** Similar Projects
+*** [[https://github.com/estherbm/Open-BioBand][Open-BioBand]]
+The code is in Spanish (I think)
+License: GPL-3
 *** [[https://www.pine64.org/pinetime/][PineTime]]
-- Morgan has already ordered a dev kit for one because it's cool and
-  cheap
-
 | Soc      | Dodads        | Battery |
 |----------+---------------+---------|
 | nRF52832 | Heart Rate    | 180 mAh |
@@ -67,3 +67,26 @@ with a simple smartphone or desktop application.
 | Soc     | Dodads        | Battery |
 |---------+---------------+---------|
 | DA14683 | Accelerometer |         |
+** Available drivers and algorithms
+https://www.owear.org/open-algorithms
+** Studies on early sickness detection
+*** Currently happening
+**** [[https://osher.ucsf.edu/research/current-research-studies/tempredict][TemPredict]]
+Using the Oura Ring which is a wearable device that measures heart
+rate, inter-beat interval and changes in dermal temperature and is
+associated with a smartphone app.
+**** [[https://innovations.stanford.edu/wearables][Stanford]]
+For iOS users, we support: Fitbit devices, Garmin devices, Samsung Galaxy Watch, Apple Watch, Oura Ring.
+
+For Android users, we support Fitbit devices.
+**** [[https://detectstudy.org/][Detect Health Study]]
+*** Completed
+**** [[https://doi.org/10.1016/S2589-7500(19)30222-5][Harnessing wearable device data to improve state-level real-time surveillance of influenza-like illness in the USA: a population-based study]]
+**** [[https://doi.org/10.1371/journal.pbio.2001402][Digital Health: Tracking Physiomes and Activity Using Wearable Biosensors Reveals Useful Health-Related Information]]
+Published in: PLoS Biology
+Wearing a commercially available smartwatch over many months, more
+than 40 adults produced a continuous daily stream of accurate personal
+health data that researchers could access and monitor. When combined
+with standard laboratory blood tests, these data—totaling more than
+250,000 bodily measurements a day per person—can detect early
+infections through changes in heart rate.
