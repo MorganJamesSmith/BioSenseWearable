@@ -1,92 +1,88 @@
-* University Project
+#+title: BioSense21
 
-A university project to be done by Morgan Smith, Samuel
-Dewan, Tadhg McDonald-Jensen, and Jason Nyentap.
-
-** Skills we want to build/exercise
-- Embedded firmware development
-- PCB/Hardware design
-- RTOS
-
-
-** The project: Yet Another Smartwatch (YAS)  (Name subject to change)
-*** Description
-A smart watch type device that would contain a small suite of sensors
-intended to produce information for a user that could in theory help
-to increase their quality of life or provide valuable information to a
-health care provider. We have considered attempting to integrate a
-number of sensors that are commercially available as ICs such as a
-pulse oximeter/heart rate sensor, single lead ECG, air quality sensor
-and temperature sensor. We would aim to use an ARM microcontroller
-with integrated Bluetooth radio (such as the nRF52840) to communicate
-with a simple smartphone or desktop application.
-
-*** Possible Feature List (We can't do everything here, we'll have to prioritize)
+A university project by Morgan Smith, Samuel Dewan, Tadhg
+McDonald-Jensen, and Jason Nyentap.
+* Description
+A wearable device that would contain a suite of sensors intended to
+produce enough information to detect illness before symptoms occur.
+* Feature List
+** User Interface (do we need one?)
+- Vibration Motor (for what?)
+- A button (for what?)
+- Speaker (for what?)
+** Necessary Sensors
 - Accelerometer
-- Heart rate monitor
-- Breath rate monitor
+- Heart rate sensor
+- Body temperature sensor
+- Ambient temperature sensor
+- air quality (BME680)
+- noise levels (cuz it's cheap)
+** Possible Sensors
+- Breath rate sensor (how?)
 - Blood sugar monitor
 - Blood pressure monitor
-- Body temperature monitor
 - Pulse oximeter/heart rate (MAX86141 + MAX32664)
 - ECG (AD8232)
-- air quality (BME680)
-- noise levels (maybe a normal microphone?)
-- UV exposure (I think the Microsoft band had this)
-- Use as a security key [[https://github.com/google/OpenSK][OpenSK]] (OpenSK is written for an nRF52 running
-  the RIOT RTOS)
-- Vibration Motor
-- Speaker
-
-*** Form factor
-- Watch with large buttons (Final Fantasy Spirits Within Seiko Watch)
-- LCD (Not touch, or at least usable without touch)
-- USB-C Port
-- Looks cool
-
-** Similar Projects
-*** [[https://github.com/estherbm/Open-BioBand][Open-BioBand]]
+- UV exposure
+* Similar Projects
+** [[https://github.com/estherbm/Open-BioBand][Open-BioBand]]
 The code is in Spanish (I think)
 License: GPL-3
-*** [[https://www.pine64.org/pinetime/][PineTime]]
-| Soc      | Dodads        | Battery |
+** [[https://www.pine64.org/pinetime/][PineTime]]
+| Soc      | Sensors       | Battery |
 |----------+---------------+---------|
 | nRF52832 | Heart Rate    | 180 mAh |
 |          | Accelerometer |         |
 
-*** [[https://www.kickstarter.com/projects/gfw/banglejs-the-hackable-smart-watch/description][Bangle.js]]
+** [[https://www.kickstarter.com/projects/gfw/banglejs-the-hackable-smart-watch/description][Bangle.js]]
 - This watch is specifically designed to run javascript, gross.
 
-| Soc      | Dodads     | Battery |
+| Soc      | Sensors    | Battery |
 |----------+------------+---------|
 | nRF52832 | Heart Rate | 350 mAh |
 
-*** [[https://github.com/S-March/smarchWatch_PUBLIC][This random dude who made his own smartwatch]]
-- imgur link with lots of pretty pictures: [[https://imgur.com/a/FSBwD3g][link]]
+** [[https://github.com/S-March/smarchWatch_PUBLIC][This random dude who made his own smartwatch]]
+- More images here: [[https://imgur.com/a/FSBwD3g][link]]
 
-| Soc     | Dodads        | Battery |
+| Soc     | Sensors       | Battery |
 |---------+---------------+---------|
 | DA14683 | Accelerometer |         |
-** Available drivers and algorithms
+* Available drivers and algorithms
 https://www.owear.org/open-algorithms
-** Studies on early sickness detection
-*** Currently happening
-**** [[https://osher.ucsf.edu/research/current-research-studies/tempredict][TemPredict]]
+* Studies on early sickness detection
+** Currently happening
+*** [[https://osher.ucsf.edu/research/current-research-studies/tempredict][TemPredict]]
 Using the Oura Ring which is a wearable device that measures heart
 rate, inter-beat interval and changes in dermal temperature and is
 associated with a smartphone app.
-**** [[https://innovations.stanford.edu/wearables][Stanford]]
+*** [[https://innovations.stanford.edu/wearables][Stanford]]
 For iOS users, we support: Fitbit devices, Garmin devices, Samsung Galaxy Watch, Apple Watch, Oura Ring.
 
 For Android users, we support Fitbit devices.
-**** [[https://detectstudy.org/][Detect Health Study]]
-*** Completed
-**** [[https://doi.org/10.1016/S2589-7500(19)30222-5][Harnessing wearable device data to improve state-level real-time surveillance of influenza-like illness in the USA: a population-based study]]
-**** [[https://doi.org/10.1371/journal.pbio.2001402][Digital Health: Tracking Physiomes and Activity Using Wearable Biosensors Reveals Useful Health-Related Information]]
-Published in: PLoS Biology
-Wearing a commercially available smartwatch over many months, more
-than 40 adults produced a continuous daily stream of accurate personal
-health data that researchers could access and monitor. When combined
-with standard laboratory blood tests, these data—totaling more than
-250,000 bodily measurements a day per person—can detect early
-infections through changes in heart rate.
+*** [[https://detectstudy.org/][Detect Health Study]]
+** Completed
+*** [[https://doi.org/10.1016/S2589-7500(19)30222-5][Harnessing wearable device data to improve state-level real-time surveillance of influenza-like illness in the USA: a population-based study]]
+References other studies that indicate that increased temperature due
+to infection can cause a higher heart rate
+
+Lack of sleep is correlated with an elevated heart rate.
+
+Mentions they would have like to use detection of voice changes or
+galvanic skin response to detect stress level to identify
+non-infectious causes of elected heart rate.
+
+Heart rate is higher when it's cold and lower when it's warm
+
+Heart rate is higher when you're dehydrated
+*** [[https://doi.org/10.1371/journal.pbio.2001402][Digital Health: Tracking Physiomes and Activity Using Wearable Biosensors Reveals Useful Health-Related Information]]
+Core temperature decreases during sleep but skin temperature increases
+
+Measurements taken during airline flights differ significantly from
+normal measurements
+
+Skin temperature increases from inflammation, and viral disease
+
+Skin temperature increases a lot from Lyme disease
+
+Heart rate increases noticeably when suffering
+from Lyme disease or rhinovirus
