@@ -10,20 +10,25 @@ produce enough information to detect illness before symptoms occur.
 - Vibration Motor (for what?)
 - A button (for what?)
 - Speaker (for what?)
-** Necessary Sensors
-- Accelerometer
-- Heart rate sensor
-- Body temperature sensor
-- Ambient temperature sensor
-- air quality (BME680)
-- noise levels (cuz it's cheap)
+** Necessary Hardware
+- Battery (Lithium Ion)
+- Charging circuit
+- Accelerometer IMU ($11.07) [[https://www.digikey.ca/en/products/detail/tdk-invensense/ICM-20948/6623535][ICM-20948]]
+- Heart rate+oximeter
+  ($11.77 [[https://www.digikey.ca/en/products/detail/maxim-integrated/MAX86150EFF/7392247][MAX86150EFF]])
+  or
+  ($3.64 [[https://www.digikey.ca/en/products/detail/osram-opto-semiconductors-inc/SFH-7050/6137020?s=N4IgTCBcDaIMoDEASACA7ABgKwZAXQF8g][SFH 7050]]) ($7.66 [[https://www.mouser.ca/ProductDetail/Maxim-Integrated/MAX32664GWEC%2bT?qs=%252B6g0mu59x7KPYz%252BeYnJYdg%3D%3D][MAX32664GWEC+T]]) ($10.13 [[https://www.mouser.ca/ProductDetail/Maxim-Integrated/MAX32664GTGC%2b?qs=vmHwEFxEFR%252B4L9bBONurNg%3D%3D][MAX86140ENP+T]])
+- Body + Ambient temperature ($1.06 [[https://www.digikey.ca/en/products/detail/microchip-technology/TCN75AVUA713/739451][TCN75AVUA713]])
 ** Possible Sensors
-- Breath rate sensor (how?)
+- air quality ($18.39 [[https://www.digikey.ca/en/products/detail/bosch-sensortec/BME680/7401317][BME680]] includes temperature)
+- noise levels (microphone)
+- Breath rate sensor (how?) (Pulse oximetry?)
+- Pulse oximeter/heart rate
+- ECG (AD8232)
+- UV exposure ($2.48 [[https://www.digikey.ca/en/products/detail/silicon-labs/SI1133-AA00-GMR/5725927][SI1133-AA00-GMR]])
+** Need more research Sensors
 - Blood sugar monitor
 - Blood pressure monitor
-- Pulse oximeter/heart rate (MAX86141 + MAX32664)
-- ECG (AD8232)
-- UV exposure
 * Similar Projects
 ** [[https://github.com/estherbm/Open-BioBand][Open-BioBand]]
 The code is in Spanish (I think)
