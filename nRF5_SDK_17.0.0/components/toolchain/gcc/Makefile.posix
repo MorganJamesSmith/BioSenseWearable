@@ -1,0 +1,5 @@
+#GNU_INSTALL_ROOT ?= /usr/local/gcc-arm-none-eabi-7-2018-q2-update/bin/
+#GNU_VERSION ?= 7.3.1
+GNU_INSTALL_ROOT ?= /opt/gcc-arm-embedded-2019-q4/bin/
+GNU_VERSION ?= 9.2.1
+GNU_PREFIX ?= arm-none-eabi
