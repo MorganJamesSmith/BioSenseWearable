@@ -67,6 +67,11 @@
       <file file_name="../nRF5_SDK_17.0.0/components/libraries/experimental_section_vars/nrf_section_iter.c" />
       <file file_name="../nRF5_SDK_17.0.0/components/libraries/sortlist/nrf_sortlist.c" />
       <file file_name="../nRF5_SDK_17.0.0/components/libraries/strerror/nrf_strerror.c" />
+      <file file_name="../nRF5_SDK_17.0.0/components/libraries/usbd/app_usbd.c" />
+      <file file_name="../nRF5_SDK_17.0.0/components/libraries/usbd/class/cdc/acm/app_usbd_cdc_acm.c" />
+      <file file_name="../nRF5_SDK_17.0.0/components/libraries/usbd/app_usbd_core.c" />
+      <file file_name="../nRF5_SDK_17.0.0/components/libraries/usbd/app_usbd_serial_num.c" />
+      <file file_name="../nRF5_SDK_17.0.0/components/libraries/usbd/app_usbd_string_desc.c" />
     </folder>
     <folder Name="None">
       <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/mdk/ses_startup_nrf52840.s" />
@@ -79,15 +84,25 @@
     <folder Name="nRF_Drivers">
       <file file_name="../nRF5_SDK_17.0.0/integration/nrfx/legacy/nrf_drv_clock.c" />
       <file file_name="../nRF5_SDK_17.0.0/integration/nrfx/legacy/nrf_drv_uart.c" />
+      <file file_name="../nRF5_SDK_17.0.0/integration/nrfx/legacy/nrf_drv_power.c" />
       <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/soc/nrfx_atomic.c" />
       <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_clock.c" />
       <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_gpiote.c" />
       <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/prs/nrfx_prs.c" />
       <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_uart.c" />
       <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_uarte.c" />
+      <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_usbd.c" />
+      <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_power.c" />
     </folder>
     <folder Name="Application">
       <file file_name="../src/main.c" />
+      <file file_name="../src/usb_serial.h" />
+      <file file_name="../src/usb_serial.c" />
+      <file file_name="../src/circular_buffer.h" />
+      <file file_name="../src/cli.h" />
+      <file file_name="../src/cli.c" />
+      <file file_name="../src/cli_commands.h" />
+      <file file_name="../src/cli_commands.c" />
       <file file_name="../config/sdk_config.h" />
     </folder>
     <folder Name="nRF_Segger_RTT">
