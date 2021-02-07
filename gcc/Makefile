@@ -61,6 +61,9 @@ SRC_FILES += \
   $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c \
   $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_printf.c \
   $(SDK_ROOT)/components/ble/common/ble_advdata.c \
+  $(SDK_ROOT)/components/ble/ble_advertising/ble_advertising.c \
+  $(SDK_ROOT)/components/ble/ble_link_ctx_manager/ble_link_ctx_manager.c \
+  $(SDK_ROOT)/components/ble/ble_services/ble_nus/ble_nus.c \
   $(SDK_ROOT)/components/ble/common/ble_conn_params.c \
   $(SDK_ROOT)/components/ble/common/ble_conn_state.c \
   $(SDK_ROOT)/components/ble/common/ble_srv_common.c \
@@ -77,6 +80,7 @@ SRC_FILES += \
   $(PROJ_DIR)/usb_serial.c \
   $(PROJ_DIR)/cli.c \
   $(PROJ_DIR)/cli_commands.c \
+  $(PROJ_DIR)/bluetooth.c \
 
 # Include folders common to all targets
 INC_FOLDERS += \
@@ -114,6 +118,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/queue \
   $(SDK_ROOT)/components/libraries/pwr_mgmt \
   $(SDK_ROOT)/components/ble/ble_dtm \
+  $(SDK_ROOT)/components/ble/ble_link_ctx_manager \
   $(SDK_ROOT)/components/toolchain/cmsis/include \
   $(SDK_ROOT)/components/ble/ble_services/ble_rscs_c \
   $(SDK_ROOT)/components/ble/common \

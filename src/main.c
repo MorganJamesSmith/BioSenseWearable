@@ -4,6 +4,7 @@
 #include "app_timer.h"
 
 #include "usb_serial.h"
+#include "bluetooth.h"
 #include "cli.h"
 #include "cli_commands.h"
 
@@ -26,7 +27,22 @@ const struct cli_io_funcs_t usb_io_funcs = {
     .read_line = usb_cdc_get_line
 };
 
-struct cli_desc_t cli;
+struct cli_desc_t usb_cli;
+
+const struct cli_io_funcs_t bluetooth_io_funcs = {
+    .set_ready_callback = bluetooth_set_ready_callback,
+    .write_string = bluetooth_put_string,
+    .write_string_blocking = bluetooth_put_string_blocking,
+    .write_bytes = bluetooth_put_bytes,
+    .write_bytes_blocking = bluetooth_put_bytes_blocking,
+    .read_string = bluetooth_get_string,
+    .has_delim = bluetooth_has_delim,
+    .read_line_delim = bluetooth_get_line_delim,
+    .has_line = bluetooth_has_line,
+    .read_line = bluetooth_get_line
+};
+
+struct cli_desc_t ble_cli;
 
 int main(void)
 {
@@ -45,8 +61,12 @@ int main(void)
     uint32_t last_blink = 0;
 
     init_usb_cdc();
-    init_cli(&cli, &usb_io_funcs, "> ", debug_commands_funcs, '\r');
+    init_cli(&usb_cli, &usb_io_funcs, "> ", debug_commands_funcs, '\r');
 
+    //A call to "nrf_sdh_enable_request()" in bluetooth_init() kills USB
+    //Use comments to turn bluetooth on and off for now until this is fixed
+    //bluetooth_init();
+    init_cli(&ble_cli, &bluetooth_io_funcs, "> ", debug_commands_funcs, '\n');
 
     /* Main Loop */
     for (;;) {
@@ -56,7 +76,10 @@ int main(void)
         }
 
         usb_cdc_service();
-        cli_service(&cli);
+        cli_service(&usb_cli);
+
+        bluetooth_service();
+        cli_service(&ble_cli);
 
         __WFI();
     }
