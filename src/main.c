@@ -3,10 +3,12 @@
 #include "boards.h"
 #include "app_timer.h"
 
+#include "global.h"
 #include "usb_serial.h"
 #include "bluetooth.h"
 #include "cli.h"
 #include "cli_commands.h"
+#include "adc.h"
 
 // MARK: Variable Definitions
 volatile uint32_t millis;
@@ -56,9 +58,18 @@ int main(void)
     APP_ERROR_CHECK(ret);
 
     /* Configue IO */
-    BSP_LED_0_PORT->DIRSET = BSP_LED_0_MASK;
+    // RGB LED
+//    NRF_P0->DIRSET = (1 << 22);
+//    NRF_P0->DIRSET = (1 << 23);
+//    NRF_P0->DIRSET = (1 << 24);
+//
+//    NRF_P0->OUTSET = (1 << 22);
+//    NRF_P0->OUTSET = (1 << 23);
+//    NRF_P0->OUTSET = (1 << 24);
 
-    uint32_t last_blink = 0;
+    // Turn on power
+    NRF_P1->DIRSET = (1 << 12);
+    NRF_P1->OUT = (1 << 12);
 
     init_usb_cdc();
     init_cli(&usb_cli, &usb_io_funcs, "> ", debug_commands_funcs, '\r');
@@ -68,12 +79,19 @@ int main(void)
     //bluetooth_init();
     init_cli(&ble_cli, &bluetooth_io_funcs, "> ", debug_commands_funcs, '\n');
 
+    init_adc();
+
     /* Main Loop */
     for (;;) {
         if ((millis - last_blink) > 1000) {
             last_blink = millis;
-            BSP_LED_0_PORT->OUT ^= BSP_LED_0_MASK;
+
+//            NRF_P0->OUT ^= (1 << 22);
+//            NRF_P0->OUT ^= (1 << 23);
+//            NRF_P0->OUT ^= (1 << 24);
         }
+
+        adc_service();
 
         usb_cdc_service();
         cli_service(&usb_cli);

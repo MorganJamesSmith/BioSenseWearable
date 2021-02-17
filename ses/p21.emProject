@@ -93,9 +93,11 @@
       <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_uarte.c" />
       <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_usbd.c" />
       <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_power.c" />
+      <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_saadc.c" />
     </folder>
     <folder Name="Application">
       <file file_name="../src/main.c" />
+      <file file_name="../src/global.h" />
       <file file_name="../src/usb_serial.h" />
       <file file_name="../src/usb_serial.c" />
       <file file_name="../src/circular_buffer.h" />
@@ -106,6 +108,8 @@
       <file file_name="../config/sdk_config.h" />
       <file file_name="../src/bluetooth.c" />
       <file file_name="../src/bluetooth.h" />
+      <file file_name="../src/adc.c" />
+      <file file_name="../src/adc.h" />
     </folder>
     <folder Name="nRF_Segger_RTT">
       <file file_name="../nRF5_SDK_17.0.0/external/segger_rtt/SEGGER_RTT.c" />
