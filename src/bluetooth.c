@@ -118,7 +118,6 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
 {
     if (p_evt->type == BLE_NUS_EVT_RX_DATA)
     {
-        uint32_t err_code;
         for (uint32_t i = 0; i < p_evt->params.rx_data.length; i++)
         {
             uint8_t data = p_evt->params.rx_data.p_data[i];
