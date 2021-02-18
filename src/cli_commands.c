@@ -19,19 +19,19 @@ void debug_print_fixed_point (const struct cli_io_funcs_t *console,
     int32_t whole = value / scale;
 
     if ((whole == 0) && (value < 0)) {
-        console->write_string("-0.");
+        console->write_string_blocking("-0.");
     } else {
         itoa(whole, str, 10);
-        console->write_string(str);
-        console->write_string(".");
+        console->write_string_blocking(str);
+        console->write_string_blocking(".");
     }
 
     int32_t frac = abs(value - (whole * scale));
     itoa(frac, str, 10);
     for (int i = strlen(str); i < decimal_places; i++) {
-        console->write_string("0");
+        console->write_string_blocking("0");
     }
-    console->write_string(str);
+    console->write_string_blocking(str);
 }
 
 void debug_print_byte_with_pad (const struct cli_io_funcs_t *console,
@@ -40,15 +40,15 @@ void debug_print_byte_with_pad (const struct cli_io_funcs_t *console,
 {
     char str[9];
 
-    console->write_string(line_start);
+    console->write_string_blocking(line_start);
 
     utoa(byte, str, 2);
     for (uint8_t i = strlen(str); i < 8; i++) {
-        console->write_string("0");
+        console->write_string_blocking("0");
     }
-    console->write_string(str);
+    console->write_string_blocking(str);
 
-    console->write_string(line_end);
+    console->write_string_blocking(line_end);
 }
 
 // MARK: Test commands
@@ -60,10 +60,10 @@ static void debug_echo(uint8_t argc, char **argv,
                        const struct cli_io_funcs_t *console)
 {
     for (uint8_t i = 1; i < argc; i++) {
-        console->write_string(argv[i]);
-        console->write_string(" ");
+        console->write_string_blocking(argv[i]);
+        console->write_string_blocking(" ");
     }
-    console->write_string("\n");
+    console->write_string_blocking("\n");
 }
 
 #define DEBUG_ANALOG_NAME   "analog"
@@ -79,30 +79,30 @@ static void debug_analog_print_channel (const struct cli_io_funcs_t *console,
     if (*name == '\0') {
         itoa(channel, str, 10);
         for (uint8_t i = strlen(str); i < 16; i++) {
-            console->write_string(" ");
+            console->write_string_blocking(" ");
         }
-        console->write_string(str);
+        console->write_string_blocking(str);
     } else {
         for (uint8_t i = strlen(name); i < 16; i++) {
-            console->write_string(" ");
+            console->write_string_blocking(" ");
         }
-        console->write_string(name);
+        console->write_string_blocking(name);
     }
-    console->write_string(": ");
+    console->write_string_blocking(": ");
 
     debug_print_fixed_point(console, voltage, 3);
-    console->write_string(" V");
+    console->write_string_blocking(" V");
 
     if (*unit != '\0') {
-        console->write_string(" (");
+        console->write_string_blocking(" (");
 
         debug_print_fixed_point(console, parsed_value, decimals);
 
-        console->write_string(" ");
-        console->write_string(unit);
-        console->write_string(")\n");
+        console->write_string_blocking(" ");
+        console->write_string_blocking(unit);
+        console->write_string_blocking(")\n");
     } else {
-        console->write_string("\n");
+        console->write_string_blocking("\n");
     }
 }
 
@@ -111,13 +111,13 @@ static void debug_analog (uint8_t argc, char **argv,
 {
     char str[16];
 
-    console->write_string("Last sweep was at ");
+    console->write_string_blocking("Last sweep was at ");
     utoa(adc_get_last_measurment_time(), str, 10);
-    console->write_string(str);
-    console->write_string(" (");
+    console->write_string_blocking(str);
+    console->write_string_blocking(" (");
     utoa(millis - adc_get_last_measurment_time(), str, 10);
-    console->write_string(str);
-    console->write_string(" milliseconds ago)\n");
+    console->write_string_blocking(str);
+    console->write_string_blocking(" milliseconds ago)\n");
 
     // Channel 0: AIN 0 - IR Temp
     debug_analog_print_channel(console, 0, adc_get_channel_0_volts(),
@@ -148,42 +148,42 @@ static void debug_imu (uint8_t argc, char **argv,
     char str[16];
 
     // Print Who Am I value
-    console->write_string("WAI: 0x");
+    console->write_string_blocking("WAI: 0x");
     utoa(imu.wai, str, 16);
     if (imu.wai < 0x1) {
-        console->write_string("0");
+        console->write_string_blocking("0");
     }
-    console->write_string(str);
+    console->write_string_blocking(str);
 
     // Print when we last got data from the sensor
-    console->write_string("\nLast sweep was at ");
+    console->write_string_blocking("\nLast sweep was at ");
     utoa(icm_20948_get_last_measurment_time(&imu), str, 10);
-    console->write_string(str);
-    console->write_string(" (");
+    console->write_string_blocking(str);
+    console->write_string_blocking(" (");
     utoa(millis - icm_20948_get_last_measurment_time(&imu), str, 10);
-    console->write_string(str);
-    console->write_string(" milliseconds ago)\n");
+    console->write_string_blocking(str);
+    console->write_string_blocking(" milliseconds ago)\n");
 
     // Print accelerometer data
-    console->write_string("Accerometer:\n\tX: ");
+    console->write_string_blocking("Accerometer:\n\tX: ");
     debug_print_fixed_point(console, icm_20948_get_last_accel_x(&imu), 4);
-    console->write_string(" g\n\tY: ");
+    console->write_string_blocking(" g\n\tY: ");
     debug_print_fixed_point(console, icm_20948_get_last_accel_y(&imu), 4);
-    console->write_string(" g\n\tZ: ");
+    console->write_string_blocking(" g\n\tZ: ");
     debug_print_fixed_point(console, icm_20948_get_last_accel_z(&imu), 4);
 
     // Print gyroscope data
-    console->write_string(" g\nGyroscope:\n\tX: ");
+    console->write_string_blocking(" g\nGyroscope:\n\tX: ");
     debug_print_fixed_point(console, icm_20948_get_last_gyro_x(&imu), 3);
-    console->write_string(" °/s\n\tY: ");
+    console->write_string_blocking(" °/s\n\tY: ");
     debug_print_fixed_point(console, icm_20948_get_last_gyro_y(&imu), 3);
-    console->write_string(" °/s\n\tZ: ");
+    console->write_string_blocking(" °/s\n\tZ: ");
     debug_print_fixed_point(console, icm_20948_get_last_gyro_z(&imu), 3);
 
     // Print temperature
-    console->write_string(" °/s\nTemperature: ");
+    console->write_string_blocking(" °/s\nTemperature: ");
     debug_print_fixed_point(console, icm_20948_get_last_temp(&imu), 3);
-    console->write_string(" °C\n");
+    console->write_string_blocking(" °C\n");
 }
 
 // MARK: Commands table

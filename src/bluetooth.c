@@ -148,18 +148,6 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
                     bluetooth_put_string("\x1B[1D\x1B[K");
                 }
             }
-
-            //Echo everything back, bypass CLI
-            /*do
-            {
-                err_code = ble_nus_data_send(&m_nus, p_evt->params.rx_data.p_data, &p_evt->params.rx_data.length, m_conn_handle);
-                if ((err_code != NRF_ERROR_INVALID_STATE) &&
-                    (err_code != NRF_ERROR_RESOURCES) &&
-                    (err_code != NRF_ERROR_NOT_FOUND))
-                {
-                    APP_ERROR_CHECK(err_code);
-                }
-            } while (err_code == NRF_ERROR_RESOURCES);*/
         }
     }
     else if (p_evt->type == BLE_NUS_EVT_TX_RDY)
