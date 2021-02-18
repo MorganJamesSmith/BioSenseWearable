@@ -24,6 +24,7 @@
   <ProjectSessionItem path="p21"/>
   <ProjectSessionItem path="p21;p21"/>
   <ProjectSessionItem path="p21;p21;Application"/>
+  <ProjectSessionItem path="p21;p21;nRF_Drivers"/>
  </Project>
  <Register1>
   <RegisterWindow visibleNodes="CPU - Current Context/r0;CPU - Current Context/r1;CPU - Current Context/r2;CPU - Current Context/r3;CPU - Current Context/r4;CPU - Current Context/r5;CPU - Current Context/r6;CPU - Current Context/r7;CPU - Current Context/r8;CPU - Current Context/r9;CPU - Current Context/r10;CPU - Current Context/r11;CPU - Current Context/r12;CPU - Current Context/sp(r13);CPU - Current Context/lr(r14);CPU - Current Context/pc(r15);CPU - Current Context/apsr;CPU/r0;CPU/r1;CPU/r2;CPU/r3;CPU/r4;CPU/r5;CPU/r6;CPU/r7;CPU/r8;CPU/r9;CPU/r10;CPU/r11;CPU/r12;CPU/sp(r13);CPU/lr(r14);CPU/pc(r15);CPU/xpsr;CPU/msp;CPU/psp;CPU/cfbp;CPU/internal" binaryNodes="" asciiNodes="" openNodes="CPU - Current Context" name="p21" decimalNodes="" octalNodes="" unsignedNodes=""/>
@@ -56,7 +57,10 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="21" y="59" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../src/main.c" selected="1" top="49" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="59" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../src/main.c" selected="0" top="49" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="3681" useTextEdit="1" openedFrom="/Users/samueldewan/Library/Mobile Documents/com~apple~CloudDocs/School/Project/uni-project/nRF5_SDK_17.0.0/integration/nrfx/nrfx_config.h" useBinaryEdit="0" left="0" path="../config/sdk_config.h" selected="0" top="3669" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="37" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_spi.c" selected="1" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="819" useTextEdit="1" openedFrom="/Users/samueldewan/Library/Mobile Documents/com~apple~CloudDocs/School/Project/uni-project/nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_spi.c" useBinaryEdit="0" left="0" path="../nRF5_SDK_17.0.0/integration/nrfx/legacy/apply_old_config.h" selected="0" top="807" codecName="Default"/>
  </Files>
- <ARMCrossStudioWindow activeProject="p21" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="J-Link" buildConfiguration="Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3711"/>
+ <ARMCrossStudioWindow activeProject="p21" fileDialogDefaultFilter="*.c;*.cpp;*.cxx;*.cc;*.h;*.hpp;*.hxx" autoConnectTarget="J-Link" buildConfiguration="Release" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3199"/>
 </session>

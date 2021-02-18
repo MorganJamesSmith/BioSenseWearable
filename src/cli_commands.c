@@ -5,7 +5,9 @@
 #include <math.h>
 
 #include "global.h"
+#include "sensors.h"
 #include "adc.h"
+#include "icm_20948.h"
 
 // MARK: Helpers
 void debug_print_fixed_point (const struct cli_io_funcs_t *console,
@@ -137,6 +139,53 @@ static void debug_analog (uint8_t argc, char **argv,
                                "Supply Voltage", "V");
 }
 
+#define DEBUG_IMU_NAME   "imu"
+#define DEBUG_IMU_HELP   "Print most recent measurments from IMU."
+
+static void debug_imu (uint8_t argc, char **argv,
+                       const struct cli_io_funcs_t *console)
+{
+    char str[16];
+
+    // Print Who Am I value
+    console->write_string("WAI: 0x");
+    utoa(imu.wai, str, 16);
+    if (imu.wai < 0x1) {
+        console->write_string("0");
+    }
+    console->write_string(str);
+
+    // Print when we last got data from the sensor
+    console->write_string("\nLast sweep was at ");
+    utoa(icm_20948_get_last_measurment_time(&imu), str, 10);
+    console->write_string(str);
+    console->write_string(" (");
+    utoa(millis - icm_20948_get_last_measurment_time(&imu), str, 10);
+    console->write_string(str);
+    console->write_string(" milliseconds ago)\n");
+
+    // Print accelerometer data
+    console->write_string("Accerometer:\n\tX: ");
+    debug_print_fixed_point(console, icm_20948_get_last_accel_x(&imu), 4);
+    console->write_string(" g\n\tY: ");
+    debug_print_fixed_point(console, icm_20948_get_last_accel_y(&imu), 4);
+    console->write_string(" g\n\tZ: ");
+    debug_print_fixed_point(console, icm_20948_get_last_accel_z(&imu), 4);
+
+    // Print gyroscope data
+    console->write_string(" g\nGyroscope:\n\tX: ");
+    debug_print_fixed_point(console, icm_20948_get_last_gyro_x(&imu), 3);
+    console->write_string(" °/s\n\tY: ");
+    debug_print_fixed_point(console, icm_20948_get_last_gyro_y(&imu), 3);
+    console->write_string(" °/s\n\tZ: ");
+    debug_print_fixed_point(console, icm_20948_get_last_gyro_z(&imu), 3);
+
+    // Print temperature
+    console->write_string(" °/s\nTemperature: ");
+    debug_print_fixed_point(console, icm_20948_get_last_temp(&imu), 3);
+    console->write_string(" °C\n");
+}
+
 // MARK: Commands table
 
 const struct cli_func_desc_t debug_commands_funcs[] = {
@@ -145,5 +194,6 @@ const struct cli_func_desc_t debug_commands_funcs[] = {
         .help_string = DEBUG_ECHO_HELP},
     {.func = debug_analog, .name = DEBUG_ANALOG_NAME,
         .help_string = DEBUG_ANALOG_HELP},
+    {.func = debug_imu, .name = DEBUG_IMU_NAME, .help_string = DEBUG_IMU_HELP},
     {.func = NULL, .name = NULL, .help_string = NULL}
 };

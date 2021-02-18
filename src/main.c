@@ -2,13 +2,16 @@
 #include "nrf.h"
 #include "boards.h"
 #include "app_timer.h"
+#include "nrfx_spim.h"
 
 #include "global.h"
+#include "sensors.h"
 #include "usb_serial.h"
 #include "bluetooth.h"
 #include "cli.h"
 #include "cli_commands.h"
 #include "adc.h"
+#include "icm_20948.h"
 
 // MARK: Variable Definitions
 volatile uint32_t millis;
@@ -16,7 +19,8 @@ volatile uint32_t millis;
 // MARK: ISR Prototypes
 void SysTick_Handler(void);
 
-const struct cli_io_funcs_t usb_io_funcs = {
+// MARK: Module Descriptors
+static const struct cli_io_funcs_t usb_io_funcs = {
     .set_ready_callback = usb_cdc_set_ready_callback,
     .write_string = usb_cdc_put_string,
     .write_string_blocking = usb_cdc_put_string_blocking,
@@ -29,9 +33,9 @@ const struct cli_io_funcs_t usb_io_funcs = {
     .read_line = usb_cdc_get_line
 };
 
-struct cli_desc_t usb_cli;
+static struct cli_desc_t usb_cli;
 
-const struct cli_io_funcs_t bluetooth_io_funcs = {
+static const struct cli_io_funcs_t bluetooth_io_funcs = {
     .set_ready_callback = bluetooth_set_ready_callback,
     .write_string = bluetooth_put_string,
     .write_string_blocking = bluetooth_put_string_blocking,
@@ -44,7 +48,14 @@ const struct cli_io_funcs_t bluetooth_io_funcs = {
     .read_line = bluetooth_get_line
 };
 
-struct cli_desc_t ble_cli;
+static struct cli_desc_t ble_cli;
+
+static const nrfx_spim_t imu_spi = NRFX_SPIM_INSTANCE(0);
+
+struct icm_20948_desc imu;
+
+
+
 
 int main(void)
 {
@@ -81,6 +92,22 @@ int main(void)
 
     init_adc();
 
+    // IMU SPI Interface
+    nrfx_spim_config_t imu_spi_config = NRFX_SPIM_DEFAULT_CONFIG;
+    imu_spi_config.ss_pin   = ICM_20948_I2C_SS_PIN;
+    imu_spi_config.miso_pin = ICM_20948_I2C_MISO_PIN;
+    imu_spi_config.mosi_pin = ICM_20948_I2C_MOSI_PIN;
+    imu_spi_config.sck_pin  = ICM_20948_I2C_SCK_PIN;
+
+    nrfx_spim_init(&imu_spi, &imu_spi_config, &icm_20948_spim_event_handler,
+                   (void*)&imu);
+
+    // IMU
+    init_icm_20948(&imu, &imu_spi, ICM_20948_INT_PORT, ICM_20948_INT_PIN);
+
+
+    uint32_t last_blink;
+
     /* Main Loop */
     for (;;) {
         if ((millis - last_blink) > 1000) {
@@ -92,6 +119,8 @@ int main(void)
         }
 
         adc_service();
+
+        icm_20948_service(&imu);
 
         usb_cdc_service();
         cli_service(&usb_cli);

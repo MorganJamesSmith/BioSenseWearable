@@ -58,6 +58,7 @@ SRC_FILES += \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_usbd.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_power.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_saadc.c \
+  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_spim.c \
   $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT.c \
   $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c \
   $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_printf.c \
@@ -83,6 +84,8 @@ SRC_FILES += \
   $(PROJ_DIR)/cli_commands.c \
   $(PROJ_DIR)/bluetooth.c \
   $(PROJ_DIR)/adc.c \
+  $(PROJ_DIR)/icm_20948.c \
+  $(PROJ_DIR)/icm_20948_states.c \
 
 # Include folders common to all targets
 INC_FOLDERS += \
@@ -222,7 +225,7 @@ INC_FOLDERS += \
 LIB_FILES += \
 
 # Optimization flags
-OPT = -O0 -g3 -gstrict-dwarf
+OPT = -O2 -ggdb3 -gstrict-dwarf
 # Uncomment the line below to enable link time optimization
 OPT += -flto
 

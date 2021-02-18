@@ -94,6 +94,7 @@
       <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_usbd.c" />
       <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_power.c" />
       <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_saadc.c" />
+      <file file_name="../nRF5_SDK_17.0.0/modules/nrfx/drivers/src/nrfx_spim.c" />
     </folder>
     <folder Name="Application">
       <file file_name="../src/main.c" />
@@ -110,6 +111,12 @@
       <file file_name="../src/bluetooth.h" />
       <file file_name="../src/adc.c" />
       <file file_name="../src/adc.h" />
+      <file file_name="../src/sensors.h" />
+      <file file_name="../src/icm_20948_registers.h" />
+      <file file_name="../src/icm_20948.h" />
+      <file file_name="../src/icm_20948.c" />`
+      <file file_name="../src/icm_20948_states.h" />`
+      <file file_name="../src/icm_20948_states.c" />`
     </folder>
     <folder Name="nRF_Segger_RTT">
       <file file_name="../nRF5_SDK_17.0.0/external/segger_rtt/SEGGER_RTT.c" />
