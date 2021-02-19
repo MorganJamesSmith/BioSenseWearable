@@ -1,11 +1,17 @@
-/***************************************************
-  Arduino library written for the Maxim MAX86150 ECG and PPG integrated sensor
-
-	Written by Ashwin Whitchurch, ProtoCentral Electronics (www.protocentral.com)
-
-  Based on code written by Peter Jansen and Nathan Seidle (SparkFun) for the MAX30105 sensor
-  BSD license, all text above must be included in any redistribution.
- *****************************************************/
+/*
+ * Driver for the Maxim MAX86150 ECG and PPG integrated sensor
+ *
+ *
+ * Based off of the following Arduino library:
+ *
+ *   Written by Ashwin Whitchurch, ProtoCentral Electronics (www.protocentral.com)
+ *
+ *   https://github.com/protocentral/protocentral_max86150
+ *
+ * Based on code written by Peter Jansen and Nathan Seidle (SparkFun) for the
+ * MAX30105 sensor BSD license, all text above must be included in any
+ * redistribution.
+ */
 
 #include "max86150.h"
 
