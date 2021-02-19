@@ -13,148 +13,120 @@
  * redistribution.
  */
 
-#pragma once
+#ifndef max86150_h
+#define max86150_h
 
-#if (ARDUINO >= 100)
- #include "Arduino.h"
-#else
- #include "WProgram.h"
-#endif
-
-#include <Wire.h>
+#include <stdint.h>
+#include <stdbool.h>
 
 #define MAX86150_ADDRESS          0x5E //7-bit I2C Address
 //Note that MAX30102 has the same I2C address and Part ID
 
-#define I2C_SPEED_STANDARD        100000
-#define I2C_SPEED_FAST            400000
+bool max86150_begin(TwoWire &wirePort = Wire, uint32_t i2cSpeed = I2C_SPEED_STANDARD, uint8_t i2caddr = MAX86150_ADDRESS);
+void init_max86150(const nrfx_spim_t *spi);
 
-//Define the size of the I2C buffer based on the platform the user has
-#if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega168__)
+uint32_t max86150_getRed(void); //Returns immediate red value
+uint32_t max86150_getIR(void);  //Returns immediate IR value
+int32_t max86150_getECG(void);  //Returns immediate ECG value
+bool max86150_safeCheck(uint8_t maxTimeToCheck); //Given a max amount of time, check for new data
 
-  //I2C_BUFFER_LENGTH is defined in Wire.H
-  #define I2C_BUFFER_LENGTH BUFFER_LENGTH
+// Configuration
+void max86150_softReset();
+void max86150_shutDown();
+void max86150_wakeUp();
 
-#elif defined(__SAMD21G18A__)
+void max86150_setLEDMode(uint8_t mode);
 
-  //SAMD21 uses RingBuffer.h
-  #define I2C_BUFFER_LENGTH SERIAL_BUFFER_SIZE
+void max86150_setADCRange(uint8_t adcRange);
+void max86150_setSampleRate(uint8_t sampleRate);
+void max86150_setPulseWidth(uint8_t pulseWidth);
 
-#else
+void max86150_setPulseAmplitudeRed(uint8_t value);
+void max86150_setPulseAmplitudeIR(uint8_t value);
+void max86150_setPulseAmplitudeProximity(uint8_t value);
 
-  //The catch-all default is 32
-  #define I2C_BUFFER_LENGTH 32
+void max86150_setProximityThreshold(uint8_t threshMSB);
 
-#endif
+//Multi-led configuration mode (page 22)
+void max86150_enableSlot(uint8_t slotNumber, uint8_t device); //Given slot number, assign a device to slot
+void max86150_disableSlots(void);
 
-class MAX86150 {
- public:
-  MAX86150(void);
+// Data Collection
 
-  boolean begin(TwoWire &wirePort = Wire, uint32_t i2cSpeed = I2C_SPEED_STANDARD, uint8_t i2caddr = MAX86150_ADDRESS);
+//Interrupts (page 13, 14)
+uint8_t max86150_getINT1(void); //Returns the main interrupt group
+uint8_t max86150_getINT2(void); //Returns the temp ready interrupt
+void max86150_enableAFULL(void); //Enable/disable individual interrupts
+void max86150_disableAFULL(void);
+void max86150_enableDATARDY(void);
+void max86150_disableDATARDY(void);
+void max86150_enableALCOVF(void);
+void max86150_disableALCOVF(void);
+void max86150_enablePROXINT(void);
+void max86150_disablePROXINT(void);
+void max86150_enableDIETEMPRDY(void);
+void max86150_disableDIETEMPRDY(void);
 
-  uint32_t getRed(void); //Returns immediate red value
-  uint32_t getIR(void); //Returns immediate IR value
-  int32_t getECG(void); //Returns immediate ECG value
-  bool safeCheck(uint8_t maxTimeToCheck); //Given a max amount of time, check for new data
+//FIFO Configuration (page 18)
+void max86150_setFIFOAverage(uint8_t samples);
+void max86150_enableFIFORollover();
+void max86150_disableFIFORollover();
+void max86150_setFIFOAlmostFull(uint8_t samples);
 
-  // Configuration
-  void softReset();
-  void shutDown();
-  void wakeUp();
+//FIFO Reading
+uint16_t max86150_check(void); //Checks for new data and fills FIFO
+uint8_t max86150_available(void); //Tells caller how many new samples are available (head - tail)
+void max86150_nextSample(void); //Advances the tail of the sense array
+uint32_t max86150_getFIFORed(void); //Returns the FIFO sample pointed to by tail
+uint32_t max86150_getFIFOIR(void); //Returns the FIFO sample pointed to by tail
+int32_t max86150_getFIFOECG(void); //Returns the FIFO sample pointed to by tail
 
-  void setLEDMode(uint8_t mode);
+uint8_t max86150_getWritePointer(void);
+uint8_t max86150_getReadPointer(void);
+void max86150_clearFIFO(void); //Sets the read/write pointers to zero
 
-  void setADCRange(uint8_t adcRange);
-  void setSampleRate(uint8_t sampleRate);
-  void setPulseWidth(uint8_t pulseWidth);
+//Proximity Mode Interrupt Threshold
+void max86150_setPROXINTTHRESH(uint8_t val);
 
-  void setPulseAmplitudeRed(uint8_t value);
-  void setPulseAmplitudeIR(uint8_t value);
-  void setPulseAmplitudeProximity(uint8_t value);
+// Die Temperature
+float max86150_readTemperature();
+float max86150_readTemperatureF();
 
-  void setProximityThreshold(uint8_t threshMSB);
+// Detecting ID/Revision
+uint8_t max86150_getRevisionID();
+uint8_t max86150_readPartID();
+uint8_t max86150_readRegLED();
 
-  //Multi-led configuration mode (page 22)
-  void enableSlot(uint8_t slotNumber, uint8_t device); //Given slot number, assign a device to slot
-  void disableSlots(void);
+// Setup the IC with user selectable settings
+void max86150_setup(uint8_t powerLevel = 0x1F, uint8_t sampleAverage = 4, uint8_t ledMode = 3, int sampleRate = 400, int pulseWidth = 411, int adcRange = 4096);
 
-  // Data Collection
+// Low-level I2C communication
+uint8_t max86150_readRegister8(uint8_t address, uint8_t reg);
+void max86150_writeRegister8(uint8_t address, uint8_t reg, uint8_t value);
 
-  //Interrupts (page 13, 14)
-  uint8_t getINT1(void); //Returns the main interrupt group
-  uint8_t getINT2(void); //Returns the temp ready interrupt
-  void enableAFULL(void); //Enable/disable individual interrupts
-  void disableAFULL(void);
-  void enableDATARDY(void);
-  void disableDATARDY(void);
-  void enableALCOVF(void);
-  void disableALCOVF(void);
-  void enablePROXINT(void);
-  void disablePROXINT(void);
-  void enableDIETEMPRDY(void);
-  void disableDIETEMPRDY(void);
+private:
+TwoWire *_i2cPort; //The generic connection to user's chosen I2C hardware
+uint8_t _i2caddr;
 
-  //FIFO Configuration (page 18)
-  void setFIFOAverage(uint8_t samples);
-  void enableFIFORollover();
-  void disableFIFORollover();
-  void setFIFOAlmostFull(uint8_t samples);
+//activeLEDs is the number of channels turned on, and can be 1 to 3. 2 is common for Red+IR.
+uint8_t activeDevices; //Gets set during setup. Allows check() to calculate how many bytes to read from FIFO
 
-  //FIFO Reading
-  uint16_t check(void); //Checks for new data and fills FIFO
-  uint8_t available(void); //Tells caller how many new samples are available (head - tail)
-  void nextSample(void); //Advances the tail of the sense array
-  uint32_t getFIFORed(void); //Returns the FIFO sample pointed to by tail
-  uint32_t getFIFOIR(void); //Returns the FIFO sample pointed to by tail
-  int32_t getFIFOECG(void); //Returns the FIFO sample pointed to by tail
+uint8_t revisionID;
 
-  uint8_t getWritePointer(void);
-  uint8_t getReadPointer(void);
-  void clearFIFO(void); //Sets the read/write pointers to zero
+void max86150_readRevisionID();
 
-  //Proximity Mode Interrupt Threshold
-  void setPROXINTTHRESH(uint8_t val);
+void max86150_bitMask(uint8_t reg, uint8_t mask, uint8_t thing);
 
-  // Die Temperature
-  float readTemperature();
-  float readTemperatureF();
-
-  // Detecting ID/Revision
-  uint8_t getRevisionID();
-  uint8_t readPartID();
-	uint8_t readRegLED();
-
-  // Setup the IC with user selectable settings
-  void setup(byte powerLevel = 0x1F, byte sampleAverage = 4, byte ledMode = 3, int sampleRate = 400, int pulseWidth = 411, int adcRange = 4096);
-
-  // Low-level I2C communication
-  uint8_t readRegister8(uint8_t address, uint8_t reg);
-  void writeRegister8(uint8_t address, uint8_t reg, uint8_t value);
-
- private:
-  TwoWire *_i2cPort; //The generic connection to user's chosen I2C hardware
-  uint8_t _i2caddr;
-
-  //activeLEDs is the number of channels turned on, and can be 1 to 3. 2 is common for Red+IR.
-  byte activeDevices; //Gets set during setup. Allows check() to calculate how many bytes to read from FIFO
-
-  uint8_t revisionID;
-
-  void readRevisionID();
-
-  void bitMask(uint8_t reg, uint8_t mask, uint8_t thing);
-
-   #define STORAGE_SIZE 4 //Each long is 4 bytes so limit this to fit on your micro
-  typedef struct Record
-  {
+#define STORAGE_SIZE 4 //Each long is 4 bytes so limit this to fit on your micro
+typedef struct Record
+{
     uint32_t red[STORAGE_SIZE];
     uint32_t IR[STORAGE_SIZE];
     int32_t ecg[STORAGE_SIZE];
-    byte head;
-    byte tail;
-  } sense_struct; //This is our circular buffer of readings from the sensor
+    uint8_t head;
+    uint8_t tail;
+} sense_struct; //This is our circular buffer of readings from the sensor
 
-  sense_struct sense;
+sense_struct sense;
 
-};
+#endif /* max86150_h */
