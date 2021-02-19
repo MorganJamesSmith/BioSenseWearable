@@ -85,7 +85,6 @@ int main(void)
     init_usb_cdc();
     init_cli(&usb_cli, &usb_io_funcs, "> ", debug_commands_funcs, '\r');
 
-    
     /* Use this to turn LED on when bluetooth is connected 
     BSP_LED_0_PORT->DIRSET = BSP_LED_0_MASK;
     BSP_LED_0_PORT->OUT |= BSP_LED_0_MASK;
@@ -93,9 +92,7 @@ int main(void)
     void ble_disconnected(){ BSP_LED_0_PORT->OUT |= BSP_LED_0_MASK; }
     bluetooth_set_connected_callback(ble_connected);
     bluetooth_set_disconnected_callback(ble_disconnected);*/
-    //A call to "nrf_sdh_enable_request()" in bluetooth_init() kills USB
-    //Use comments to turn bluetooth on and off for now until this is fixed
-    //bluetooth_init();
+    //bluetooth_init(); //UNCOMMENT THIS TO TURN ON BLUETOOTH
     init_cli(&ble_cli, &bluetooth_io_funcs, "> ", debug_commands_funcs, '\n');
 
     init_adc();
