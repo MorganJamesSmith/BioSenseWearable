@@ -36,7 +36,7 @@
 
 (define (HEAD-git-version)
   (let* ((pipe (with-directory-excursion %source-dir
-                 (open-pipe* OPEN_READ "git" "rev-parse" "HEAD")))
+                 (open-pipe* OPEN_READ "git" "rev-parse" "--short=7" "HEAD")))
          (version (read-line pipe)))
     (close-pipe pipe)
     version))
