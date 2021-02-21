@@ -2,10 +2,16 @@
 #include "nrf.h"
 #include "boards.h"
 #include "app_timer.h"
+#include "nrfx_spim.h"
 
+#include "global.h"
+#include "sensors.h"
 #include "usb_serial.h"
+#include "bluetooth.h"
 #include "cli.h"
 #include "cli_commands.h"
+#include "adc.h"
+#include "icm_20948.h"
 
 // MARK: Variable Definitions
 volatile uint32_t millis;
@@ -13,7 +19,8 @@ volatile uint32_t millis;
 // MARK: ISR Prototypes
 void SysTick_Handler(void);
 
-const struct cli_io_funcs_t usb_io_funcs = {
+// MARK: Module Descriptors
+static const struct cli_io_funcs_t usb_io_funcs = {
     .set_ready_callback = usb_cdc_set_ready_callback,
     .write_string = usb_cdc_put_string,
     .write_string_blocking = usb_cdc_put_string_blocking,
@@ -26,7 +33,29 @@ const struct cli_io_funcs_t usb_io_funcs = {
     .read_line = usb_cdc_get_line
 };
 
-struct cli_desc_t cli;
+static struct cli_desc_t usb_cli;
+
+static const struct cli_io_funcs_t bluetooth_io_funcs = {
+    .set_ready_callback = bluetooth_set_ready_callback,
+    .write_string = bluetooth_put_string,
+    .write_string_blocking = bluetooth_put_string_blocking,
+    .write_bytes = bluetooth_put_bytes,
+    .write_bytes_blocking = bluetooth_put_bytes_blocking,
+    .read_string = bluetooth_get_string,
+    .has_delim = bluetooth_has_delim,
+    .read_line_delim = bluetooth_get_line_delim,
+    .has_line = bluetooth_has_line,
+    .read_line = bluetooth_get_line
+};
+
+static struct cli_desc_t ble_cli;
+
+static const nrfx_spim_t imu_spi = NRFX_SPIM_INSTANCE(0);
+
+struct icm_20948_desc imu;
+
+
+
 
 int main(void)
 {
@@ -40,23 +69,69 @@ int main(void)
     APP_ERROR_CHECK(ret);
 
     /* Configue IO */
-    BSP_LED_0_PORT->DIRSET = BSP_LED_0_MASK;
+    // RGB LED
+//    NRF_P0->DIRSET = (1 << 22);
+//    NRF_P0->DIRSET = (1 << 23);
+//    NRF_P0->DIRSET = (1 << 24);
+//
+//    NRF_P0->OUTSET = (1 << 22);
+//    NRF_P0->OUTSET = (1 << 23);
+//    NRF_P0->OUTSET = (1 << 24);
 
-    uint32_t last_blink = 0;
+    // Turn on power
+    NRF_P1->DIRSET = (1 << 12);
+    NRF_P1->OUT = (1 << 12);
 
     init_usb_cdc();
-    init_cli(&cli, &usb_io_funcs, "> ", debug_commands_funcs, '\r');
+    init_cli(&usb_cli, &usb_io_funcs, "> ", debug_commands_funcs, '\r');
 
+    /* Use this to turn LED on when bluetooth is connected 
+    BSP_LED_0_PORT->DIRSET = BSP_LED_0_MASK;
+    BSP_LED_0_PORT->OUT |= BSP_LED_0_MASK;
+    void ble_connected(){ BSP_LED_0_PORT->OUT &= ~BSP_LED_0_MASK; }
+    void ble_disconnected(){ BSP_LED_0_PORT->OUT |= BSP_LED_0_MASK; }
+    bluetooth_set_connected_callback(ble_connected);
+    bluetooth_set_disconnected_callback(ble_disconnected);*/
+    //bluetooth_init(); //UNCOMMENT THIS TO TURN ON BLUETOOTH
+    init_cli(&ble_cli, &bluetooth_io_funcs, "> ", debug_commands_funcs, '\n');
+
+    init_adc();
+
+    // IMU SPI Interface
+    nrfx_spim_config_t imu_spi_config = NRFX_SPIM_DEFAULT_CONFIG;
+    imu_spi_config.ss_pin   = ICM_20948_I2C_SS_PIN;
+    imu_spi_config.miso_pin = ICM_20948_I2C_MISO_PIN;
+    imu_spi_config.mosi_pin = ICM_20948_I2C_MOSI_PIN;
+    imu_spi_config.sck_pin  = ICM_20948_I2C_SCK_PIN;
+
+    nrfx_spim_init(&imu_spi, &imu_spi_config, &icm_20948_spim_event_handler,
+                   (void*)&imu);
+
+    // IMU
+    init_icm_20948(&imu, &imu_spi, ICM_20948_INT_PORT, ICM_20948_INT_PIN);
+
+
+    uint32_t last_blink;
 
     /* Main Loop */
     for (;;) {
         if ((millis - last_blink) > 1000) {
             last_blink = millis;
-            BSP_LED_0_PORT->OUT ^= BSP_LED_0_MASK;
+
+//            NRF_P0->OUT ^= (1 << 22);
+//            NRF_P0->OUT ^= (1 << 23);
+//            NRF_P0->OUT ^= (1 << 24);
         }
 
+        adc_service();
+
+        icm_20948_service(&imu);
+
         usb_cdc_service();
-        cli_service(&cli);
+        cli_service(&usb_cli);
+
+        bluetooth_service();
+        cli_service(&ble_cli);
 
         __WFI();
     }

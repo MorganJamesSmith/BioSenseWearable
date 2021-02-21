@@ -11,6 +11,7 @@
 #include "nrf_drv_clock.h"
 #include "nrf_delay.h"
 #include "nrf_drv_power.h"
+#include "nrf_sdh.h"
 
 #include "app_error.h"
 #include "app_util.h"
@@ -226,6 +227,11 @@ void init_usb_cdc(void)
     APP_ERROR_CHECK(ret);
 
     if (USBD_POWER_DETECTION) {
+        if(!nrf_sdh_is_enabled())
+        {
+            ret = nrf_sdh_enable_request();
+            APP_ERROR_CHECK(ret);
+        }
         ret = app_usbd_power_events_enable();
         APP_ERROR_CHECK(ret);
     } else {

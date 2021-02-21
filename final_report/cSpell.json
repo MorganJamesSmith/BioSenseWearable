@@ -1,0 +1,33 @@
+{
+    "version": "0.1",
+    "words": [
+        "biomarkers",
+        "bootloader",
+        "COVID",
+        "ELEC",
+        "electrodermal",
+        "electrophysiological",
+        "Empatica",
+        "GPIO",
+        "microcontroller",
+        "microcontroller's",
+        "microcontrollers",
+        "minimalistic",
+        "nanogenerator",
+        "Nanomaterial",
+        "Nyentap",
+        "oximetry",
+        "Paulo",
+        "PCBs",
+        "Segger",
+        "supercapacitor",
+        "SYSC",
+        "Tadhg",
+        "toolchain",
+        "Triboelectric",
+        "UART"
+    ],
+    "dictionaries": [
+        "softwareTerms"
+    ]
+}
