@@ -110,13 +110,6 @@ Samuel Dewan
 
 Tadhg McDonald-Jensen
 
-{\footnotesize 101047069}
-
-{\footnotesize tadhgmcdonaldjensen@cmail.carleton.ca}
-
-Jason Nyentap
-
-{\footnotesize 101032473}
 
 {\footnotesize jasonnyentap@cmail.carleton.ca}
 
@@ -140,6 +133,11 @@ Supervisor: Dr. Paulo Garcia
 % Front matter
 \pagenumbering{Roman}
 
+%\section*{Abstract}
+%\label{sec:abstract}
+%\input{sections/abstract.tex}
+%\clearpage
+
 \tableofcontents
 \clearpage
 
@@ -151,45 +149,136 @@ Supervisor: Dr. Paulo Garcia
 \input{sections/overview.tex}
 \clearpage
 
+\section{Engineering}
+\label{sec:engineering}
+\input{sections/engineering.tex}
+\clearpage
+
 \section{State of the Art}
 \label{sec:state-of-the-art}
 \input{sections/state-of-the-art.tex}
 \clearpage
 
-\section{Background}
-\label{sec:background}
-\input{sections/background.tex}
+\section{Hardware Implementation}
+\label{sec:hardware}
+\input{sections/hardware.tex}
 \clearpage
 
-\section{Scope}
-\label{sec:scope}
-\input{sections/scope.tex}
+\section{Software Implementation}
+\label{sec:software}
+\input{sections/software.tex}
 \clearpage
 
-\section{Approach}
-\label{sec:approach}
-\input{sections/approach.tex}
+\section{Encolsure}
+\label{sec:enclosure}
+\input{sections/enclosure.tex}
 \clearpage
 
-\section{Team}
-\label{sec:team}
-\input{sections/team.tex}
+\section{Testing}
+\label{sec:testing}
+\input{sections/testing.tex}
 \clearpage
 
-% Final Report
+\section{Challenges}
+\label{sec:challenges}
+\input{sections/challenges.tex}
+\clearpage
+
+\section{Timeline}
+\label{sec:timeline}
+\input{sections/timeline.tex}
+\clearpage
+
 \section{Reflections}
 \label{sec:reflections}
 \input{sections/reflections.tex}
 \clearpage
 
-\bibliography{references}{}
-\bibliographystyle{plain}
-\clearpage
+%\bibliography{references}{}
+%\bibliographystyle{plain}
+%\clearpage
 
 \appendix
 \section{Schematics}
 \label{sec:appendix-schematics}
 \input{sections/schematics_appendix.tex}
 \clearpage
+
+\section{Enclosue Renders}
+\label{sec:appendix-enclosure}
+\input{sections/enclosure_appendix.tex}
+\clearpage
+
+\section{Pictures}
+\label{sec:appendix-pictures}
+\input{sections/pictures_appendix.tex}
+\clearpage
+
+%
+%   Front matter:
+%       - Title page
+%       - Abstract?
+%       - ToC
+%       - Lists of figures and tables?
+%   1 - Overview:
+%       - Background section
+%       - Current overview section
+%       - Scope section
+%   2 - The Engineering Project
+%       - Health and Safety
+%       - Engineering Professionalism
+%       - Project Management
+%       - Justification of Suitability for Degree Program
+%       - Individual Contributions
+%           - Project Contributions
+%           - Report Contributions
+%   3 - State of the Art
+%   4 - Hardware Implementation
+%       - Component choices
+%       - Hardware Tools
+%   5 - Software Implementation
+%       - Software Tools
+%   6 - Enclosure
+%   7 - Test Plan
+%   8 - Challenges
+%   9 - Timeline
+%   10 - Reflections
+%   11 - References
+%   A - Schematics
+%   B - Source code?
+%   C - Enclosure Renders
+%   D - Pictures
+%
+
+%
+%   TODO:
+%       Morgan:
+%           - Heart rate software
+%           - Enclosure
+%           - Testing
+%           - Timeline
+%       Jason:
+%           - Copy stuff from proposal repo
+%               - Overview
+%               - Suitability for degree program
+%               - State of the art
+%               - Some hardware challenges
+%               - Challenges with build system
+%               - Copy software diagrams from progress report
+%           - Hardware section
+%           - Bluetooth software
+%           - Bluetooth + USB challenge
+%           - Update schematics
+%       Tadhg:
+%           - Section 2 stuff:
+%               - Health and safety
+%               - Engineering Profesionalism
+%               - Project Managment
+%       Sam:
+%           - Hardware assembly challenges
+%           - Parts availability challenges
+%           - Assemble appendicies
+%           - Try to flesh out software design a little more
+%
 
 \end{document}
