@@ -1,0 +1,67 @@
+This section will discuss both the criteria for success and what measures will be used
+to meet these criteria.
+
+The purpose of this project is to design and build a wrist mounted wearable
+health monitoring device.  The device will provide a sensor platform that is
+suitable for early detection of disease.  The sensors chosen will measure skin
+and ambient temperature, heart rate, pulse oximetry, and motion.  The electronic
+components will fit into a comfortable, wearable 3D printed plastic enclosure.
+The devices will be powered by a AAA battery to ensure maintainability.  Since
+the battery is the largest single component of the device, the device should be
+roughly the width of a wrist and
+% Rectangular device - not explicitly mentioning it's rectangular.
+the length of the AAA battery plus the battery contacts.  The device will also
+have a charging circuit to allow rechargeable AAA batteries to be charged with
+a USB connector.
+
+The bulk of the electronics will consist of a microcontroller that supports
+Bluetooth for ease of extracting logged data off of the device and a USB
+connection for development and charging.  A microcontroller of relatively low
+cost will be chosen if multiple options with the above requirements are
+available.
+
+% - Exposed serial interface for end user expansion
+
+The wearable device will have limited user interfaces consisting of a indicator
+LED for power, notifications and debugging and a button for power.
+% - Blinky LED and USB serial interface for debugging
+The main interactions with the device will occur through a companion software
+which will extract recorded data from the device and display it as graphs or
+export in a analyzable format such as a csv or json file.  This companion
+software will connect to the device through Bluetooth or USB to extract data.
+
+The device will store the collected sensor information to a micro SD card
+in the device which is then read back when requested via the companion software.
+The SD card will be encrypted so that unauthorized access to the data will be
+more difficult, maintaining the privacy of the user's biometrics. This
+encryption will likely happen in the application layer as well as the bluetooth
+transport layer so that physical access to the device does not allow the data to
+be read without proper authority. 
+The SD card used will be replaceable, the capacity of the card used will dictate
+how long the device can record data before needing to off load to the companion
+software and this size will be decided by the user.
+
+The overall cost of the device will be minimized while preserving all functional
+requirements, particularly by using readily available electronic components to
+ensure the device is easy to produce without additional effort.
+
+The focus of the project will be on collection of biometrics and making them
+available for analysis. We do not plan to attempt to perform medical analysis
+or give clinical diagnosis from the collected biometrics. Our intention is to
+design the system so that those applications could be integrated with or built
+on top of the work we will do in this project.
+
+The companion software will be limited to simply receiving, decoding, and
+decrypting data received from the wearable device. We may integrate some basic
+data visualization either in the companion app or as a separate application, but
+this will be solely for demonstration purposes and will not be considered part
+of the project requirements.
+
+In the interest of reducing development cost and complexity it was decided to
+use sensors that are readily available from online sources, and that can be
+assembled on a PCB by hand relatively easily.  The selection of sensors may be
+more limited or lower quality than what would have been possible if options
+that are made to order, or only available in large quantities had been
+explored.  The use of parts that can be soldered to a PCB without paying for
+the services of an advanced manufacturing facility is also likely going to
+result in the final hardware design being larger than it could be.

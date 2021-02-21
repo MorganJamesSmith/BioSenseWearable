@@ -1,0 +1,195 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[top=2.54cm,bottom=2.54cm,left=4cm,right=2.5cm,headheight=14pt]{geometry}
+\usepackage{graphicx}
+\usepackage[hidelinks,bookmarksnumbered]{hyperref}
+\usepackage[all]{hypcap}
+\usepackage{fancyhdr}
+\usepackage[calcwidth]{titlesec}
+\usepackage{chngcntr}
+\usepackage{booktabs}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\usepackage[section]{placeins}
+\usepackage[style=iso]{datetime2}
+\usepackage{pgf-umlsd}
+\usepackage{amsmath}
+\usepackage{cite}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{comment}
+\usepackage{pgfgantt}
+\usepackage{todonotes}
+\usepackage{ragged2e}
+\usepackage{textcomp}
+\usepackage{array}
+\usepackage{pdflscape}
+
+\title{BioSense Wearable}
+\author{Samuel Dewan, Tadhg Mcdonald-Jensen, Jason Nyentap, and Morgan Smith}
+
+% Headers and footers
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Final Report}
+\rhead{BioSense Wearable}
+\rfoot{\thepage}
+
+% More space around figures
+\setlength\intextsep{18pt}
+% Per section figure and table numbers
+\counterwithin{figure}{section}
+\counterwithin{table}{section}
+
+% Colour links rather than putting a box around them
+\hypersetup{
+    colorlinks,
+    linkcolor={black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black},
+    pdftitle={Project 21}
+}
+
+% More space between table rows
+\renewcommand{\arraystretch}{1.2}
+
+% Section numbers in the margin
+\newcommand{\marginsecnumber}[1]{%
+    \makebox[0pt][r]{#1\hspace{6pt}}%
+}
+\titleformat{\section}
+    {\sffamily\Large\bfseries}
+    {\marginsecnumber\thesection}
+    {0pt}
+    {}
+\titleformat{\subsection}
+    {\sffamily\large\bfseries}
+    {\marginsecnumber\thesubsection}
+    {0pt}
+    {}
+\titleformat{\subsubsection}
+    {\sffamily\normalsize\bfseries}
+    {\marginsecnumber\thesubsubsection}
+    {0pt}
+    {}
+
+% Draft watermark
+\usepackage{eso-pic,graphicx}
+\AddToShipoutPicture*{%
+    \AtTextCenter{%
+        \makebox(0,0)[c]{\resizebox{\textwidth}{!}{%
+        \rotatebox{45}{\textsf{\textbf{\color{lightgray}DRAFT}}}}}
+    }
+}
+
+\begin{document}
+\frenchspacing
+
+% Title Page
+\pagenumbering{Alph}
+\begin{titlepage}
+\centering
+
+\vspace*{\stretch{1}}
+{\large \textbf{SYSC4907}}
+
+\vspace{\stretch{1}}
+{\Huge \sffamily Final Report}
+
+\vspace{\stretch{1}}
+{\large \textbf{BioSense Wearable}}
+
+\vspace{\stretch{1}}
+\textbf{Project Group 21}
+
+\vspace{\stretch{0.5}}
+Samuel Dewan
+
+{\footnotesize 101041496}
+
+{\footnotesize samueldewan@cmail.carleton.ca}
+
+Tadhg McDonald-Jensen
+
+{\footnotesize 101047069}
+
+{\footnotesize tadhgmcdonaldjensen@cmail.carleton.ca}
+
+Jason Nyentap
+
+{\footnotesize 101032473}
+
+{\footnotesize jasonnyentap@cmail.carleton.ca}
+
+Morgan Smith
+
+{\footnotesize 101031075}
+
+{\footnotesize morgansmith@cmail.carleton.ca}
+
+\vspace{\stretch{0.5}}
+Supervisor: Dr. Paulo Garcia
+
+\vspace{\stretch{2}}
+
+{\large \textbf{\today}}
+
+\vspace{\stretch{2}}
+
+\end{titlepage}
+
+% Front matter
+\pagenumbering{Roman}
+
+\tableofcontents
+\clearpage
+
+% Proposal Content
+\pagenumbering{arabic}
+
+\section{Overview}
+\label{sec:overview}
+\input{sections/overview.tex}
+\clearpage
+
+\section{State of the Art}
+\label{sec:state-of-the-art}
+\input{sections/state-of-the-art.tex}
+\clearpage
+
+\section{Background}
+\label{sec:background}
+\input{sections/background.tex}
+\clearpage
+
+\section{Scope}
+\label{sec:scope}
+\input{sections/scope.tex}
+\clearpage
+
+\section{Approach}
+\label{sec:approach}
+\input{sections/approach.tex}
+\clearpage
+
+\section{Team}
+\label{sec:team}
+\input{sections/team.tex}
+\clearpage
+
+% Final Report
+\section{Reflections}
+\label{sec:reflections}
+\input{sections/reflections.tex}
+\clearpage
+
+\bibliography{references}{}
+\bibliographystyle{plain}
+\clearpage
+
+\appendix
+\section{Schematics}
+\label{sec:appendix-schematics}
+\input{sections/schematics_appendix.tex}
+\clearpage
+
+\end{document}
