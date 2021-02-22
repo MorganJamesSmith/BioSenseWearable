@@ -1,0 +1,65 @@
+%We didn't do this stuff yet 
+\iffalse
+
+We plan to write automated or semi-automated tests for each component of our
+project. Most of these tests will take the form of unit tests, test harnesses
+that emulate adjacent modules or small test applications that exercise a single
+module.
+
+\subsubsection{Unit Tests}
+
+We plan to build a simple unit testing framework that allows us to write unit
+tests that can be compiled and run on a host system. These tests will target
+individual functions and will aim to validate that they are correct.
+
+It is unlikely that we will be able to achieve full test coverage due to time
+constraints. We will therefore focus on unit testing areas of the code that
+are difficult to write test harnesses for, such as sensor drivers and the SD
+card driver.
+
+\subsubsection{Sensor Driver Testing}
+
+In addition to unit tests, we will test the sensor drivers with semi-automated
+test applications that run on the microcontroller. These tests will provide
+feedback over the USB-CDC interface and will interact with the actual sensor
+hardware.  Our sensor tests will aim to exercise all of the functionality of the
+sensors that our application code makes use of.
+
+These tests will be in the form of small console applications that will take
+a series of sensor readings and display them. These readings will be manually
+verified, since automatic verification of output that is based on real world
+inputs is difficult. Due to the difficulty in writing automated tests for the
+sensor drivers, these drivers will be an area of focus for unit testing.
+
+\subsubsection{Bluetooth Stack Testing}
+
+Our Bluetooth related firmware components will be developed alongside the
+companion software. As they are developed together we will test them together,
+using each to verify the correct operation of the other. Much of this testing
+will be performed manually as we anticipate that tests that require interaction
+between our device and the companion software will be more difficult to
+automate.
+
+\subsubsection{SD Card Driver Testing}
+
+We will test the SD card driver and filesystem software using test applications
+that will run directly on the microcontroller. A test application that reads
+and writes blocks on the SD card and a test application that is able to read
+from and write to files will be developed in order to validate the functionality
+of the SD card and filesystem code. These tests will be small console
+applications that a user can interact with using the the USB-CDC interface.
+
+\subsubsection{Data Logging Code Testing}
+
+In order to test the data logging component of the project we will create a test
+framework that runs on a desktop computer which will emulate the sensor input
+and the filesystem components in order to ensure that the application layer
+encryption and file packing design works as intended. This will allow the data
+logging code to be developed and tested independently of the filesystem and SD
+card drivers to allow for more parallel development. This test framework will
+create snapshots of the outputted data for a set of input conditions and ensure
+that any updates to the logging code either does not change the output to ensure
+nothing is broken during development, or if there is an error in these snapshots
+then the snapshots will be updated.
+
+\fi
