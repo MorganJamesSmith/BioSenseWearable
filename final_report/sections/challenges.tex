@@ -80,3 +80,41 @@ example projects provided with the nRF52 SDK. A surprising amount of work was
 required to get the Makefile and Segger Embedded Studio project from the example 
 to work in our repository without having to place all of our code in the examples 
 folder inside the nRF52 SDK's directory structure.
+
+One of the challenges faced during integration testing was a conflict between 
+the USB and Bluetooth drivers. The two drivers were developed independently of
+each other, and both worked on their own. When running the two drivers together
+Bluetooth would function as expected but USB would fail to enumerate on the host
+and therefore, not work at all. Oddly, this problem would not occur when the 
+microcontroller was running in debug mode, it presented itself only in the 
+normal run mode. This made the problem much more difficult to solve because
+stepping though code, breakpoints, or any other debugging capabilities were not
+available outside of debug mode. The alternative technique used was to turn on 
+an LED when execution reached a certain point or some condition was met. 
+
+In the end, the solution to the problem ended up being very easy to implement 
+despite taking a significant amount of time to find. When Bluetooth is 
+initialised, it enables what Nordic calls a Soft Device. This Soft Device runs 
+the Bluetooth stack and also takes over control of some parts of the hardware 
+in the process. If other components of the software need access to hardware 
+controlled by the Soft Device, then they must make calls to the Soft Device to 
+perform the necessary actions on their behalf. The USB driver relies on events 
+from the hardware to inform it when it is attached to a host so it knows when 
+to enumerate and begin communicating. These hardware events happen to be blocked 
+by the Soft Device, so if the USB driver wants to receive them it must arrange 
+this with the Soft Device after it has been enabled. The USB initialisation 
+functions provided by the Nordic SDK will check if the Soft Device is enabled or 
+not and set things up accordingly. The problem we experienced was a result of 
+initialising USB first, then Bluetooth, which in turn enables the Soft Device. 
+At the time USB was initialised, the Soft Device was not enabled so the SDK did 
+not set up the hardware events to work with the Soft Device. Once the Soft Device 
+was enabled by the Bluetooth initialisation, the hardware events would no longer 
+work for USB. The result was the USB driver not knowing the device had been 
+connected to a host, so it would remain idle and never make any attempt to 
+enumerate or communicate with the host. While running in debug mode, there just
+happened to be enough time for the hardware events to reach the USB driver after 
+it was initialised but before Bluetooth was initialised. The solution to the problem
+was to simply enable the Soft Device in the USB initialisation code before it
+configures the hardware for USB detection. This way, when the SDK checks if the
+Soft Device is enabled it will see that it is, and USB will be configured 
+accordingly.
