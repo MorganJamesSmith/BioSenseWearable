@@ -43,3 +43,44 @@ to be updated periodically. The drivers read and process the data from the
 sensors and write it to a buffer to be written to the SD card. The logging service
 maintains a few of these buffers and ensures they get written to the SD card
 at reasonable intervals.
+
+\subsection{Drivers}
+
+\subsubsection{USB}
+
+\subsubsection{Bluetooth}
+
+The design goal for the Bluetooth driver was to have it behave like a serial
+port in the same fashion that USB CDC does. Our intention in doing this was to 
+simplify the design of the companion software as well as the command line 
+interface present on the microcontroller. This goal was fully achieved 
+on the microcontroller side of the communication link. The software interface for 
+Bluetooth was made identical to USB so that they can be used interchangeably 
+without additional complications. On the PC side where the companion software
+runs the solution was not as elegant. We had hoped to find a way to make the
+Bluetooth connection appear as a serial port so it could be used interchangeably
+with the USB CDC connection, but a method to do this was not found. It likely
+could be done by writing custom drivers, but this was outside the scope of the
+project. Instead, a cross platform Python library was used to establish the
+Bluetooth connection to the device and communicate with it as you normally
+would with a Bluetooth device.
+
+The device uses Bluetooth Low Energy, which works by advertising
+available services to other nearby devices. Each service may offer a number
+of characteristics that can be read only, write only, read-write, and have 
+several other options such as notifying a connected device when a characteristic
+value changes. The Bluetooth Low Energy specification includes descriptions of several
+standard services and their characteristics, but none of these could be used to
+to achieve the serial port-like behaviour needed for this project. A custom
+serial port service included with the Nordic SDK was used instead. This service
+has two characteristics, one named TX and one named RX. The RX characteristic is
+write only and is used to send data to the device. The TX characteristic is
+written to only by the device and has notifications enabled. If a connected device
+wants to receive data then it must subscribe to the notifications of the TX 
+characteristic. This solution worked out quite well, although it has a low 
+throughput in comparison to USB. The fact that each notification packet can only 
+hold approximately 20 bytes and must be acknowledged before the next one is 
+sent likely contributes to the low throughput significantly. It was not expected
+that Bluetooth Low Energy would be very fast however, since it is optimized for 
+power consumption instead of speed. This trade-off is well suited to this project 
+because it is battery powered.
