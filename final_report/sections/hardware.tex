@@ -4,7 +4,7 @@ schematic design, and component placement on the PCB. It will also detail any
 variations from what was planned in the project proposal and why these changes
 were made.
 
-\subsection{Component Selecton}
+\subsection{Component Selection}
 
 We considered a number of requirements in choosing a microcontroller for our
 project. We identified several microcontroller features that were needed to
@@ -48,8 +48,8 @@ balls, but they still do have two rows of connections. This means that while we
 are able to solder the packages with hot air reflow they would difficult to
 inspect. Another option that was considered to sidestep the issue of soldering 
 difficulty entirely was the use of modules that integrate the microcontroller and
-a pcb antenna on a small pcb. The nRF52840 and nRF52830 can be found in these 
-modules and the Apollo3 Blue is available in a similar module from SparkFun 
+a PCB antenna on a small PCB. The nRF52840 and nRF52830 can be found in these
+modules and the Apollo3 Blue is available in a similar module from SparkFun
 branded as SparkFun Artemis.
 
 The availability was also a limiting factor in our decision. Most of our listed
@@ -84,7 +84,7 @@ EFR32BG22 C224 & Silicon Labs & ARM Cortex-M33 at 76.8 MHz & 512 KiB & 32 KiB & 
 \end{table*}
 
 Table \ref{tab:mcu-comp-comm} compares the communications interfaces available
-on the microcontrollers we considered. All of the micrcrocontrollers feature at
+on the microcontrollers we considered. All of the microcontrollers feature at
 least Bluetooth Low Energy 5.0, at least two I2C interfaces and at least two SPI
 interfaces. In addition to these interfaces the MAX32668 has an SD/MMC interface
 controller which supports the SD3.0 specification. This interface would allow
@@ -123,14 +123,14 @@ EFR32BG22C224 & 2 & 2 & None & 5.2 & None \\
 \end{table*}
 
 While our project did not necessarily require hardware accelerated cryptography,
-we thought it should be included to accomodate any future software layers that 
-build on top of our platform. Since the device collects information about the 
+we thought it should be included to accommodate any future software layers that
+build on top of our platform. Since the device collects information about the
 user it is likely that cryptography would be heavily used by security features,
-and software implementations of the cryptographic alrogithms may not be adequate.  
-Table \ref{tab:mcu-comp-crypto} shows the cryptography features of the 
-microcontrollers that we considered. All of the microcontrollers have suitable 
-hardware accelerated cryptography features with the exception of the nRF52832 
-which lacks any modular arithmetic acceleration for public key cryptography and 
+and software implementations of the cryptographic algorithms may not be adequate.
+Table \ref{tab:mcu-comp-crypto} shows the cryptography features of the
+microcontrollers that we considered. All of the microcontrollers have suitable
+hardware accelerated cryptography features with the exception of the nRF52832
+which lacks any modular arithmetic acceleration for public key cryptography and
 the Apollo3 Blue which has no hardware cryptography accelerator.
 
 \begin{table*}[htb]
@@ -214,7 +214,7 @@ sources are seamless and will not interrupt operation of the rest of the
 device. Upon request by the processor, the power supply can also perform fast 
 charging of the battery. The processor is responsible for communicating with 
 all onboard sensors and the internal SD card through several I2C and SPI 
-busses. Communication with the outside world is also handled by the processor 
+buses. Communication with the outside world is also handled by the processor
 through the USB-C port or wirelessly over Bluetooth. The collection of onboard 
 sensors is responsible for gathering information about the user and their 
 environment to be used by the processor.
