@@ -1,4 +1,6 @@
 
+// Make the heart rate sensor look more round
+$fn = 100;
 
 // Used to prevent 3D geometries that would have zero thickness
 nothing = 0.01;
@@ -47,11 +49,36 @@ module watch_nubs(strap_width=20, pin_hole_diameter=1) {
     mirror([1, 0, 0]) nub();
 }
 
+// Cutouts used for the heart rate sensor, temperature sensor, USB, and SD card
+module enclosure_cutouts() {
+    // SD Card
+    translate(sd_card_position)
+        cube([sd_card_size.x, sd_card_size.y+wall_thickness+nothing, sd_card_size.z]);
+
+    // USB
+    translate([usb_position.x-wall_thickness-nothing, usb_position.y, usb_position.z])
+        cube([usb_size.x+wall_thickness+nothing, usb_size.y, usb_size.z]);
+
+    // Heart rate
+    translate([heart_rate_position.x,
+               heart_rate_position.y,
+               heart_rate_position.z-bottom_thickness])
+        cube([heart_rate_size.x, heart_rate_size.y, heart_rate_size.z+bottom_thickness]);
+
+    // Temperature
+    translate([temperature_position.x,
+               temperature_position.y,
+               temperature_position.z-bottom_thickness])
+        cylinder(d = temperature_diameter, h = temperature_height+bottom_thickness);
+}
+
 module enclosure_body() {
     difference(){
         cube(outer_size);
         translate([wall_thickness, wall_thickness, bottom_thickness])
             cube([pcb_size.x, pcb_size.y, 100]);
+        translate([wall_thickness, wall_thickness, bottom_thickness])
+            enclosure_cutouts();
     }
     translate([outer_size.x/2, -nub_size.y, -nub_size.z/2])
         watch_nubs();
