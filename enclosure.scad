@@ -13,8 +13,11 @@ outer_size = [pcb_size.x + wall_thickness * 2,
               pcb_size.y + wall_thickness * 2,
               10];
 
+nub_size = [3, 3, 3];
+
+
 // A set of two spaced nubs that can hold a watch pin
-module watch_nubs(strap_width=20, nub_size=[3, 3, 3], pin_hole_diameter=1) {
+module watch_nubs(strap_width=20, pin_hole_diameter=1) {
     module nub() {
         translate([strap_width/2, 0, 0])
         difference() {
@@ -35,9 +38,9 @@ module enclosure_body() {
         translate([wall_thickness, wall_thickness, bottom_thickness])
             cube([pcb_size.x, pcb_size.y, 100]);
     }
-    translate([outer_size.x/2, -4, -1.5])
+    translate([outer_size.x/2, -nub_size.y, -nub_size.z/2])
         watch_nubs();
-    translate([outer_size.x/2, outer_size.y, -1.5])
+    translate([outer_size.x/2, outer_size.y, -nub_size.z/2])
         watch_nubs();
 }
 
