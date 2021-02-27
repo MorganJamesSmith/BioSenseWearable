@@ -6,12 +6,13 @@ nothing = 0.01;
 
 wall_thickness = 2;
 bottom_thickness = 3.7;
+top_thickness = 3;
 
 pcb_size = [57, 35, 1.6];
 
 outer_size = [pcb_size.x + wall_thickness * 2,
               pcb_size.y + wall_thickness * 2,
-              10];
+              bottom_thickness + pcb_size.z + top_thickness];
 
 nub_size = [3, 3, 3];
 
