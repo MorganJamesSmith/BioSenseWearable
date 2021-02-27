@@ -16,6 +16,20 @@ outer_size = [pcb_size.x + wall_thickness * 2,
 
 nub_size = [3, 3, 3];
 
+heart_rate_size = [5.6, 3.3, 1.3];
+heart_rate_position = [24, 15.5, -heart_rate_size.z];
+
+temperature_diameter = 5.4;
+temperature_height = 2.9;
+temperature_position = [33.5, 17.5, -temperature_height];
+
+// TODO: get actual size data
+sd_card_size = [16, 17.5, 2];
+sd_card_position = [7, 17.5, -sd_card_size.z];
+
+// TODO: get actual size data
+usb_size = [7.5, 14, 2];
+usb_position = [0, 20, pcb_size.z];
 
 // A set of two spaced nubs that can hold a watch pin
 module watch_nubs(strap_width=20, pin_hole_diameter=1) {
@@ -52,29 +66,27 @@ module main_board() {
         cube(pcb_size);
 
     // SD Card
-    // TODO: get actual size data
     color("grey")
-        translate([7, 17.5, -2])
-        cube([16, 17.5, 2]);
+        translate(sd_card_position)
+            cube(sd_card_size);
 
     // USB
-    // TODO: get actual size data
     color("grey")
-        translate([0, 20, pcb_size.z])
-        cube([7.5, 14, 2]);
+        translate(usb_position)
+            cube(usb_size);
 
     // Heart rate
     color("blue")
-        translate([24, 15.5, -1.3])
-        cube([5.6, 3.3, 1.3]);
+        translate(heart_rate_position)
+            cube(heart_rate_size);
 
     // Temperature
     color("red")
-        translate([33.5, 17.5, -2.9])
-        cylinder(d = 5.4, h = 2.9);
+        translate(temperature_position)
+            cylinder(d = temperature_diameter, h = temperature_height);
     }
 }
 
 enclosure_body();
 translate([wall_thickness, wall_thickness, bottom_thickness])
-main_board();
+    main_board();
