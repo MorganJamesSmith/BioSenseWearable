@@ -84,3 +84,16 @@ sent likely contributes to the low throughput significantly. It was not expected
 that Bluetooth Low Energy would be very fast however, since it is optimized for 
 power consumption instead of speed. This trade-off is well suited to this project 
 because it is battery powered.
+
+\subsubsection{Heart Rate}
+
+Our heart rate driver is based on an open source implementation written in
+C++ \cite{max86150-ardino}. Since the SDK we are using falls under the nRF5
+Nordic License, only software that is compatible with this license can be
+integrated into the project. The open source C++ heart rate driver is under the
+expat license so we are free to use it as long as the copyright notice is
+maintained. Unfortunately, not all useful open source software was licensed in
+a way compatible with the SDK license. In particular, it would have been ideal
+to reuse an algorithm to convert raw PPG data to beats per minute, however the
+available algorithm was licensed with the Lesser GNU Public
+License \cite{wasp-os} which is incompatible with the SDK license.
