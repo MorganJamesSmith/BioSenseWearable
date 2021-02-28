@@ -102,6 +102,8 @@ copy of our board.
 
 \subsection{Software Challenges}
 
+\subsubsection{Toolchain and nRF5 SDK}
+
 Our toolchain setup ended up being much more difficult than we had envisioned.
 In our proposal we had only budgeted ourselves a couple days for this step,
 assuming that our experience with other ARM microcontrollers would allow us to
@@ -109,9 +111,7 @@ get up and running with the nRF52840 quite quickly. In reality, this seemingly
 simple task had required a significant investment of time which held up our
 software progress early in the project considerably.
 
-%should we get rid of the \ref?
-As described in our proposal (section \ref{subsec:proposed_software_libraries}),
-we are used the hardware abstraction layer provided by Nordic
+We are used the hardware abstraction layer provided by Nordic
 Semiconductor for the nRF52840 as well as some of their libraries. While we had
 a build system set up that allowed us to successfully compile and run bare metal
 software without any of Nordic's nRF SDK components, actually compiling the SDK 
@@ -122,6 +122,8 @@ example projects provided with the nRF52 SDK. A surprising amount of work was
 required to get the Makefile and Segger Embedded Studio project from the example 
 to work in our repository without having to place all of our code in the examples 
 folder inside the nRF52 SDK's directory structure.
+
+\subsubsection{USB and Bluetooth Integration}
 
 One of the challenges faced during integration testing was a conflict between 
 the USB and Bluetooth drivers. The two drivers were developed independently of
