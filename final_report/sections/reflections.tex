@@ -71,4 +71,29 @@ something where size is not as relevant as it is in a watch.
 
 \subsection{Morgan}
 
-Reflection.
+Our project was quite ambitious, but I feel like we made great progress.
+However, there are a few areas I think we fell short in.
+
+We started the software for our project much later than intended.  This
+occurred for a few reasons.  We didn't take into account the time needed to
+setup and learn the development environment.  The Nordic SDK was more difficult
+to setup than expected, and the documentation is quite lackluster.
+Furthermore, there was little feedback when writing drivers as we did not have
+the hardware yet.  If we had setup a testing framework ahead of time that did
+not rely on the hardware, I believe that would have made much more progress
+earlier on.
+
+Personally, I wish we had gone with open source drivers for the main board
+instead of relying on Nordic's SDK.  Using Nordic's SDK prevented us from
+integrating code under the GNU Public License into our project.  It also limits
+the licenses we can choose to release our project under.  Furthermore, it is
+not well documented.  We decided to use it because we believed it to be the
+easiest option.  While that might be true, I dislike the limitations it put on
+our project.
+
+I am quite proud of the enclosure and the methods I used to create it.
+Traditional 3D modeling programs have given me no end of grief so I decided to
+try using OpenSCAD.  This program allowed me to pragmatically tune tolerances,
+thicknesses, and positions with ease.  If I had more time, I would investigate
+methods to integrate OpenSCAD with KiCad in order to generate parts of the
+enclosure based on the electronic design.
