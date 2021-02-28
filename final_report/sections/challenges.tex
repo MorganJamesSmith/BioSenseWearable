@@ -5,6 +5,8 @@ if any, had to be considered when finding a solution.
 
 \subsection{Hardware Challenges}
 
+\subsubsection{Power and Battery Design}
+
 One of the major challenges that occurred with the hardware development early
 on in the project was the power supply. The original plan as described in the 
 proposal was to use a single rechargeable AAA nickel metal hydride (NiMH) 
@@ -57,6 +59,46 @@ batteries removable so they could be swapped out with charged ones instead of
 waiting for the device to charge them. This will no longer be possible with 
 the current design; however fast charging capability has now been added as a 
 replacement.
+
+\subsubsection{Assembly and Parts Availability}
+
+One of the key challenges that we planned for and managed on the hardware side
+of our project was the difficulty of assembling our circuit boards by hand. Due
+to the sensors we wanted to use coming in packages designed for small, high
+density printed circuit board designs and our desire to build a prototype that
+was roughly wrist sized we ended up using a number of components that where not
+particularly well suited to hand assembly.
+
+For the most part our assembly still worked out well using a hot air reflow
+technique, but we did encounter significant frustration and delay in soldering
+our microcontroller module to the board. The module we used was not amenable to
+the hot air reflow technique since the pads that needed to be soldered are
+located below an RF shielding can. This means that it took a considerable amount
+of time and heat to properly reflow the solder paste below the module and we had
+inconstant results with no way of properly inspecting the module to ensure that
+it had been soldered properly. In the end we simply ended up repeatedly removing
+the module and then soldering it back on until we where lucky enough to have all
+of the pins flow properly.
+
+An issue that we did not foresee, but should have, was limited availability of
+components. When originally designing our hardware we limited ourselves to
+components that where readily available in small quantities from online
+retailers and that where in stock in large quantities at the time. Between
+finalizing our schematic design near the end of the fall semester and ordering
+the components for our first copy of the board in the winter semester the IMU
+and air quality sensors we had selected had gone out of stock at all of the
+electronics retailers that we where familiar with. The IMU later became
+available again, but we where never able to obtain the air quality sensor.
+
+A few weeks later when we went to order parts for our second copy of the board
+we found that even more components had become unavailable. In addition to the
+air quality sensor, the microcontroller module, diodes, USB connector and UV
+light sensor that we had chosen for our design where not available. We where
+able to find a substitute microcontroller module, though the substitute requires
+an external Bluetooth antenna and suitable replacement diodes, but we where
+forced to leave the USB connector and UV light sensor unpopulated on the second
+copy of our board.
+
 
 \subsection{Software Challenges}
 
