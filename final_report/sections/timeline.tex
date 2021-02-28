@@ -1,0 +1,141 @@
+Our original timeline was very optimistic.  Our original timeline can be seen
+in figure \ref{fig:original-project-timeline} and our actual timeline can be
+seen in figure \ref{fig:actual-project-timeline}.
+
+Software development was started much later than intended. There are a few
+explanations for this.  The software development environment was more
+difficult to set up than expected.  Also there was a discouraging lack of
+feedback since there was no hardware to test on.
+
+The most prominent change in hardware is the elimination of a second PCB
+revision. Thankfully, only having one revision did not prevent us from making a
+functional product, but this eliminate was done to save time, not because we
+had a flawless first PCB revision.
+
+The enclosure was delayed due to hardware assembly and part availability
+issues.  The idea behind the enclosure design was to rapidly iterate the case
+with the PCB in hand.  However, assembly and part availability issues meant the
+hand off of the PCB to the case designer happened much later than expected.
+
+
+\ganttset{
+    calendar week text={\currentweek}
+}
+
+\begin{figure}[!htb]
+\makebox[\textwidth][r]{
+\begin{ganttchart}[
+        y unit title=0.5cm, y unit chart=0.5cm,
+        vgrid,
+        x unit = 1mm,
+        time slot format=isodate,
+        time slot unit=day,
+        title/.append style={draw=none, fill=RoyalBlue!50!black},
+        title label font=\sffamily\scriptsize\color{white},
+        title label node/.append style={below=-1.6ex},
+        title left shift=.05,
+        title right shift=-.05,
+        title height=1,
+        bar height=.6,
+        group right shift=0,
+        group top shift=.6,
+        group height=.3,
+        group peaks height=.2,
+        bar incomplete/.append style={fill=Maroon},
+        bar label node/.style={text width=3cm,align=right,font=\scriptsize\RaggedLeft,anchor=east},
+        milestone label node/.style={text width=2cm,align=right,font=\scriptsize\RaggedLeft,anchor=east},
+        group label node/.style={text width=3cm,align=right,font=\textbf\scriptsize\RaggedLeft,anchor=east}
+    ]{2020-11-02}{2021-03-20}
+    \gantttitlecalendar{year} \\
+    \gantttitlecalendar{month} \\
+    \gantttitlecalendar{week} \\
+
+% Software
+    \ganttgroup{Software}{2020-11-02}{2021-02-20} \\
+    \ganttbar{Setup Dev. Env.}{2020-11-02}{2020-11-07} \\
+    \ganttbar{USB Debugging Interface}{2020-11-08}{2020-12-19} \\
+    \ganttbar{SD Card Driver}{2020-11-08}{2021-01-02} \\
+    \ganttbar{Sensor Drivers}{2020-11-08}{2021-01-09} \\
+    \ganttbar{Filesystem}{2020-12-12}{2021-01-16} \\
+    \ganttbar{Bluetooth Interface}{2020-12-19}{2021-01-30} \\
+    \ganttbar{Data Logging}{2020-12-26}{2021-01-30} \\
+    \ganttbar{Companion Software}{2021-01-02}{2021-02-20} \\
+
+% Testing
+    \ganttbar{Sensor Driver Tests}{2021-01-09}{2021-02-13} \\
+
+% Elec
+    \ganttgroup{Hardware}{2020-11-02}{2021-03-06} \\
+    \ganttbar{Electrical Schematic}{2020-11-02}{2020-12-12} \\
+    \ganttbar{PCB Rev. A}{2020-12-13}{2021-01-30} \\
+    \ganttbar{PCB Rev. B}{2021-01-31}{2021-03-06} \\
+
+% Mech
+    \ganttgroup{Enclosure}{2020-11-02}{2021-03-08} \\
+    \ganttbar{Enclosure Prototype A}{2020-11-02}{2020-12-19} \\
+    \ganttbar{Enclosure Prototype B}{2021-01-23}{2021-02-03} \\
+    \ganttbar{Final Enclosure}{2021-02-27}{2021-03-08} \\
+\end{ganttchart}
+}
+\caption{Original Project Timeline}
+\label{fig:original-project-timeline}
+\end{figure}
+
+\begin{figure}[!htb]
+\makebox[\textwidth][r]{
+\begin{ganttchart}[
+        y unit title=0.5cm, y unit chart=0.5cm,
+        vgrid,
+        x unit = 1mm,
+        time slot format=isodate,
+        time slot unit=day,
+        title/.append style={draw=none, fill=RoyalBlue!50!black},
+        title label font=\sffamily\scriptsize\color{white},
+        title label node/.append style={below=-1.6ex},
+        title left shift=.05,
+        title right shift=-.05,
+        title height=1,
+        bar height=.6,
+        group right shift=0,
+        group top shift=.6,
+        group height=.3,
+        group peaks height=.2,
+        bar incomplete/.append style={fill=Maroon},
+        bar label node/.style={text width=3cm,align=right,font=\scriptsize\RaggedLeft,anchor=east},
+        milestone label node/.style={text width=2cm,align=right,font=\scriptsize\RaggedLeft,anchor=east},
+        group label node/.style={text width=3cm,align=right,font=\textbf\scriptsize\RaggedLeft,anchor=east}
+    ]{2020-11-02}{2021-03-20}
+    \gantttitlecalendar{year} \\
+    \gantttitlecalendar{month} \\
+    \gantttitlecalendar{week} \\
+
+% Software
+    \ganttgroup{Software}{2020-11-02}{2021-02-20} \\
+    \ganttbar{Setup Dev. Env.}{2020-11-02}{2020-12-24} \\
+    \ganttbar{USB Debugging Interface}{2020-12-25}{2021-01-22} \\
+    \ganttbar{SD Card Driver}{2021-01-15}{2021-02-01} \\
+    \ganttbar{Sensor Drivers}{2021-01-20}{2021-03-05} \\
+    \ganttbar{Filesystem}{2021-01-22}{2021-02-19} \\
+    \ganttbar{Bluetooth Interface}{2021-01-29}{2021-02-26} \\
+    \ganttbar{Data Logging}{2021-02-05}{2021-02-19} \\
+    \ganttbar{Companion Software}{2021-02-12}{2021-03-08} \\
+
+% Testing
+    \ganttbar{Sensor Driver Tests}{2021-02-05}{2021-03-08} \\
+
+% Elec
+    \ganttgroup{Hardware}{2020-11-02}{2021-03-06} \\
+    \ganttbar{Electrical Schematic}{2020-11-02}{2020-12-24} \\
+    \ganttbar{PCB Layout}{2020-12-24}{2020-12-31} \\
+    \ganttbar{PCB Assembly}{2021-01-20}{2021-02-27} \\
+
+% Mech
+    \ganttgroup{Enclosure}{2021-02-01}{2021-03-15} \\
+    \ganttbar{Enclosure Prototype}{2021-02-01}{2021-02-27} \\
+    \ganttbar{Final Enclosure}{2021-03-05}{2021-03-15} \\
+\end{ganttchart}
+}
+\caption{Actual Project Timeline}
+\label{fig:actual-project-timeline}
+\end{figure}
+
