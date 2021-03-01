@@ -48,6 +48,14 @@ at reasonable intervals.
 
 \subsubsection{USB}
 
+The USB serial interface software module provides a simple abstraction over the
+nRF5 SDK's USB communications device class abstract communications model
+(CDC-ACM) driver which allows for serial port emulation. The USB serial module
+maintains circular buffers for input and output and provides a variety of
+functions for reading from and writing to the buffers. The output buffer can be
+written to in a blocking or non-blocking fashion. The input buffer can be read
+character by character, in blocks, or by line with a selectable delimiter.
+
 \subsubsection{Bluetooth}
 
 The design goal for the Bluetooth driver was to have it behave like a serial
@@ -97,3 +105,10 @@ a way compatible with the SDK license. In particular, it would have been ideal
 to reuse an algorithm to convert raw PPG data to beats per minute, however the
 available algorithm was licensed with the Lesser GNU Public
 License \cite{wasp-os} which is incompatible with the SDK license.
+
+\subsubsection{Inertial Measurement Unit}
+
+Our driver for the ICM 20948 IMU is written from scratch. The driver is a finite
+state machine that makes use of the nRF5 SDK's SPI driver. The state machine
+controls the process of initializing the sensor and of periodically taking
+readings, which are then handed off to the data logging service to be recorded.
