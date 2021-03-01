@@ -10,31 +10,10 @@ of the design and what the final product looks like.
 
 \subsection{Background}
 
-Traditionally, people only seek treatment for ailments after they start
-experiencing symptoms; however, it is often desirable to take action before
-symptoms appear.  One solution to catch illness earlier could be to monitor a
-person's physiological state using various sensors and take action when the
-state falls outside of a known healthy state.  However, the accepted healthy
-range for a population could be significantly larger than the accepted healthy
-range for the individual \cite{Wearable-tracking2017}.
-
-Wearables are capable of revealing personal daily physiological cycles with
-respect to skin temperature, and heart rate with high accuracy
-\cite{Wearable-tracking2017}. By comparing a person's current physiological
-state with the expected state, it is possible to predict illness with greater
-sensitivity than a self diagnosis. For example, a study was able to detect a
-period of inflammation (confirmed by a medical high-sensitivity C-reactive
-protein test) using a participant's heart rate even though the participant
-themselves experienced no symptoms \cite{Wearable-tracking2017}.  The same
-study even helped a participant get treatment of Lyme disease before the
-``Bull's eye'' rash appeared (a common symptom during the early stages of Lyme
-disease) by detecting an abnormality in their SpO\textsubscript{2} levels.
-
-Wearable data can also be used to detect group illness rates.  By using heart
-rate data and sleep data from fitbit devices and cross referencing that data
-with the Centers for Disease Control and Prevention's (CDC) Influenza Like
-Illness (ILI) data, a study was able to predict illness 6.3\% to 32.9\% better
-than previous methods \cite{Radin2020}.
+Traditionally, people only sought treatment for ailments after they started to experience symptoms; however, it would be desirable to take action before symptoms appear. One method to do this could be to monitor a person’s physiological state using various sensors and take action when the state falls outside of normal parameters. However, normal parameters vary from individual to individual. 
+Wearables are capable of revealing personal daily physiological cycles with respect to skin temperature and heart rate with high accuracy [12]. By comparing a person’s current physiological state with the expected state, it is possible to predict illness with greater accuracy. For example, a study was able to detect a period of inflammation (confirmed by a medical high-sensitivity C-reactive protein test) using a participant’s heart rate even though the participant themselves experienced no symptoms [12]. The same study even helped a participant get treatment of Lyme disease before the characteristic “Bull’s eye” rash appeared by detecting an abnormality in their SpO2 levels. 
+Data monitored by wearable tech can also be used to detect group illness rates. By using heart rate data and sleep data from Fitbit devices and cross referencing that data with the Centers for Disease Control and Prevention’s (CDC) Influenza Like Illness (ILI) data, a study was able to predict illness 6.3% to 32.9% better than previous methods [17]. 
+Wearables can also detect more immediate dangers to someone’s health like a heart attack [20], a fall [9] or dangerously low or high heart rates. This information could be used to alert emergency services to save lives.\cite{Radin2020}.
 
 Wearables can also detect more immediate dangers to someone's health like a
 heart attack \cite{heart-attack}, a fall \cite{Khojasteh_2018}, or dangerously
@@ -43,15 +22,14 @@ services to save lives.
 
 \subsection{Motivation}
 
-Despite all of the advances in medical technology, a cure for diseases and
-allowing humans to live longer are ever present goals for scientists and 
-doctors alike.  Often wide spread diseases we have not prepared for can occur in
-society.  COVID-19 is a pandemic that
-has, at the time of writing, claimed an estimated 2.5 million lives globally
+Despite all of the advances in medical technology, curing diseases and
+allowing humans to live longer are ever-present goals for scientists and 
+doctors alike.  Often, wide-spread diseases we have not prepared for can occur in
+society.  COVID-19 is a pandemic that has, at the time of writing, claimed an estimated 2.5 million lives globally
 \cite{johns-hopkins-corona-chan}, and continues to infect more people every
 day.  In 2007 it was estimated that the total cost of occupational illnesses
 among civilians in the United States was \$58 billion \cite{Leigh2011}.
-Slowing the spread of disease could save lives and save money.
+Slowing the spread of disease could therefore save lives and money.
 
 One method of limiting the spread of disease is early diagnosis.  This would
 allow individuals who are aware they are ill to take measures to reduce the
@@ -61,18 +39,16 @@ individuals, since identifying symptoms early has the highest efficiency for
 protecting others.
 
 By creating a personal physiological profile and constantly
-comparing the user's current physiological state to it, illness can be detected
+comparing it to the user's current physiological state, illness can be detected
 early.  The motivation for our project is to create a device capable of measuring 
-enough of the user's current physiological state to predict illness.  This is done 
-in the hope that it could be used to slow the spread of illness's and, to speed
-recovery from illness's by starting treatment earlier.
+enough of the user's current physiological state to predict illness, potentially slowing the spread of illness and enabling an earlier start to treatment .
 
 \subsection{Problem Statement}
 
 One way to facilitate early diagnosis is to measure biometrics on patients and
 make clinical diagnoses based on these measurements.
 A convenient and low cost method to collect biometric data is needed in order
-to make the potential benefits of the technology available to a large number of
+to realise potential benefits of the technology available to a large number of
 people. This information may then be used to detect abnormalities in the user’s 
 physiology and could be used to aid in the early detection of illness.
 The objective of this project is to create a wearable device that can measure a
@@ -80,7 +56,7 @@ variety of critical health metrics including skin temperature and heart rate.
 
 \subsection{Solution}
 
-The solution provided by this project is a wrist mounted wearable health 
+The solution provided by this project is a wrist-mounted wearable biometric 
 monitoring device. The device provides a sensor platform that is suitable for 
 early detection of disease. The included sensors can measure skin temperature, 
 ambient temperature, heart rate, pulse oximetry, and motion.  The electronic
@@ -94,20 +70,20 @@ LED for power, notifications, and debugging. It also features a power button
 to turn the device on and off. The main interactions with the device occur 
 through a companion software that connects to the device through Bluetooth or 
 USB. It is limited to simply receiving and decoding data received from the 
-wearable device, and exporting it in an analyzable format such as a csv or json 
+wearable device, and exporting it to an analyzable format such as a csv or json 
 file.
 
-The device will store the collected sensor information to a micro SD card
-in the device which is then read back when requested via the companion software.
-The SD card will be replaceable, and the capacity of the card used will dictate
-how long the device can record data before needing to off load to the companion
+The device will store the collected sensor information in a micro SD card
+inside the device which is then read back when requested via the companion software.
+The SD card can be replaced, and the capacity of the card used will dictate
+how long the device can record data before needing to off-load data to the companion
 software.
 
 The focus of this solution is on the collection of biometrics and making them
-available for analysis. No attempt was made to perform medical analysis
-or give clinical diagnosis from the collected biometrics. Our intention was to
-design the system so that those applications could be integrated with or built
-on top of the work we have done for this project.
+available for analysis. No attempt was made to perform a medical analysis
+or give a clinical diagnosis from the collected biometrics. Our intention was to
+design the system so that those applications could be integrated with/built
+on the work we have done for this project.
 
 \subsection{Accomplishments}
 {\color{red}
@@ -117,11 +93,11 @@ What did we actually do?
 %Should this be in a reflection or something? Not really part of a solution,
 %it is a disclaimer.
 
-%In order to reduce development cost and complexity, the hardware component of
-%the project uses sensors that are readily available from online sources, and 
-%that can be assembled on a PCB by hand relatively easily. As a result the 
-%selection of sensors may be more limited or lower quality than what is possible 
-%if options that are made to order, or only available in large quantities had been
+%In order to reduce development cost and complexity, the hardware components of
+%the project use sensors that are readily available from online sources, and 
+%can be assembled on a PCB by hand relatively easily. As a result the 
+%selection of sensors may be more limited or of lower quality than what is possible 
+%for options that are made to order, or only available in large quantities had been
 %explored.  The use of parts that can be soldered to a PCB without paying for
 %the services of an advanced manufacturing facility also resulted in the final 
 %hardware design being larger than it would have been otherwise.

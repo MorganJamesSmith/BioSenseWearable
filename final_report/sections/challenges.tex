@@ -1,7 +1,7 @@
-Several challenges were faced during the course of this project with both the
+Several challenges were faced during the course of this project in regards to both the
 hardware and software development. This section will describe some of the 
 challenges faced, how they were overcome, and what trade-offs or compromises,
-if any, had to be considered when finding a solution.
+if any, had to be considered when determining a solution.
 
 \subsection{Hardware Challenges}
 
@@ -10,14 +10,14 @@ if any, had to be considered when finding a solution.
 One of the major challenges that occurred with the hardware development early
 on in the project was the power supply. The original plan as described in the 
 proposal was to use a single rechargeable AAA nickel metal hydride (NiMH) 
-battery. Designing a power supply to work with the low input voltage of 1.2V 
-to 1.0V proved to be quite difficult due to a small selection of components that 
+battery. Designing a power supply to work with the low input voltage of 1.0 to 1.2V 
+proved to be quite difficult due to a small selection of components that 
 work at that voltage. The most difficult part was trying to implement a soft 
 power on / off circuit as well as an automatic switchover circuit to shift the 
 electrical load from the battery to USB power. The voltage drop across a diode 
 for example makes the resulting signal nearly unusable to turn on a MOSFET. 
 Diodes with a very low forward voltage drop and MOSFETS with very low gate 
-threshold voltages are available for a higher price, but keeping cost down was 
+threshold voltages are available for a higher price, however keeping cost down was 
 also a very important goal. In the end a design was created, and since it was 
 expected that it may present some problems, it was prototyped on a breadboard 
 so that testing could be done before moving ahead with schematic capture and 
@@ -27,16 +27,16 @@ Testing showed that the design mostly worked, but had some flaws that were
 deemed unacceptable for this project. The first concern was that the power 
 supply would not be able to supply enough current. It was capable of powering 
 an nRF52840 development board with some additional resistive load, but it 
-struggled to maintain a set voltage and it became apparent that it would be 
-barely capable of powering the final design with several sensors. The second 
+struggled to maintain a set voltage and became apparent that it would 
+barely be capable of powering the final design with several sensors. The second 
 issue was with voltage regulator start up under load. The switching regulator 
-was only able to start with a very small load on it, but once the output had 
-reached the desired voltage more load could be placed on it without issue. When 
-too much load was attached to the regulator before start up it would stay in an 
-under-voltage lockout state indefinitely. This problem may or may not have 
+was only able to start with a very small applied load, but once the output had 
+reached the desired voltage, more load could be placed on it without issue. When 
+too much load was attached to the regulator before start up, it would remain indefinitely in an
+under-voltage lockout state. This problem may or may not have 
 presented itself in a real-world test with the final design, however the goal 
 was to have a robust solution that was reliable and not leave things to chance 
-with a potential race condition. The final problem was efficiency. With a light 
+with a potential race condition. The final problem was with efficiency. With a light 
 load the power supply performed in an acceptable fashion, but under heavier 
 loads efficiency dropped off much more than expected. The datasheet for the 
 regulator did not indicate that efficiency would change appreciably over the 
@@ -64,39 +64,38 @@ replacement.
 
 One of the key challenges that we planned for and managed on the hardware side
 of our project was the difficulty of assembling our circuit boards by hand. Due
-to the sensors we wanted to use coming in packages designed for small, high
+to the sensors coming in packages designed for small, high
 density printed circuit board designs and our desire to build a prototype that
-was roughly wrist sized we ended up using a number of components that where not
-particularly well suited to hand assembly.
+could be worn on the wrist, a number of components that were not
+particularly well suited to hand assembly were used.
 
-For the most part our assembly still worked out well using a hot air reflow
-technique, but we did encounter significant frustration and delay in soldering
-our microcontroller module to the board. The module we used was not amenable to
+The assembly still worked well using a hot air reflow
+technique, but we did encounter significant frustration and delays in soldering
+our microcontroller module to the board. The module used was not amenable to
 the hot air reflow technique since the pads that needed to be soldered are
 located below an RF shielding can. This means that it took a considerable amount
 of time and heat to properly reflow the solder paste below the module and we had
 inconstant results with no way of properly inspecting the module to ensure that
-it had been soldered properly. In the end we simply ended up repeatedly removing
-the module and then soldering it back on until we where lucky enough to have all
-of the pins flow properly.
+it had been soldered properly. In the end we ended up repeatedly removing
+the module then soldering it back on until all pins were in the proper configuration.
 
-An issue that we did not foresee, but should have, was limited availability of
-components. When originally designing our hardware we limited ourselves to
+An issue that we did not foresee at the time of planning was limited availability of
+components. When originally designing the hardware, we limited ourselves to
 components that where readily available in small quantities from online
-retailers and that where in stock in large quantities at the time. Between
+retailers and were in stock in large quantities at the time. Between
 finalizing our schematic design near the end of the fall semester and ordering
-the components for our first copy of the board in the winter semester the IMU
+the components for our first copy of the board in the winter semester, the IMU
 and air quality sensors we had selected had gone out of stock at all of the
-electronics retailers that we where familiar with. The IMU later became
-available again, but we where never able to obtain the air quality sensor.
+electronics retailers we were familiar with. The IMU later became
+available again, but we were never able to obtain the air quality sensor.
 
-A few weeks later when we went to order parts for our second copy of the board
+A few weeks later when we went to order parts for our second copy of the board,
 we found that even more components had become unavailable. In addition to the
 air quality sensor, the microcontroller module, diodes, USB connector and UV
-light sensor that we had chosen for our design where not available. We where
+light sensor we selected for our design were not available. We were
 able to find a substitute microcontroller module, though the substitute requires
-an external Bluetooth antenna and suitable replacement diodes, but we where
-forced to leave the USB connector and UV light sensor unpopulated on the second
+an external Bluetooth antenna and suitable replacement diodes, but we were
+forced to leave out the USB connector and UV light sensor from the second
 copy of our board.
 
 
@@ -109,9 +108,9 @@ get up and running with the nRF52840 quite quickly. In reality, this seemingly
 simple task had required a significant investment of time which held up our
 software progress early in the project considerably.
 
-%should we get rid of the \ref?
-As described in our proposal (section \ref{subsec:proposed_software_libraries}),
-we are used the hardware abstraction layer provided by Nordic
+%should we get rid of the \ref? -> yes - Kira
+As described in the proposal,
+we are used to the hardware abstraction layer provided by Nordic
 Semiconductor for the nRF52840 as well as some of their libraries. While we had
 a build system set up that allowed us to successfully compile and run bare metal
 software without any of Nordic's nRF SDK components, actually compiling the SDK 
@@ -125,17 +124,16 @@ folder inside the nRF52 SDK's directory structure.
 
 One of the challenges faced during integration testing was a conflict between 
 the USB and Bluetooth drivers. The two drivers were developed independently of
-each other, and both worked on their own. When running the two drivers together
+each other and both worked on their own. When running the two drivers together,
 Bluetooth would function as expected but USB would fail to enumerate on the host
-and therefore, not work at all. Oddly, this problem would not occur when the 
-microcontroller was running in debug mode, it presented itself only in the 
+and therefore not work at all. Oddly, this problem would not occur when the 
+microcontroller was running in debug mode; it presented itself only in the 
 normal run mode. This made the problem much more difficult to solve because
 stepping though code, breakpoints, or any other debugging capabilities were not
 available outside of debug mode. The alternative technique used was to turn on 
 an LED when execution reached a certain point or some condition was met. 
 
-In the end, the solution to the problem ended up being very easy to implement 
-despite taking a significant amount of time to find. When Bluetooth is 
+In the end, a solution was found; when Bluetooth is 
 initialised, it enables what Nordic calls a Soft Device. This Soft Device runs 
 the Bluetooth stack and also takes over control of some parts of the hardware 
 in the process. If other components of the software need access to hardware 

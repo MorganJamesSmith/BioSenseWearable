@@ -1,4 +1,4 @@
-Wearable health monitoring devices have been progressing in areas including
+Wearable health monitoring devices have been under constant development and are therefore progressing in areas such as
 form factor, biometric data collection, and battery life.  This section will
 discuss the current state of commercially available solutions, as well as some
 ongoing research areas.
@@ -13,7 +13,7 @@ and a processor, but have no display.  An example of such a device is the Empati
 E4 wristband \cite{McCarthy2016}.  This device is designed to provide real-time
 physiological data for research using a photoplethysmogram, electrodermal
 activity sensor, accelerometer, and temperature sensor \cite{empatica}. The
-device can log data internally, stream it over Bluetooth, and has an API for
+device can log data internally, stream it over Bluetooth, and uses an API for
 developing smartphone apps that make use of the data it collects. Empatica
 claims that their device has been used by researchers in over 1000 studies
 \cite{empatica}.
@@ -38,7 +38,7 @@ electrochemical sensors, and more \cite{Yai2018}.
 
 Like smart-phones or other mobile devices, powering wearable health monitoring
 devices can be a challenge \cite{Pantelopoulos2010}.  Longer battery life is 
-desirable but usually comes at the cost of weight and size.  
+desirable but usually comes with the downside of increased weight and size.  
 Wearable devices place yet another constraint on this problem: comfort 
 \cite{Motti2014}.  Comfort enables users to wear the device continuously for 
 long periods of time.  
@@ -65,43 +65,41 @@ frequency \cite{Forman1994}. All three of these factors can be reduced in order
 to save power.  Supply voltage can be reduced by using components designed to 
 operate on lower voltages, capacitance can be reduced by using highly integrated 
 components or multichip modules, and frequency can be reduced by lowering 
-processor clock speeds at the cost of performance \cite{Forman1994}.  An
-additional benefit of highly integrated electronics for wearable devices is 
-there can be fewer components required in the hardware design, leading to 
+processor clock speeds at the cost of performance \cite{Forman1994}. With highly integrated electronics, fewer components are required in the hardware design, leading to 
 a smaller final product.  An embedded processor in a wearable device could make 
 use of an adjustable clock, or multiple clock sources in order to slow the 
-processor down when high performance is not needed to conserve power.  Even
-when high performance is needed certain tasks can be offloaded to dedicated
+processor down when high performance is not needed to conserve power. When higher performance is required, certain tasks can be offloaded to dedicated
 hardware that is more efficient, thus allowing the processor to remain in a 
-lower power state.  AES encryption for example has been shown to have lower 
+lower power state.  For example, AES encryption has been shown to have lower 
 power consumption and increased performance when dedicated hardware is used
 instead of a software implementation \cite{Hamalainen2006}.  For this reason,
 wearable devices using encryption for communication or data storage may 
 benefit from using a processor with hardware cryptography support. Another task
-directly related to wearable devices that has seen benefit from hardware 
+directly related to wearable devices that has benefitted from hardware 
 acceleration is real time ECG signal processing \cite{Cardarilli2018}. It was 
 shown that hardware acceleration allowed for a reduction in processor clock 
 speed without sacrificing execution time, resulting in significant power 
 savings.
 
-By combining the power generation, storage, and conservation technologies 
-aforementioned, it may be possible to create future wearable health monitoring 
-devices that are just as comfortable to wear as regular clothing, never 
+By combining the aforementioned power generation, storage, and conservation technologies,
+it may be possible to create future wearable health monitoring 
+devices that are very comfortable, never 
 require charging, and are essentially maintenance-free for the life of the unit.
 
 In summary, it appears that significant research and development has gone into
-moving wearable health monitoring devices away from the current design of a
-battery-powered device affixed to the body in some way, and towards comfortable
+progressing wearable health monitoring devices towards comfortable
 textiles that cover the body, monitor biometrics, and power themselves from the
-body.  Unfortunately, the technology required for these desirable qualities is 
+body itself and away from the current design of a
+battery-powered device affixed to the body in some way.  
+Unfortunately, the technology required for these desirable qualities is 
 not yet mature enough to be inexpensive and readily available.  As a result,
 the wearable device this project aims to create will have to be more in line 
-with some of the commercially available products out there today. It is
-possible however to apply some of the power conservation techniques using 
-technology available today. Hardware acceleration and higher levels of 
+with some of the commercially available products. It is
+possible, however, to apply some of the power conservation techniques using 
+today’s technology. Hardware acceleration and higher levels of 
 integration can be achieved using embedded processors with several built in
 modules for things like Bluetooth, USB, cryptography, and more. There are also
-sensors available that integrate measurement of several different parameters 
+sensors available that enable the measurement of several different parameters 
 and may even perform some signal processing all in a single chip. Many 
 opportunities exist for a wearable device to slow down or stop its processor in
 order to save power, such as between sensor readings, or when not interacting

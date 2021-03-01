@@ -6,32 +6,29 @@ were made.
 
 \subsection{Component Selection}
 
-We considered a number of requirements in choosing a microcontroller for our
-project. We identified several microcontroller features that were needed to
-support our project requirements and did not consider any microcontrollers
-without these features. These features are:
+A number of requirements were considered in choosing a microcontroller for our
+project. We identified several microcontroller features that were required to
+meet our project requirements and omitted any microcontrollers
+without these features from consideration. These features include:
 \begin{itemize}
     \item Bluetooth Low Energy support
     \item At least one I2C master mode interface for sensors
     \item An SPI or SD/MMC interface to connect and SD card
 \end{itemize}
 
-While we could have selected from a much wider variety of microcontrollers if we
-had considered using a separate Bluetooth LE controller chip, we chose to limit
-our selection to parts that featured an integrated Bluetooth LE radio. This is
+We chose to limit our selection of microcontrollers to those that included parts 
+that featured an integrated Bluetooth LE radio. This is
 to reduce part count (and therefore size, cost and design complexity) and to
 provide better power consumption.
 
 Table \ref{tab:mcu-comp-general} shows a brief summary of the microcontroller
-options that we considered, all of which meet the minimum criteria outlined
-above. The costs listed in the table are the price in Canadian dollars in single
-quantities in the friendliest device package available and cut tape or tray
-packaging from digikey.ca. These prices are often volatile and are therefore
-listed here only for relative comparison.
+options that we considered, all of which met the minimum criteria outlined
+above. The costs listed in the table are in Canadian dollars in single
+quantities from digikey.ca. Different prices are compared, as they may vary.
 
 All of the parts listed are based on ARM cortex processors. Nordic
-Semiconductor's nRF5340 and the Silicon Labs EFR32BG22C224 use a Cortex-M33
-while all of the other microcontrollers listed use a Cortex-M4. We estimated that
+Semiconductor's nRF5340 and the Silicon Labs’ EFR32BG22C224 use a Cortex-M33
+while all other listed microcontrollers use a Cortex-M4. We estimated that
 any of these microcontrollers would have sufficient processor performance for
 our application. Similarly, all of the listed options have ample flash storage
 and SRAM.
@@ -40,20 +37,19 @@ Not all of the listed microcontrollers come in packages that are easy to solder
 by hand. The relatively small QFN packages of the nRF52832 and EFR32BG22C224 can
 be soldered with relative ease using a hot air reflow station or an iron and be
 inspected easily with a microscope. Unfortunately the other options are much
-more difficult, the Apollo3 Blue's BGA package and the WLP package of the
+more difficult, as the Apollo3 Blue's BGA package and the WLP package of the
 MAX32668 each have a large array of solder balls. These packages can be soldered
 with hot air reflow, but we did not have the equipment to inspect them. The
 nRF52840 and nRF5340 are a middle ground, their aQFN packages have many fewer
 balls, but they still do have two rows of connections. This means that while we
-are able to solder the packages with hot air reflow they would difficult to
-inspect. Another option that was considered to sidestep the issue of soldering 
-difficulty entirely was the use of modules that integrate the microcontroller and
+are able to solder the packages with hot air reflow they would also be difficult to
+inspect. Another option that was considered to bypass the issue of soldering 
+difficulty was the use of modules that integrate the microcontroller and
 a PCB antenna on a small PCB. The nRF52840 and nRF52830 can be found in these
-modules and the Apollo3 Blue is available in a similar module from SparkFun
-branded as SparkFun Artemis.
+modules and the Apollo3 Blue is available in a similar module from SparkFun as SparkFun Artemis.
 
-The availability was also a limiting factor in our decision. Most of our listed
-microcontrollers were readily available from a variety of online component
+Availability was also a limiting factor in our decision. Most of our listed
+microcontrollers were readily available from a variety of online
 vendors. The exception was the Apollo3 Blue, which was not readily available
 outside of SparkFun's Artemis module, and the MAX32668 which is a newly
 available part and could only be ordered as a sample from Maxim's
@@ -84,7 +80,7 @@ EFR32BG22 C224 & Silicon Labs & ARM Cortex-M33 at 76.8 MHz & 512 KiB & 32 KiB & 
 \end{table*}
 
 Table \ref{tab:mcu-comp-comm} compares the communications interfaces available
-on the microcontrollers we considered. All of the microcontrollers feature at
+on the microcontrollers under consideration. All microcontrollers feature at
 least Bluetooth Low Energy 5.0, at least two I2C interfaces and at least two SPI
 interfaces. In addition to these interfaces the MAX32668 has an SD/MMC interface
 controller which supports the SD3.0 specification. This interface would allow
@@ -125,12 +121,12 @@ EFR32BG22C224 & 2 & 2 & None & 5.2 & None \\
 While our project did not necessarily require hardware accelerated cryptography,
 we thought it should be included to accommodate any future software layers that
 build on top of our platform. Since the device collects information about the
-user it is likely that cryptography would be heavily used by security features,
-and software implementations of the cryptographic algorithms may not be adequate.
+user, it is likely that cryptography would be heavily used by security features so
+software implementations of the cryptographic algorithms may not be adequate.
 Table \ref{tab:mcu-comp-crypto} shows the cryptography features of the
 microcontrollers that we considered. All of the microcontrollers have suitable
 hardware accelerated cryptography features with the exception of the nRF52832
-which lacks any modular arithmetic acceleration for public key cryptography and
+which lacks modular arithmetic acceleration for public key cryptography and
 the Apollo3 Blue which has no hardware cryptography accelerator.
 
 \begin{table*}[htb]
@@ -156,33 +152,29 @@ EFR32BG22 C224 & SHA-1, SHA-2 up to 256 bits & ECC & AES128, AES192, AES256 & EC
 \label{tab:mcu-comp-crypto}
 \end{table*}
 
-Because of its availability, relatively easy to work with package, suitable
-serial interface, integrated USB support and hardware cryptography acceleration
-we chose to use the nRF52840 microcontroller. The Apollo3 Blue had tempting low 
-power features, but questionable availability and a complete lack of hardware 
-accelerated cryptography. The MAX32668 would also have been a very strong 
-option, but it is not yet widely available. The EFR32BG33C224's lack of an 
-integrated USB interface and comparatively little documentation caused us to
-choose the nRF52840 over it.
-
+Because of its availability, easy to work with package, suitable
+serial interface, integrated USB support and hardware cryptography acceleration,
+we chose to use the nRF52840 microcontroller. While the Apollo3 Blue had low 
+power features, it had questionable availability and a complete lack of hardware 
+accelerated cryptography. The MAX32668 would also have been a very good 
+option, but it is not yet widely available. The EFR32BG33C224 was excluded due to the lack of an 
+integrated USB interface and comparatively little documentation.
 More specifically, it was decided to use a module (BMD-340) containing the
-nRF52840 instead of the bare chip itself. This decision was made because 
-the module is much more available for purchase, it has a built in Bluetooth 
-antenna which has already been certified by several different parties, it is 
-easier to solder, and it includes several supporting components for the 
-microcontroller such as oscillators and capacitors. The module is more 
-expensive and larger than the microcontroller by itself, however when taking 
-into consideration the size and cost of the additional components it contains, 
-it likely as good or better than using individual components.
+nRF52840 instead of just chip itself. This was because 
+the module is much more readily available, has a built in Bluetooth 
+antenna already been certified by several different parties, is 
+easier to solder, and includes several supporting components for the 
+microcontroller, such as oscillators and capacitors. While the module is more 
+expensive and larger than the microcontroller by itself, it is more cost-effective due to
+the additional components it contains.
 
 The selection of sensors that made it into the final design are an inertial 
 measurement unit (IMU), a heart rate sensor, an air quality sensor, a UV light 
 sensor, an infrared temperature sensor and an ambient temperature sensor. This 
 suite of sensors was selected in order to capture as much information as 
-possible without increasing the cost of the device too much. The component 
-choice for each of these sensors was mostly driven by cost, availability, and 
-ease of soldering. Taking these factors into consideration narrowed down the 
-options very quickly. The infrared temperature sensor and ambient temperature 
+possible without increasing the cost of the device too much. The 
+choice of each of these sensors was mostly driven by cost, availability, and 
+ease of soldering. The infrared temperature sensor and ambient temperature 
 sensor are both integrated into the same component. The ambient temperature 
 sensor will indicate the temperature of the user’s environment while the 
 infrared temperature sensor measures the user’s body temperature. The air 
@@ -202,15 +194,15 @@ below.
 
 \subsection{Schematic}
 
-The schematic is split into three major sections. These are the power supply, 
+The schematic is split into three major sections; the power supply, 
 processor, and sensors. The power supply is responsible for managing the 
 devices internal lithium-ion polymer (LiPo) battery and powering all other 
-parts of the circuit. When the device has its USB-C port connected to a 
+parts of the circuit. When the device’s USB-C port is connected to a 
 suitable host, the power supply will shift the electrical load from the 
 internal battery to the USB power source and begin charging the internal 
-battery. When USB power is lost charging stops and the electrical load is 
+battery. When USB power is disconnected, charging stops and the electrical load is 
 shifted back to the internal battery. Transitions between the two power 
-sources are seamless and will not interrupt operation of the rest of the 
+sources are seamless and will not interrupt operation of the 
 device. Upon request by the processor, the power supply can also perform fast 
 charging of the battery. The processor is responsible for communicating with 
 all onboard sensors and the internal SD card through several I2C and SPI 
@@ -219,10 +211,10 @@ through the USB-C port or wirelessly over Bluetooth. The collection of onboard
 sensors is responsible for gathering information about the user and their 
 environment to be used by the processor.
 
-The implementation of the power supply was mostly guided by the requirements of 
-the rest of the system and cost. The majority of the components in the design 
-require 1.8V to operate with the exceptions being the RGB status LED and the SD 
-card requiring 3.3V. The status LED does not have a specific voltage 
+The implementation of the power supply was mostly guided by the remaining system requirements and cost. 
+The majority of the components in the design 
+require 1.8V to operate, with exceptions being the RGB status LED and the SD 
+card, requiring 3.3V. The status LED does not have a specific voltage 
 requirement, but 1.8V was not sufficient to overcome the forward voltage of the 
 diodes so 3.3V was used instead with appropriate series current limiting 
 resistors. The choice of a LiPo battery meant that the power supply input 
@@ -240,7 +232,8 @@ diagram.
 \end{figure}
 
 The battery and USB power input are both connected directly to a dedicated 
-battery management IC. This IC handles battery charging, battery protection, 
+battery management IC. This IC handles battery charging, battery protection,
+%you need to define what IC stands for and use brackets when defining it (isomething csomething (IC)) 
 and automatic switchover from one power source to the other. It does not 
 however provide any means of regulation. Regulation is handled by three 
 separate voltage regulators, the first of which boosts the input up to 5V. The 
@@ -252,11 +245,10 @@ Additionally, the 5V regulator has an enable input that is used in conjunction
 with some soft power on/off circuitry to completely isolate the load from the 
 power source and reduce standby power consumption to nearly zero. Another option 
 that was considered was using the voltage regulator built into the chosen 
-processor to generate the 1.8V from 3.3V. It was ultimately decided not to go 
-this route due to concerns over robustness and maximum current limitations. With 
-the current design, both the 3.3V and 1.8V regulators can operate independent of 
-each other, have short circuit protection with automatic recovery, have over 
-temperature protection, can deliver much more current than needed, and should 
+processor to generate the 1.8V from 3.3V. Due to concerns over robustness and maximum current limitations, the latter option was rejected. 
+With the current design, both the 3.3V and 1.8V regulators can operate independently of 
+each other, have short circuit protection with automatic recovery, have overheating 
+protection, can deliver much more current than needed, and should 
 operate with over 90\% efficiency according to the device datasheets. The result 
 is a very robust, safe, and cheap solution that integrates well with the rest of 
 the design.
@@ -264,11 +256,10 @@ the design.
 One interesting design feature related to the power supply is the way in which 
 the device is powered on and off. The most obvious approach was to use a simple 
 on/off switch that connects or disconnects power from the load, but some flaws 
-were identified with this idea. Suddenly removing power from the microcontroller 
+were identified with this idea; suddenly removing power from the microcontroller 
 during writes to the SD card or communication over USB or Bluetooth may cause 
 data corruption. Also, if the battery is allowed to die completely with the 
-switch left on the device may “flicker” on and off similar to an LED flashlight 
-with a dead battery. The next obvious approach was to leave power permanently 
+switch left on, the device may “flicker” on and off. The next obvious approach was to leave power permanently 
 connected to the microcontroller and use a momentary push button to toggle 
 between a very low power state and normal operation. This solution solves the 
 data corruption problem but does not eliminate the possibility of power 
@@ -276,7 +267,7 @@ data corruption problem but does not eliminate the possibility of power
 power consumption since the device does not actually turn off. Elements of both 
 approaches were used to come up with a design that solves all of these problems. 
 When the device is off, the power source and load are completely isolated by 
-disabling the 5V regulator shown in Figure \ref{fig:BlockDiagram_PowerSupply}. 
+disabling the 5V regulator, depicted in Figure \ref{fig:BlockDiagram_PowerSupply}. 
 A momentary power button enables this regulator when pressed, turning on the 
 device. As soon as the microcontroller starts up it uses one of its GPIO pins to 
 latch the power supply on before the user releases the momentary button. The 
@@ -285,11 +276,11 @@ the enable pin of the voltage regulator. This means that the device will stay
 powered up for as long as the microcontroller desires regardless of what the 
 user does with the power button. A separate signal from the momentary button is 
 routed to an input pin of the microcontroller so that it can determine when the 
-user is pressing the button. If the user holds the button for an extended period 
-of time the microcontroller will go through a shutdown routine ended by turning 
+user presses the button. If the user holds down the button for an extended period 
+of time the microcontroller will go through a shutdown routine, ending with turning 
 off the GPIO pin that latched the power supply on. As soon as the user releases 
-the power button all power will be lost and the device is off. A simplified 
-schematic view of this arrangement can be seen in 
+the power button all power will be lost and the device is now off. A simplified 
+schematic view of this arrangement is depicted in 
 Figure \ref{fig:BlockDiagram_OnOff} below.
 
 \begin{figure}[!htb]
@@ -300,8 +291,8 @@ Figure \ref{fig:BlockDiagram_OnOff} below.
 \end{figure}
 
 The fact that the microcontroller can wait as long as it wants before turning 
-itself off means that it can finish any pending IO without interruption and 
-avoid data corruption. The “flicker” problem is also solved because the device 
+itself off means that it can finish any pending IO without interruption, thus
+avoiding data corruption. The “flicker” problem is also solved because the device 
 can not turn on without the user pressing the button first. The isolation 
 between power source and load when powered off means that standby power 
 consumption should be extremely low. This implementation is slightly more 
@@ -357,15 +348,15 @@ The following is a list of components indicated in Figure \ref{fig:Board_TopBott
 \end{enumerate}
 
 Placement of the components on the board was an important consideration. Many 
-of them require proper positioning to work correctly. The USB port and SD card 
+require proper positioning to work correctly. The USB port and SD card 
 slot were placed near the edge of the board for easy access outside the 
 enclosure. The heart rate sensor and infrared temperature sensor had to be 
 placed on the bottom of the board so they could take measurements from the 
 user’s arm. The LiPo battery will be placed on top of the board once it is 
-assembled into the enclosure so that it does not block the heart rate sensor 
-and temperature sensor. The status LED had to be on the top of the board so it 
+assembled into the enclosure so that it does not block the heart rate
+and temperature sensors. The status LED had to be on the top of the board so it 
 could be seen by the user, but also had to be in a corner so it would not be 
-covered by the battery. The air quality sensor needs access to air from outside 
+covered by the battery. The air quality sensor requires access to the air outside 
 the enclosure so it was placed near the edge of the board where some vents in 
 the enclosure could be made. The UV light sensor had to placed on top of the 
 board and also in a corner so it could receive light from outside the enclosure 

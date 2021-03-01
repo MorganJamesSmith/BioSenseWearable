@@ -1,36 +1,35 @@
 
 The enclosure was difficult to construct for multiple reasons.  In order to
 minimize the size of the PCB, we decided to forgo traditional mounting holes.
-Additionally, we avoided using adhesive to mount the PCB in order to maintain
+Additionally, we avoided using adhesives to mount the PCB in order to maintain
 easy access for debugging and repair purposes.  This means the enclosure needed
 tight tolerances around the PCB to prevent horizontal movement.  Vertical
 movement can be easily countered by sandwiching the PCB between the bottom and
 top half of the enclosure.  Additionally, the sensors mounted on the bottom of
-the PCB need to be a precise distance away from the users wrist.  This means
+the PCB need to be a precise distance away from the user’s wrist.  This means
 the thickness of the bottom of the enclosure needed to be accurately tuned.
 
-To add difficulty to the situation, the enclosure was manufactured by a (rather
-cheap) desktop FDM 3D printer.  These printers are known for over extruding
-plastic which causes the produced part to be slightly larger in the X and Y
+As another layer of difficulty, the enclosure was manufactured by a desktop FDM 3D printer.  
+These printers are known for over extruding plastic, causing the produced part to be slightly larger in the X and Y
 dimensions.  As over extruding is preferable to under extruding (which weakens
 the structural integrity of the part), it is common to simply model the part
 slightly smaller to compensate.
 
 FDM printers also tend to warp parts if the plastic cools too quickly, but that
-can be countered by simply putting the printer in a warm room or giving the
-printer a cozy blanket (although that is a fire hazard).
+can be countered by simply putting the printer in a warm room or insulating the
+printer, though that could be a fire hazard.
 
 However, FDM 3D printing is exceptionally fast.  They make it possible to
-iterate and print a 3D model of this size multiple times per day.  This rapid
-iteration has allowed me to create parts that meet the above requirements.
+prototype and print a 3D model of this size multiple times per day.  This rapid
+prototyping has allowed the successful creation of parts that meet the above requirements.
 
-The need for rapid iteration has led to the creation of many parametric 3D
-modeling programs.  The idea is to define variables (like the the thickness of
+The need for rapid prototyping has led to the creation of many parametric 3D
+modelling programs.  The idea is to define variables (like the the thickness of
 the bottom of the model) that can easily be changed.  The problem with many of
-these modeling programs is that they simply save a series of steps the user has
+these modelling programs is that they simply save a series of steps the user has
 entered with the GUI so they can later replay this with different values.  This
 replay of events is very error prone and usually requires a lot of human
-intervention.  This is because the interface makes it difficult to specify
+intervention, as the interface makes it difficult to specify
 geometry that is valid for a wide parameter range.
 
 For this reason, OpenSCAD was used.  OpenSCAD defines 3D models in its
@@ -38,4 +37,4 @@ scripting language which is executed to produce 3D printable files.  Since
 every usage of a parameter is written out explicitly, it is easy to determine
 all the valid values for the parameters.
 
-The model can be seen in figure \ref{fig:enclosure} in the appendix.
+The model can be seen in Figure \ref{fig:enclosure} in the Appendix.
