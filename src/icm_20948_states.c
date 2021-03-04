@@ -577,8 +577,21 @@ static int icm_20948_handler_read_data (struct icm_20948_desc *inst)
         inst->last_gyro_z = (inst->spi_buffer[11] << 8) | inst->spi_buffer[12];
         inst->last_temp = (inst->spi_buffer[13] << 8) | inst->spi_buffer[14];
         inst->last_sample_time = inst->time;
-        // Pass the rest of the data to the data logging service
-
+        // Pass the data to the data logging service
+        if (inst->logger != NULL) {
+            struct imu_data_entry data = {
+                .accel_x = icm_20948_parse_accel_value(inst->last_accel_x),
+                .accel_y = icm_20948_parse_accel_value(inst->last_accel_y),
+                .accel_z = icm_20948_parse_accel_value(inst->last_accel_z),
+                .gyro_x = icm_20948_parse_gyro_value(inst->last_gyro_x),
+                .gyro_y = icm_20948_parse_gyro_value(inst->last_gyro_y),
+                .gyro_z = icm_20948_parse_gyro_value(inst->last_gyro_z),
+                .temperature = icm_20948_parse_temp_value(inst->last_temp)
+            };
+            data_logger_log(inst->logger, inst->last_sample_time,
+                            DATA_ENTRY_IMU, (const uint8_t*)&data,
+                            sizeof(data));
+        }
         // Go back to idle
         inst->state = ICM_20948_IDLE;
         return 1;

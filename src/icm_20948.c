@@ -5,11 +5,14 @@
 #include <string.h>
 
 void init_icm_20948(struct icm_20948_desc *inst, const nrfx_spim_t *spi,
-                    NRF_GPIO_Type *int_port, uint8_t int_pin)
+                    NRF_GPIO_Type *int_port, uint8_t int_pin,
+                    struct data_logger_descriptor *logger)
 {
     inst->spi = spi;
     inst->int_port = int_port;
     inst->int_pin = int_pin;
+
+    inst->logger = logger;
 
     inst->spi_output_buf_ready = 0;
     inst->spi_in_progress = 0;
@@ -64,19 +67,19 @@ uint32_t icm_20948_get_last_measurment_time(struct icm_20948_desc *inst)
 }
 
 
-int32_t icm_20948_parse_accel_value(uint16_t value)
+int32_t icm_20948_parse_accel_value(int16_t value)
 {
     // At +/-8 g full scale range we have 4096 LSB/g
     return ((int32_t)value * 10000)/4096;
 }
 
-int32_t icm_20948_parse_gyro_value(uint16_t value)
+int32_t icm_20948_parse_gyro_value(int16_t value)
 {
     // At +/-2000 dps full scale range we have 16.4 LSB/dps
     return ((int32_t)value * 10000)/164;
 }
 
-int32_t icm_20948_parse_temp_value(uint16_t value)
+int32_t icm_20948_parse_temp_value(int16_t value)
 {
     // Value from sensor is in units of 333.87 LSB/°C with a room temeperature
     // offset of 0 LSB at 21 °C.
@@ -86,35 +89,35 @@ int32_t icm_20948_parse_temp_value(uint16_t value)
 
 int32_t icm_20948_get_last_accel_x(struct icm_20948_desc *inst)
 {
-    return icm_20948_parse_accel_value(inst->last_accel_x);
+    return icm_20948_parse_accel_value((int16_t)inst->last_accel_x);
 }
 
 int32_t icm_20948_get_last_accel_y(struct icm_20948_desc *inst)
 {
-    return icm_20948_parse_accel_value(inst->last_accel_y);
+    return icm_20948_parse_accel_value((int16_t)inst->last_accel_y);
 }
 
 int32_t icm_20948_get_last_accel_z(struct icm_20948_desc *inst)
 {
-    return icm_20948_parse_accel_value(inst->last_accel_z);
+    return icm_20948_parse_accel_value((int16_t)inst->last_accel_z);
 }
 
 int32_t icm_20948_get_last_gyro_x(struct icm_20948_desc *inst)
 {
-    return icm_20948_parse_gyro_value(inst->last_gyro_x);
+    return icm_20948_parse_gyro_value((int16_t)inst->last_gyro_x);
 }
 
 int32_t icm_20948_get_last_gyro_y(struct icm_20948_desc *inst)
 {
-    return icm_20948_parse_gyro_value(inst->last_gyro_y);
+    return icm_20948_parse_gyro_value((int16_t)inst->last_gyro_y);
 }
 
 int32_t icm_20948_get_last_gyro_z(struct icm_20948_desc *inst)
 {
-    return icm_20948_parse_gyro_value(inst->last_gyro_z);
+    return icm_20948_parse_gyro_value((int16_t)inst->last_gyro_z);
 }
 
 int32_t icm_20948_get_last_temp(struct icm_20948_desc *inst)
 {
-    return icm_20948_parse_temp_value(inst->last_temp);
+    return icm_20948_parse_temp_value((int16_t)inst->last_temp);
 }

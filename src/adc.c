@@ -17,6 +17,7 @@ static uint32_t adc_last_sample_time;
 
 static nrf_saadc_value_t adc_last_samples[ADC_NUM_CHANNELS];
 
+static struct data_logger_descriptor *adc_logger;
 
 struct adc_val_lut_entry {
     int32_t v;
@@ -181,7 +182,7 @@ static void saadc_callback(nrfx_saadc_evt_t const * p_event)
 
 
 
-int init_adc(void)
+int init_adc(struct data_logger_descriptor *logger)
 {
     ret_code_t err_code;
 
@@ -236,6 +237,7 @@ int init_adc(void)
 
     adc_last_sample_time = 0;
 
+    adc_logger = logger;
     return 0;
 }
 
@@ -256,11 +258,23 @@ void adc_service(void)
         uint16_t vdd = adc_sample_to_supply_voltage(adc_last_samples[3]);
 
         // Do something with the samples
-        (void)ir_temp;
-        (void)ambient_temp;
-        (void)v_bat;
-        (void)vdd;
+        if (adc_logger != NULL) {
+            struct voltage_data_entry volts = {
+                .supply_voltage = vdd,
+                .battery_voltage = v_bat
+            };
+            data_logger_log(adc_logger, adc_last_sample_time, DATA_ENTRY_VOLTAGES,
+                            (const uint8_t*)&volts, sizeof(volts));
 
+            struct temperature_data_entry temps = {
+                .ir_temp = ir_temp,
+                .ambient_temp = ambient_temp
+            };
+            data_logger_log(adc_logger, adc_last_sample_time,
+                            DATA_ENTRY_TEMPERATURES, (const uint8_t*)&temps,
+                            sizeof(temps));
+        }
+        
         adc_samples_pending = 0;
     }
 }

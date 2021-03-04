@@ -6,6 +6,8 @@
 #include <nrfx_spim.h>
 #include <nrf_gpio.h>
 
+#include "data_logger.h"
+
 #define ICM_20948_I2C_MISO_PIN      28
 #define ICM_20948_I2C_MOSI_PIN      29
 #define ICM_20948_I2C_SCK_PIN       30
@@ -56,6 +58,8 @@ enum icm_20948_state {
 struct icm_20948_desc {
     const nrfx_spim_t *spi;
     NRF_GPIO_Type *int_port;
+
+    struct data_logger_descriptor *logger;
 
     uint32_t last_sample_time;
 
@@ -117,7 +121,8 @@ struct icm_20948_desc {
 
 
 extern void init_icm_20948(struct icm_20948_desc *inst, const nrfx_spim_t *spi,
-                           NRF_GPIO_Type *int_port, uint8_t int_pin);
+                           NRF_GPIO_Type *int_port, uint8_t int_pin,
+                           struct data_logger_descriptor *logger);
 
 extern void icm_20948_service(struct icm_20948_desc *inst);
 
@@ -134,7 +139,7 @@ extern uint32_t icm_20948_get_last_measurment_time(struct icm_20948_desc *inst);
  *
  *  @param return The acceleration in units of 100 µg per LSB (0.0001g/LSB)
  */
-extern int32_t icm_20948_parse_accel_value(uint16_t value);
+extern int32_t icm_20948_parse_accel_value(int16_t value);
 
 /**
  *  Convert a raw sensor roational velocity value into useful units
@@ -144,7 +149,7 @@ extern int32_t icm_20948_parse_accel_value(uint16_t value);
  *  @param return The roational velocity in units of 1 milladps per LSB
  *                (0.001 dps/LSB)
  */
-extern int32_t icm_20948_parse_gyro_value(uint16_t value);
+extern int32_t icm_20948_parse_gyro_value(int16_t value);
 
 /**
  *  Convert a raw sensor temperature value into useful units
@@ -154,7 +159,7 @@ extern int32_t icm_20948_parse_gyro_value(uint16_t value);
  *  @param return The temperature in units of 1 milladegree Celsius per LSB
  *                (0.001 °C/LSB)
  */
-extern int32_t icm_20948_parse_temp_value(uint16_t value);
+extern int32_t icm_20948_parse_temp_value(int16_t value);
 
 /**
  *  Get the most recent x axis acceleration value that the sensor read.

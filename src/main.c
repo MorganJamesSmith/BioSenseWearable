@@ -3,6 +3,9 @@
 #include "boards.h"
 #include "app_timer.h"
 #include "nrfx_spim.h"
+#include "ff.h"
+#include "diskio_blkdev.h"
+#include "nrf_block_dev_sdc.h"
 
 #include "global.h"
 #include "sensors.h"
@@ -10,6 +13,7 @@
 #include "bluetooth.h"
 #include "cli.h"
 #include "cli_commands.h"
+#include "data_logger.h"
 #include "adc.h"
 #include "icm_20948.h"
 
@@ -54,8 +58,62 @@ static const nrfx_spim_t imu_spi = NRFX_SPIM_INSTANCE(0);
 
 struct icm_20948_desc imu;
 
+#define SDC_SCK_PIN     19
+#define SDC_MOSI_PIN    21
+#define SDC_MISO_PIN    20
+#define SDC_CS_PIN      17
 
+NRF_BLOCK_DEV_SDC_DEFINE(block_dev_sdc,
+                         NRF_BLOCK_DEV_SDC_CONFIG(SDC_SECTOR_SIZE,
+                         APP_SDCARD_CONFIG(SDC_MOSI_PIN, SDC_MISO_PIN,
+                                           SDC_SCK_PIN, SDC_CS_PIN)),
+                         NFR_BLOCK_DEV_INFO_CONFIG("Nordic", "SDC", "1.00"));
 
+FATFS fs;
+int filesystem_init_status = 1;
+uint32_t sd_card_capacity;
+
+struct data_logger_descriptor data_logger;
+int log_init_status = -2;
+
+int initialize_sd_card_fs(void)
+{
+    FRESULT ff_result;
+    DSTATUS disk_state = STA_NOINIT;
+
+    // Initialize FATFS disk I/O
+    static diskio_blkdev_t drives[] = {
+        DISKIO_BLOCKDEV_CONFIG(NRF_BLOCKDEV_BASE_ADDR(block_dev_sdc, block_dev),
+                               NULL)
+    };
+
+    app_sdc_info_get();
+
+    diskio_blockdev_register(drives, ARRAY_SIZE(drives));
+
+    for (uint32_t retries = 3; retries && disk_state; --retries) {
+        disk_state = disk_initialize(0);
+    }
+
+    if (disk_state) {
+        return -1;
+    }
+
+    const uint32_t blocks_per_mb = ((1024uL * 1024uL) /
+                                    block_dev_sdc.block_dev.p_ops->geometry(
+                                        &block_dev_sdc.block_dev)->blk_size);
+    sd_card_capacity = (block_dev_sdc.block_dev.p_ops->geometry(
+                                    &block_dev_sdc.block_dev)->blk_count /
+                                        blocks_per_mb);
+
+    // Mount the filesystem
+    ff_result = f_mount(&fs, "", 1);
+    if (ff_result) {
+        return -1;
+    }
+
+    return 0;
+}
 
 int main(void)
 {
@@ -70,13 +128,13 @@ int main(void)
 
     /* Configue IO */
     // RGB LED
-//    NRF_P0->DIRSET = (1 << 22);
-//    NRF_P0->DIRSET = (1 << 23);
-//    NRF_P0->DIRSET = (1 << 24);
-//
-//    NRF_P0->OUTSET = (1 << 22);
-//    NRF_P0->OUTSET = (1 << 23);
-//    NRF_P0->OUTSET = (1 << 24);
+    NRF_P0->DIRSET = (1 << 22);
+    NRF_P0->DIRSET = (1 << 23);
+    NRF_P0->DIRSET = (1 << 24);
+
+    NRF_P0->OUTSET = (1 << 22);
+    NRF_P0->OUTSET = (1 << 23);
+    NRF_P0->OUTSET = (1 << 24);
 
     // Turn on power
     NRF_P1->DIRSET = (1 << 12);
@@ -92,10 +150,22 @@ int main(void)
     void ble_disconnected(){ BSP_LED_0_PORT->OUT |= BSP_LED_0_MASK; }
     bluetooth_set_connected_callback(ble_connected);
     bluetooth_set_disconnected_callback(ble_disconnected);*/
-    //bluetooth_init(); //UNCOMMENT THIS TO TURN ON BLUETOOTH
+    bluetooth_init(); //UNCOMMENT THIS TO TURN ON BLUETOOTH
     init_cli(&ble_cli, &bluetooth_io_funcs, "> ", debug_commands_funcs, '\n');
 
-    init_adc();
+    // Filesystem
+    filesystem_init_status = initialize_sd_card_fs();
+
+    // Data logging service
+    log_init_status = init_data_logger(&data_logger);
+
+    struct data_logger_descriptor *logger = NULL;
+    if ((filesystem_init_status == 0) && (log_init_status == 0)) {
+        logger = &data_logger;
+    }
+
+    // ADC service
+    init_adc(logger);
 
     // IMU SPI Interface
     nrfx_spim_config_t imu_spi_config = NRFX_SPIM_DEFAULT_CONFIG;
@@ -108,8 +178,8 @@ int main(void)
                    (void*)&imu);
 
     // IMU
-    init_icm_20948(&imu, &imu_spi, ICM_20948_INT_PORT, ICM_20948_INT_PIN);
-
+    init_icm_20948(&imu, &imu_spi, ICM_20948_INT_PORT, ICM_20948_INT_PIN,
+                   logger);
 
     uint32_t last_blink;
 

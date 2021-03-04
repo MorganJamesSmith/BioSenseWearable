@@ -3,7 +3,9 @@
 
 #include <stdint.h>
 
-extern int init_adc(void);
+#include "data_logger.h"
+
+extern int init_adc(struct data_logger_descriptor *logger);
 
 extern void adc_service(void);
 

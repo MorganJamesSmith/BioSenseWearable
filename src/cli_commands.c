@@ -4,7 +4,11 @@
 #include <string.h>
 #include <math.h>
 
+#include <ff.h>
+
 #include "global.h"
+#include "fs.h"
+#include "data_logger.h"
 #include "sensors.h"
 #include "adc.h"
 #include "icm_20948.h"
@@ -186,6 +190,229 @@ static void debug_imu (uint8_t argc, char **argv,
     console->write_string_blocking(" °C\n");
 }
 
+#define DEBUG_LS_NAME "ls"
+#define DEBUG_LS_HELP "Lists the files on the SD card.\nUsage: ls <dir>\n"
+
+static void debug_ls(uint8_t argc, char **argv,
+                     const struct cli_io_funcs_t *console)
+{
+    char str[16];
+
+    if (filesystem_init_status != 0) {
+        console->write_string_blocking("SD card is not initialized.\n");
+        return;
+    }
+
+    FRESULT ff_result;
+
+    DIR dir;
+    FILINFO fno;
+
+    const char *dir_name = "/";
+    if (argc > 2) {
+        console->write_string_blocking("Too many arguments.\n");
+    } else if (argc == 2) {
+        dir_name = argv[1];
+    }
+
+    // Open root dir
+    ff_result = f_opendir(&dir, dir_name);
+
+    if (ff_result != FR_OK) {
+        console->write_string_blocking("Failed to open directory.\n");
+        return;
+    }
+
+    // Iterate over files in directory
+    for (;;) {
+        ff_result = f_readdir(&dir, &fno);
+        if (ff_result != FR_OK) {
+            console->write_string_blocking("Failed to read file info.\n");
+            return;
+        }
+
+        if (!fno.fname[0]) {
+            break;
+        }
+
+        console->write_string_blocking(fno.fname);
+        if (fno.fattrib & AM_DIR) {
+            console->write_string_blocking(" (directory)\n");
+        } else {
+            console->write_string_blocking(" (");
+            utoa(fno.fsize, str, 10);
+            console->write_string_blocking(str);
+            console->write_string_blocking(")\n");
+        }
+    }
+
+    // Close directory
+    ff_result = f_closedir(&dir);
+
+    if (ff_result != FR_OK) {
+        console->write_string_blocking("Failed to close directory\n");
+        return;
+    }
+}
+
+#define DEBUG_CAT_NAME "cat"
+#define DEBUG_CAT_HELP "Print the contents of a file on the SD card.\nUsage: " \
+                       "cat <file>"
+
+static void debug_cat(uint8_t argc, char **argv,
+                      const struct cli_io_funcs_t *console)
+{
+    if (filesystem_init_status != 0) {
+        console->write_string_blocking("SD card is not initialized.\n");
+        return;
+    }
+
+    FRESULT ff_result;
+
+    FIL file;
+
+    if (argc > 2) {
+        console->write_string_blocking("Too many arguments.\n");
+    } else if (argc < 2) {
+        console->write_string_blocking("No file specified.\n");
+    }
+
+    // Open file
+    ff_result = f_open(&file, argv[1], FA_READ);
+
+    if (ff_result != FR_OK) {
+        console->write_string_blocking("Failed to open file.\n");
+        return;
+    }
+
+    char buffer;
+    unsigned bytes_read;
+
+    for(;;) {
+        ff_result = f_read(&file, &buffer, 1, &bytes_read);
+
+        if (ff_result != FR_OK) {
+            console->write_string_blocking("Failed to read from file.\n");
+            return;
+        }
+
+        if (bytes_read != 0) {
+            console->write_bytes_blocking((uint8_t*)&buffer, 1);
+        } else {
+            break;
+        }
+    }
+
+
+    // Close file
+    ff_result = f_close(&file);
+
+    if (ff_result != FR_OK) {
+        console->write_string_blocking("Failed to close file\n");
+        return;
+    }
+}
+
+#define DEBUG_HCAT_NAME "hcat"
+#define DEBUG_HCAT_HELP "Print the contents of a file on the SD card in hex. " \
+                        "\nUsage: hcat <file>"
+
+static void debug_hcat(uint8_t argc, char **argv,
+                       const struct cli_io_funcs_t *console)
+{
+    char str[16];
+
+    if (filesystem_init_status != 0) {
+        console->write_string_blocking("SD card is not initialized.\n");
+        return;
+    }
+
+    FRESULT ff_result;
+
+    FIL file;
+
+    if (argc > 2) {
+        console->write_string_blocking("Too many arguments.\n");
+    } else if (argc < 2) {
+        console->write_string_blocking("No file specified.\n");
+    }
+
+    // Open file
+    ff_result = f_open(&file, argv[1], FA_READ);
+
+    if (ff_result != FR_OK) {
+        console->write_string_blocking("Failed to open file.\n");
+        return;
+    }
+
+    char buffer[4];
+    unsigned bytes_read;
+
+    for (;;) {
+        ff_result = f_read(&file, buffer, 4, &bytes_read);
+
+        if (ff_result != FR_OK) {
+            console->write_string_blocking("Failed to read from file.\n");
+            return;
+        }
+
+        for (unsigned i = 0; i < bytes_read; i++) {
+            if (buffer[i] < 16) {
+                console->write_string_blocking("0");
+            }
+
+            utoa(buffer[i], str, 16);
+            console->write_string_blocking(str);
+        }
+
+        if (bytes_read != 0) {
+            console->write_string_blocking("\n");
+        } else {
+            break;
+        }
+    }
+
+
+    // Close file
+    ff_result = f_close(&file);
+
+    if (ff_result != FR_OK) {
+        console->write_string_blocking("Failed to close file\n");
+        return;
+    }
+}
+
+#define DEBUG_LOG_NAME  "log"
+#define DEBUG_LOG_HELP  "Logs a message to the log file.\nUsage: <message>"
+
+static void debug_log (uint8_t argc, char **argv,
+                       const struct cli_io_funcs_t *console)
+{
+    if (log_init_status != 0) {
+        console->write_string_blocking("Data logger not initialized (");
+        char str[8];
+        itoa(log_init_status, str, 10);
+        console->write_string_blocking(str);
+        console->write_string_blocking(")\n");
+    }
+
+    if (argc != 2) {
+        console->write_string_blocking("Must provide exactly one argument.\n");
+        return;
+    }
+
+    int ret = data_logger_log(&data_logger, millis, DATA_ENTRY_LOG_MSG,
+                              (uint8_t*)argv[1], strlen(argv[1]));
+
+    if (ret != 0) {
+        console->write_string_blocking("Failed to log message (");
+        char str[8];
+        utoa(ret, str, 10);
+        console->write_string_blocking(str);
+        console->write_string_blocking(")\n");
+    }
+}
+
 // MARK: Commands table
 
 const struct cli_func_desc_t debug_commands_funcs[] = {
@@ -195,5 +422,10 @@ const struct cli_func_desc_t debug_commands_funcs[] = {
     {.func = debug_analog, .name = DEBUG_ANALOG_NAME,
         .help_string = DEBUG_ANALOG_HELP},
     {.func = debug_imu, .name = DEBUG_IMU_NAME, .help_string = DEBUG_IMU_HELP},
+    {.func = debug_ls, .name = DEBUG_LS_NAME, .help_string = DEBUG_LS_HELP},
+    {.func = debug_cat, .name = DEBUG_CAT_NAME, .help_string = DEBUG_CAT_HELP},
+    {.func = debug_hcat, .name = DEBUG_HCAT_NAME,
+        .help_string = DEBUG_HCAT_HELP},
+    {.func = debug_log, .name = DEBUG_LOG_NAME, .help_string = DEBUG_LOG_HELP},
     {.func = NULL, .name = NULL, .help_string = NULL}
 };

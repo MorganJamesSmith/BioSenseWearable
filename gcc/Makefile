@@ -31,6 +31,7 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/atomic_flags/nrf_atflags.c \
   $(SDK_ROOT)/components/libraries/atomic/nrf_atomic.c \
   $(SDK_ROOT)/components/libraries/balloc/nrf_balloc.c \
+  $(SDK_ROOT)/components/libraries/sdcard/app_sdcard.c \
   $(SDK_ROOT)/external/fprintf/nrf_fprintf.c \
   $(SDK_ROOT)/external/fprintf/nrf_fprintf_format.c \
   $(SDK_ROOT)/components/libraries/memobj/nrf_memobj.c \
@@ -78,6 +79,10 @@ SRC_FILES += \
   $(SDK_ROOT)/components/softdevice/common/nrf_sdh_soc.c \
   $(SDK_ROOT)/components/libraries/bsp/bsp.c \
   $(SDK_ROOT)/components/libraries/bsp/bsp_cli.c \
+  $(SDK_ROOT)/external/fatfs/port/diskio_blkdev.c \
+  $(SDK_ROOT)/external/fatfs/src/ff.c \
+  $(SDK_ROOT)/components/libraries/block_dev/sdc/nrf_block_dev_sdc.c \
+  $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_spi.c \
   $(PROJ_DIR)/main.c \
   $(PROJ_DIR)/usb_serial.c \
   $(PROJ_DIR)/cli.c \
@@ -86,6 +91,7 @@ SRC_FILES += \
   $(PROJ_DIR)/adc.c \
   $(PROJ_DIR)/icm_20948.c \
   $(PROJ_DIR)/icm_20948_states.c \
+  $(PROJ_DIR)/data_logger.c \
 
 # Include folders common to all targets
 INC_FOLDERS += \
@@ -220,6 +226,12 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/libraries/log/src \
   $(SDK_ROOT)/components/libraries/bsp \
   $(SDK_ROOT)/components/libraries/cli/uart \
+  $(SDK_ROOT)/external/protothreads \
+  $(SDK_ROOT)/external/protothreads/pt-1.4 \
+  $(SDK_ROOT)/external/fatfs/src \
+  $(SDK_ROOT)/external/fatfs/port \
+  $(SDK_ROOT)/components/libraries/block_dev \
+  $(SDK_ROOT)/components/libraries/block_dev/sdc \
 
 # Libraries common to all targets
 LIB_FILES += \
