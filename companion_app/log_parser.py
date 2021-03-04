@@ -11,8 +11,10 @@ import typing
 try:
     from . import struct_types as types
 except ImportError:
-    import struct_types as types
-    
+    # I shall forever curse pylance for not being able to figure out this is valid
+    # and therefore breaking all type checking for my IDE
+    import struct_types as types 
+
 ###########################################################################
 ### Raw Data Entries
 
@@ -21,7 +23,7 @@ class EntryHeader(metaclass=types.Struct):
     Attributes:
         timestamp   timestamp since last reset in milliseconds
         type        type as found in _entry_type_names
-        legnth      length of payload in bytes, payload directly follows header
+        length      length of payload in bytes, payload directly follows header
     """
     timestamp:  types.uint32_t
     type:       types.uint16_t
