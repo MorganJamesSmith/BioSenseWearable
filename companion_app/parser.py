@@ -6,7 +6,6 @@ csv files for each type of data collection.
 """
 
 import struct
-from types import WrapperDescriptorType
 import typing
 
 try:
@@ -67,7 +66,17 @@ class ImuDataPayload(metaclass=types.Struct):
 
     temperature:types.int32_t # 1 m°C per LSB
 
-AnyEntry = typing.Union[ResetDataPayload,TimeDataPayload,VoltageDataPayload,TemperatureDataPayload,ImuDataPayload]
+class LogMessagePayload(metaclass=types.Struct):
+    "Text Log Message"
+    message: types.string
+    @classmethod
+    def from_bytes(cls, buffer: bytes):
+        return cls(buffer.decode())
+
+AnyEntry = typing.Union[
+    ResetDataPayload,   TimeDataPayload,
+    VoltageDataPayload, TemperatureDataPayload,
+    ImuDataPayload,     LogMessagePayload]
 
 entry_type_payloads: typing.Dict[int, AnyEntry] = {
     0x00: ResetDataPayload,
@@ -75,6 +84,7 @@ entry_type_payloads: typing.Dict[int, AnyEntry] = {
     0x02: VoltageDataPayload,
     0x03: TemperatureDataPayload,
     0x04: ImuDataPayload,
+    0x05: LogMessagePayload,
 }
 ### Payloads
 ###########################################################################
@@ -110,7 +120,9 @@ def write_multifile(file: typing.BinaryIO):
     """writes a csv file for each type of collected data"""
     open_files = {}
     for type_index, payload_cls in entry_type_payloads.items():
-        filename = f"collected_{payload_cls.__name__.rpartition('payload')[0]}.csv"
+        if payload_cls is ResetDataPayload:
+            continue # don't make a file for resets, we don't produce those events anyway
+        filename = f"collected_{payload_cls.__name__.rpartition('Payload')[0]}.csv"
         f = open_files[type_index] = open(filename, "w")
         print(*FIELDS_BEFORE_PAYLOAD, *payload_cls._fields, sep=",", file=f)
     try:

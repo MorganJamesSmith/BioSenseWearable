@@ -27,6 +27,8 @@ class float_t(float):
     STRUCT_FORMAT = "f"
 class double_t(float):
     STRUCT_FORMAT = "d"
+class string(str):
+    STRUCT_FORMAT = "s"
 
 
 # _CLS is used by methods from_bytes and from_file to denote it returns an instance type of the struct.
