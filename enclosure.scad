@@ -1,4 +1,8 @@
 
+
+render_pcb=true;
+render_enclosure=true;
+
 // Make the heart rate sensor look more round
 $fn = 100;
 
@@ -114,6 +118,11 @@ module main_board() {
     }
 }
 
-enclosure_body();
-translate([wall_thickness, wall_thickness, bottom_thickness])
-    main_board();
+if(render_enclosure) {
+    enclosure_body();
+ }
+
+if(render_pcb) {
+    translate([wall_thickness, wall_thickness, bottom_thickness])
+        main_board();
+ }
