@@ -53,7 +53,7 @@ module watch_nubs(strap_width=20, pin_hole_diameter=1) {
 module enclosure_cutouts() {
     // SD Card
     translate(sd_card_position)
-        cube([sd_card_size.x, sd_card_size.y+wall_thickness+nothing, sd_card_size.z]);
+        cube([sd_card_size.x, sd_card_size.y+wall_thickness+nothing, sd_card_size.z+nothing]);
 
     // USB
     translate([usb_position.x-wall_thickness-nothing, usb_position.y, usb_position.z])
@@ -63,13 +63,13 @@ module enclosure_cutouts() {
     translate([heart_rate_position.x,
                heart_rate_position.y,
                heart_rate_position.z-bottom_thickness])
-        cube([heart_rate_size.x, heart_rate_size.y, heart_rate_size.z+bottom_thickness]);
+        cube([heart_rate_size.x, heart_rate_size.y, heart_rate_size.z+bottom_thickness+nothing]);
 
     // Temperature
     translate([temperature_position.x,
                temperature_position.y,
                temperature_position.z-bottom_thickness])
-        cylinder(d = temperature_diameter, h = temperature_height+bottom_thickness);
+        cylinder(d = temperature_diameter, h = temperature_height+bottom_thickness+nothing);
 }
 
 module enclosure_body() {
