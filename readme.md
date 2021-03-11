@@ -19,3 +19,10 @@ conneted to it. To debug the board with a Black Magic Probe, use the `GDB_FILE`
 variable to specify the probe's serial port. For example,
 `make debug GDB_FILE=/dev/ttyACM0`.
 
+## Licensing
+
+The folder nRF5_SDK_17.0.0 is third-party code subject to its own licenses.
+
+All other intellectual property in this repository (code, hardware designs,
+documentation, etc.) is provided under the BSD-3 clause license (SPDX:
+BSD-3-Clause https://spdx.org/licenses/BSD-3-Clause.html).
