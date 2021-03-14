@@ -65,9 +65,11 @@ class TimeDataPayload(metaclass=types.Struct):
     "time alignment, contains a unix timestamp for alignment with real time spans."
     unix_time:  types.uint64_t
 class VoltageDataPayload(metaclass=types.Struct):
-    NotImplemented
+    supply_voltage: types.uint16_t  #1 mV per LSB
+    battery_voltage:types.uint16_t  # 1 mV per LSB
 class TemperatureDataPayload(metaclass=types.Struct):
-    NotImplemented
+    ir_temp:        types.uint16_t  # 10 milladegrees Celsius per LSB (0.01 °C/LSB)
+    ambient_temp:   types.uint16_t # 10 milladegrees Celsius per LSB (0.01 °C/LSB)
 
 class ImuDataPayload(metaclass=types.Struct):
     "contains IMU data for acceleration and gyroscope"
