@@ -15,6 +15,13 @@ except ImportError:
     # and therefore breaking all type checking for my IDE
     import struct_types as types 
 
+
+def hex_display_bytes(buffer):
+    for idx in range(0,len(buffer), 8):
+        for a,b in enumerate(buffer[idx:idx+8]):
+            print(f"{b:02x}", end=" " if a==3 else "")
+        print()
+
 ###########################################################################
 ### Raw Data Entries
 
@@ -32,11 +39,17 @@ class EntryHeader(metaclass=types.Struct):
 def parse_raw_entries(fileio: typing.BinaryIO) -> typing.Iterator[typing.Tuple[EntryHeader, bytes]]:
     "yields tuple of (header, payload) for each entry of a log file. payload is in bytes"
     header_size = struct.calcsize(EntryHeader._struct_format)
+    last_timestamp = 0
     def next_header(): return fileio.read(header_size)
     # iterate over headers until empty string is returned meaning end of file is reached.
     for header_bytes in iter(next_header, b''):
         assert len(header_bytes) == header_size, f"got unexpected trailing data: {header_bytes!r}"
         header = EntryHeader.from_bytes(header_bytes)
+        # VAIDATION
+        if header.type != 0: # not reset
+            assert header.timestamp > last_timestamp, "timestamp decreased without reset"
+        last_timestamp = header.timestamp
+        # END VALIDATION
         payload_bytes = fileio.read(header.length)
         assert len(payload_bytes) == header.length, "file ended mid payload"
         yield (header, payload_bytes)
@@ -44,13 +57,13 @@ def parse_raw_entries(fileio: typing.BinaryIO) -> typing.Iterator[typing.Tuple[E
 ### Raw Data Entries
 ###########################################################################
 ### Payloads
-
 class ResetDataPayload(metaclass=types.Struct):
     "reset command, has no data in payload"
     pass
 
 class TimeDataPayload(metaclass=types.Struct):
-    NotImplemented
+    "time alignment, contains a unix timestamp for alignment with real time spans."
+    unix_time:  types.uint64_t
 class VoltageDataPayload(metaclass=types.Struct):
     NotImplemented
 class TemperatureDataPayload(metaclass=types.Struct):
@@ -105,7 +118,7 @@ def parse_data(entries_iterator: typing.Iterator[typing.Tuple[EntryHeader, bytes
     entries_iterator = iter(entries_iterator) # looping structure really relies on it being an iterator not iterable
     reset_idx = -1
     while True: # broken by end of entries_iterator
-
+        
         reset_idx += 1
 
         for header, payload_bytes in entries_iterator:
@@ -139,5 +152,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input_file", type=argparse.FileType('rb'))
     ns = parser.parse_args()
+    # ns = parser.parse_args(["P21"])
     with ns.input_file:
         write_multifile(ns.input_file)
