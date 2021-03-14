@@ -3,6 +3,7 @@
 #include "boards.h"
 #include "app_timer.h"
 #include "nrfx_spim.h"
+//#include "nrfx_rtc.h"
 #include "ff.h"
 #include "diskio_blkdev.h"
 #include "nrf_block_dev_sdc.h"
@@ -18,6 +19,8 @@
 #include "icm_20948.h"
 
 // MARK: Variable Definitions
+//const nrfx_rtc_t rtc = NRFX_RTC_INSTANCE(2);
+
 volatile uint32_t millis;
 
 // MARK: ISR Prototypes
@@ -121,6 +124,16 @@ int main(void)
 
     /* Enable SysTick for an interupt every millisecond */
     SysTick_Config(64000);
+    NVIC_SetPriority(SysTick_IRQn, 2);
+
+    /* Enable RTC */
+//    nrfx_rtc_config_t config = NRFX_RTC_DEFAULT_CONFIG;
+//    config.prescaler = 31;
+//    ret = nrfx_rtc_init(&rtc, &config, NULL);
+//    APP_ERROR_CHECK(ret);
+
+    //Power on RTC instance
+//    nrfx_rtc_enable(&rtc);
 
     /* Enable timer module */
     ret = app_timer_init();
@@ -132,9 +145,9 @@ int main(void)
     NRF_P0->DIRSET = (1 << 23);
     NRF_P0->DIRSET = (1 << 24);
 
-    NRF_P0->OUTSET = (1 << 22);
-    NRF_P0->OUTSET = (1 << 23);
-    NRF_P0->OUTSET = (1 << 24);
+//    NRF_P0->OUTSET = (1 << 22);
+//    NRF_P0->OUTSET = (1 << 23);
+//    NRF_P0->OUTSET = (1 << 24);
 
     // Turn on power
     NRF_P1->DIRSET = (1 << 12);
@@ -202,6 +215,8 @@ int main(void)
 
         bluetooth_service();
         cli_service(&ble_cli);
+
+        data_logger_service(&data_logger);
 
         __WFI();
     }

@@ -85,30 +85,26 @@ int init_data_logger(struct data_logger_descriptor *inst)
     // Write a entry to the data file
     data_logger_log(inst, millis, DATA_ENTRY_RESET, NULL, 0);
 
+    // Initialize buffer
+    inst->buffer_used[0] = 0;
+    inst->buffer_used[1] = 0;
+    inst->current_buffer = 0;
+    inst->buffer_full[0] = 0;
+    inst->buffer_full[1] = 0;
+
     return 0;
 }
 
-int data_logger_log(struct data_logger_descriptor *inst, uint32_t timestamp,
-                    enum data_entry_type type, const uint8_t *data,
-                    uint32_t length)
+static int data_logger_write_buffer(struct data_logger_descriptor *inst,
+                                    uint8_t buffer_num)
 {
-    const uint32_t entry_length = sizeof(struct data_entry) + length;
-    // This would be much cleaner with alloca, but SES's libc doesn't seem to have it
-    uint8_t p[entry_length];
-    struct data_entry *packet = (struct data_entry *)(&p);
-    packet->timestamp = timestamp;
-    packet->type = type;
-    packet->length = length;
-    if (length != 0) {
-        memcpy(packet->payload, data, length);
-    }
-
     FRESULT ff_result;
     unsigned bytes_written = 0;
-    while (bytes_written < entry_length) {
+    while (bytes_written < inst->buffer_used[buffer_num]) {
         unsigned bw = 0;
-        ff_result = f_write(&inst->file, ((void*)packet) + bytes_written,
-                            entry_length - bytes_written, &bw);
+        ff_result = f_write(&inst->file,
+                            ((void*)inst->buffer[buffer_num]) + bytes_written,
+                            inst->buffer_used[buffer_num] - bytes_written, &bw);
 
         if (ff_result != FR_OK) {
             return ff_result;
@@ -125,6 +121,53 @@ int data_logger_log(struct data_logger_descriptor *inst, uint32_t timestamp,
     if (ff_result != FR_OK) {
         return ff_result;
     }
+
+    inst->buffer_used[buffer_num] = 0;
+    inst->buffer_full[buffer_num] = 0;
+
+    return 0;
+}
+
+void data_logger_service(struct data_logger_descriptor *inst)
+{
+    if (inst->buffer_full[0]) {
+        data_logger_write_buffer(inst, 0);
+    }
+    if (inst->buffer_full[1]) {
+        data_logger_write_buffer(inst, 1);
+    }
+}
+
+int data_logger_log(struct data_logger_descriptor *inst, uint32_t timestamp,
+                    enum data_entry_type type, const uint8_t *data,
+                    uint32_t length)
+{
+    const uint32_t entry_length = sizeof(struct data_entry) + length;
+
+    if (inst->buffer_full[inst->current_buffer] ||
+        ((DL_BUFFER_LENGTH - inst->buffer_used[inst->current_buffer])
+         < entry_length)) {
+        inst->buffer_full[inst->current_buffer] = 1;
+        inst->current_buffer = !inst->current_buffer;
+        if (inst->buffer_full[inst->current_buffer] ||
+            ((DL_BUFFER_LENGTH - inst->buffer_used[inst->current_buffer])
+             < entry_length)) {
+            inst->buffer_full[inst->current_buffer] = 1;
+            // No buffer available
+            return 1;
+        }
+    }
+
+    uint8_t *const insert_point = (inst->buffer[inst->current_buffer] +
+                                   inst->buffer_used[inst->current_buffer]);
+    struct data_entry entry = {
+        .timestamp = timestamp,
+        .type = type,
+        .length = length
+    };
+    memcpy(insert_point, &entry, sizeof(struct data_entry));
+    memcpy(insert_point + sizeof(struct data_entry), data, length);
+    inst->buffer_used[inst->current_buffer] += entry_length;
 
     return 0;
 }
