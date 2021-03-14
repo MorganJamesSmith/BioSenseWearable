@@ -430,7 +430,7 @@ static void debug_hcat(uint8_t argc, char **argv,
 }
 
 #define DEBUG_LOG_NAME  "log"
-#define DEBUG_LOG_HELP  "Logs a message to the log file.\nUsage: <message>"
+#define DEBUG_LOG_HELP  "Logs a message to the log file.\nUsage: log <message>"
 
 static void debug_log (uint8_t argc, char **argv,
                        const struct cli_io_funcs_t *console)
@@ -460,6 +460,45 @@ static void debug_log (uint8_t argc, char **argv,
     }
 }
 
+#define DEBUG_TIME_NAME  "time"
+#define DEBUG_TIME_HELP  "Record current time.\nUsage: time <unix time>"
+
+static void debug_time (uint8_t argc, char **argv,
+                        const struct cli_io_funcs_t *console)
+{
+    if (log_init_status != 0) {
+        console->write_string_blocking("Data logger not initialized (");
+        char str[8];
+        itoa(log_init_status, str, 10);
+        console->write_string_blocking(str);
+        console->write_string_blocking(")\n");
+    }
+
+    if (argc != 2) {
+        console->write_string_blocking("Must provide exactly one argument.\n");
+        return;
+    }
+
+    char *end;
+    struct time_data_entry t;
+    t.unix_time = (uint64_t)strtoull(argv[1], &end, 0);
+    if (*end != '\0') {
+        console->write_string_blocking("Invalid time.\n");
+        return;
+    }
+
+    int ret = data_logger_log(&data_logger, millis, DATA_ENTRY_TIME,
+                        (uint8_t*)&t, sizeof(t));
+
+    if (ret != 0) {
+        console->write_string_blocking("Failed to log time (");
+        char str[8];
+        utoa(ret, str, 10);
+        console->write_string_blocking(str);
+        console->write_string_blocking(")\n");
+    }
+}
+
 // MARK: Commands table
 
 const struct cli_func_desc_t debug_commands_funcs[] = {
@@ -474,5 +513,7 @@ const struct cli_func_desc_t debug_commands_funcs[] = {
     {.func = debug_hcat, .name = DEBUG_HCAT_NAME,
         .help_string = DEBUG_HCAT_HELP},
     {.func = debug_log, .name = DEBUG_LOG_NAME, .help_string = DEBUG_LOG_HELP},
+    {.func = debug_time, .name = DEBUG_TIME_NAME,
+        .help_string = DEBUG_TIME_HELP},
     {.func = NULL, .name = NULL, .help_string = NULL}
 };
