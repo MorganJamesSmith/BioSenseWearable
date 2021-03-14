@@ -315,12 +315,45 @@ static void debug_cat(uint8_t argc, char **argv,
 
 #define DEBUG_HCAT_NAME "hcat"
 #define DEBUG_HCAT_HELP "Print the contents of a file on the SD card in hex. " \
-                        "\nUsage: hcat <file>"
+                        "\nUsage: hcat [file] <offset> <num_bytes>"
 
 static void debug_hcat(uint8_t argc, char **argv,
                        const struct cli_io_funcs_t *console)
 {
     char str[16];
+
+    unsigned offset = 0;
+    unsigned num_bytes = 0;
+
+    // Parse arguments
+    if (argc > 4) {
+        // We have to many arguments
+        console->write_string_blocking("Too many arguments.\n");
+        return;
+    } else if (argc < 2) {
+        console->write_string_blocking("No file specified.\n");
+    }
+
+    if (argc > 2) {
+        // We have an offset to parse
+        char *end;
+        offset = (unsigned)strtoul(argv[2], &end, 0);
+        if (*end != '\0') {
+            console->write_string_blocking("Invalid offset.\n");
+            return;
+        }
+    }
+
+    if (argc > 3) {
+        // We have a number of bytes to parse
+        char *end;
+        num_bytes = (unsigned)strtoul(argv[3], &end, 0);
+        if (*end != '\0') {
+            console->write_string_blocking("Invalid number of bytes.\n");
+            return;
+        }
+    }
+
 
     if (filesystem_init_status != 0) {
         console->write_string_blocking("SD card is not initialized.\n");
@@ -331,12 +364,6 @@ static void debug_hcat(uint8_t argc, char **argv,
 
     FIL file;
 
-    if (argc > 2) {
-        console->write_string_blocking("Too many arguments.\n");
-    } else if (argc < 2) {
-        console->write_string_blocking("No file specified.\n");
-    }
-
     // Open file
     ff_result = f_open(&file, argv[1], FA_READ);
 
@@ -345,11 +372,31 @@ static void debug_hcat(uint8_t argc, char **argv,
         return;
     }
 
-    char buffer[4];
+    // Seek file
+    ff_result = f_lseek(&file, offset);
+
+    if (ff_result != FR_OK) {
+        console->write_string_blocking("Failed to seek file.\n");
+        return;
+    }
+
+    // Read file
+
+    char buffer[32];
+    unsigned total_bytes_read = 0;
     unsigned bytes_read;
 
     for (;;) {
-        ff_result = f_read(&file, buffer, 4, &bytes_read);
+        unsigned bytes_to_read = (num_bytes == 0) ? 32 :
+                                 ((num_bytes - total_bytes_read >= 32)) ? 32 :
+                                 (num_bytes - total_bytes_read);
+
+        if (bytes_to_read == 0) {
+            break;
+        }
+
+        ff_result = f_read(&file, buffer, bytes_to_read, &bytes_read);
+        total_bytes_read += bytes_read;
 
         if (ff_result != FR_OK) {
             console->write_string_blocking("Failed to read from file.\n");
