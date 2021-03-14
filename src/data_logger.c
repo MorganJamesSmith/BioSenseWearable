@@ -82,15 +82,15 @@ int init_data_logger(struct data_logger_descriptor *inst)
         return -1;
     }
 
-    // Write a entry to the data file
-    data_logger_log(inst, millis, DATA_ENTRY_RESET, NULL, 0);
-
     // Initialize buffer
     inst->buffer_used[0] = 0;
     inst->buffer_used[1] = 0;
     inst->current_buffer = 0;
     inst->buffer_full[0] = 0;
     inst->buffer_full[1] = 0;
+
+    // Write a entry to the data file
+    ret = data_logger_log(inst, millis, DATA_ENTRY_RESET, NULL, 0);
 
     return 0;
 }
