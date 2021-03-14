@@ -46,8 +46,9 @@ def parse_raw_entries(fileio: typing.BinaryIO) -> typing.Iterator[typing.Tuple[E
         assert len(header_bytes) == header_size, f"got unexpected trailing data: {header_bytes!r}"
         header = EntryHeader.from_bytes(header_bytes)
         # VAIDATION
-        if header.type != 0: # not reset
-            assert header.timestamp > last_timestamp, "timestamp decreased without reset"
+        if header.type != 0 and header.timestamp < last_timestamp:
+            import warnings
+            warnings.warn(f"timestamp decreased from {last_timestamp} to {header.timestamp}")
         last_timestamp = header.timestamp
         # END VALIDATION
         payload_bytes = fileio.read(header.length)
@@ -154,6 +155,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("input_file", type=argparse.FileType('rb'))
     ns = parser.parse_args()
-    # ns = parser.parse_args(["P21"])
+    # ns = parser.parse_args(["companion_app/P21"])
     with ns.input_file:
         write_multifile(ns.input_file)
