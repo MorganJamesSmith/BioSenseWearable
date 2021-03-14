@@ -167,7 +167,7 @@ static void saadc_callback(nrfx_saadc_evt_t const * p_event)
         memcpy(adc_last_samples, p_event->data.done.p_buffer,
                sizeof(nrf_saadc_value_t) * ADC_NUM_CHANNELS);
         adc_last_sample_time = millis;
-        adc_samples_pending = 0;
+        adc_samples_pending = 1;
         adc_sample_in_progress = 0;
 
         err_code = nrfx_saadc_buffer_convert(p_event->data.done.p_buffer,
