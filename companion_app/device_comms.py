@@ -1,5 +1,6 @@
 import asyncio
 import io
+import serial
 import bleak
 try:
     from . import log_parser
@@ -19,9 +20,12 @@ async def scan_for_device(device_name, *, log=print):
         log(f"looking for {device_name}")
         return await device_was_found_future
 
-async def open_cli(device_name, rx_uuid, tx_uuid, *, log=print):
+async def open_bluetooth_cli(device_name='Project21', 
+                             rx_uuid='6e400002-b5a3-f393-e0a9-e50e24dcca9e', 
+                             tx_uuid='6e400003-b5a3-f393-e0a9-e50e24dcca9e', 
+                             *, log=print):
     """opens cli with bluetooth device as async coroutine
-    first iteration will connect to the device and yield nothing
+    first iteration will connect to the device and yield initial prompt from device
     subsequently should call .asend(message) to send the message to the device
     this will read the output and produce it as a response to the asend call.
     """
@@ -42,16 +46,19 @@ async def open_cli(device_name, rx_uuid, tx_uuid, *, log=print):
             await client.write_gatt_char(tx_uuid, msg_send_to_device.encode())
     log("closed connection with bluetooth device")
 
+async def open_usb_cli(device="/dev/ttyACM0", prompt="\n> "):
+    "opens serial connection to device, mimics behaviour to bluetooth cli"
+    with serial.Serial(device) as conn:
+        while True:
+            msg_to_send = yield conn.read_until(prompt)
+            conn.write(msg_to_send)
+
 def hex_output_to_binary_file(hexbuffer: str):
     """converts hex output from hcat command to file buffer for parser."""
     return io.BytesIO(bytes.fromhex(hexbuffer.replace("\n","")))
 
-async def get_log_file_over_bluetooth():
-    # TODO: document what these mean
-    UART_RX_UUID = '6e400002-b5a3-f393-e0a9-e50e24dcca9e'
-    UART_TX_UUID = '6e400003-b5a3-f393-e0a9-e50e24dcca9e'
-    DEVICE_NAME = 'Project21'
-    cli = open_cli(DEVICE_NAME, UART_RX_UUID, UART_TX_UUID)
+async def get_log_file():
+    cli = open_cli()
     await cli.asend(None)
     log_text_bytearray = await cli.asend("hcat P21")
     print("!!!!!!GOT DATA!!!!!!!!")
@@ -60,10 +67,9 @@ async def get_log_file_over_bluetooth():
 
 
 async def main():
-    f = await get_log_file_over_bluetooth()
+    f = await get_log_file()
     log_parser.write_multifile(f)
 
-
+open_cli = open_usb_cli
 if __name__ == "__main__":
-    import asyncio
     asyncio.run(main())
