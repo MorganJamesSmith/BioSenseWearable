@@ -69,12 +69,12 @@ class VoltageDataPayload(metaclass=types.Struct):
     supply_voltage: types.uint16_t  # 1 mV per LSB
     battery_voltage:types.uint16_t  # 1 mV per LSB
 class TemperatureDataPayload(metaclass=types.Struct):
-    ir_temp:        types.uint16_t  # 0.01 °C per LSB
-    ambient_temp:   types.uint16_t  # 0.01 °C per LSB
+    ir_temp:        types.uint16_t  # 0.01 °C per LSB (relative to 0°C)
+    ambient_temp:   types.uint16_t  # 0.01 °C per LSB (relative to 0°C)
 
 class ImuDataPayload(metaclass=types.Struct):
     "contains IMU data for acceleration and gyroscope"
-    accel_x:    types.int32_t # 0.1 mg per LSB
+    accel_x:    types.int32_t # 0.1 m_gravity per LSB
     accel_y:    types.int32_t
     accel_z:    types.int32_t
 
@@ -82,7 +82,7 @@ class ImuDataPayload(metaclass=types.Struct):
     gyro_y:     types.int32_t
     gyro_z:     types.int32_t
 
-    temperature:types.int32_t # 1 m°C per LSB
+    temperature:types.int32_t # 1 m°C per LSB (relative to 0°C)
 
 class LogMessagePayload(metaclass=types.Struct):
     "Text Log Message"
