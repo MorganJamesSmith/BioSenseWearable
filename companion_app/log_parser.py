@@ -74,7 +74,7 @@ class TemperatureDataPayload(metaclass=types.Struct):
 
 class ImuDataPayload(metaclass=types.Struct):
     "contains IMU data for acceleration and gyroscope"
-    accel_x:    types.int32_t # 0.1 m_gravity per LSB
+    accel_x:    types.int32_t # 0.1 milli_gravity per LSB
     accel_y:    types.int32_t
     accel_z:    types.int32_t
 
