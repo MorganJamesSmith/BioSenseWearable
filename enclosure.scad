@@ -10,32 +10,59 @@ $fn = 100;
 nothing = 0.01;
 
 
-wall_thickness = 2;
-bottom_thickness = 3.7;
+wall_thickness = 1.5;
+bottom_thickness = 2.9;
 top_thickness = 3;
 
 pcb_size = [57, 35, 1.6];
 
-outer_size = [pcb_size.x + wall_thickness * 2,
-              pcb_size.y + wall_thickness * 2,
+x_overextrusion = 0.75;
+
+outer_size = [pcb_size.x + wall_thickness * 2 + x_overextrusion * 2,
+              pcb_size.y + wall_thickness * 2 + x_overextrusion * 2,
               bottom_thickness + pcb_size.z + top_thickness];
 
-nub_size = [3, 3, 3];
+inner_offset = wall_thickness + x_overextrusion;
 
-heart_rate_size = [5.6, 3.3, 1.3];
-heart_rate_position = [24, 15.5, -heart_rate_size.z];
+nub_size = [3, 3, 3];
 
 temperature_diameter = 5.4;
 temperature_height = 2.9;
 temperature_position = [33.5, 17.5, -temperature_height];
 
-// TODO: get actual size data
-sd_card_size = [16, 17.5, 2];
-sd_card_position = [7, 17.5, -sd_card_size.z];
+// item[0] - position
+// item[1] - size
+// item[2] - color
+heart_rate = [[24, 15.5, -1.3], [5.6, 3.3, 1.3], "hotpink"];
+sd_card = [[7, 17.5, -3], [16, 17.5, 3], "silver"];
+usb = [[0, 25, pcb_size.z], [7, 9, 4], "gray"];
+jumpers = [[23, pcb_size.y-12, -2], [5, 12, 2], "white"];
+nrf = [[pcb_size.x-16, (pcb_size.y-11)/2, -2], [16, 11, 2], "yellow"];
 
-// TODO: get actual size data
-usb_size = [7.5, 14, 2];
-usb_position = [0, 20, pcb_size.z];
+// cube_cutouts[0] - position
+// cube_cutouts[1] - size
+cube_cutouts =
+    [
+     // Heart Rate Sensor
+     [[heart_rate[0].x, heart_rate[0].y, heart_rate[0].z - bottom_thickness],
+      [heart_rate[1].x, heart_rate[1].y, heart_rate[1].z + bottom_thickness + nothing]],
+
+     // SD Card
+     [sd_card[0],
+      [sd_card[1].x, sd_card[1].y + wall_thickness + nothing, sd_card[1].z + nothing]],
+
+     // USB
+     [[usb[0].x - (wall_thickness + nothing), usb[0].y, usb[0].z],
+      [usb[1].x + (wall_thickness + nothing), usb[1].y, usb[1].z]],
+
+     // Jumpers
+     [jumpers[0],
+      [jumpers[1].x, jumpers[1].y, jumpers[1].z + nothing]],
+
+     // NRF
+     [nrf[0],
+      [nrf[1].x, nrf[1].y, nrf[1].z + nothing]],
+     ];
 
 // A set of two spaced nubs that can hold a watch pin
 module watch_nubs(strap_width=20, pin_hole_diameter=1) {
@@ -53,69 +80,56 @@ module watch_nubs(strap_width=20, pin_hole_diameter=1) {
     mirror([1, 0, 0]) nub();
 }
 
-// Cutouts used for the heart rate sensor, temperature sensor, USB, and SD card
+// Cutouts for components
 module enclosure_cutouts() {
-    // SD Card
-    translate(sd_card_position)
-        cube([sd_card_size.x, sd_card_size.y+wall_thickness+nothing, sd_card_size.z+nothing]);
-
-    // USB
-    translate([usb_position.x-wall_thickness-nothing, usb_position.y, usb_position.z])
-        cube([usb_size.x+wall_thickness+nothing, usb_size.y, usb_size.z]);
-
-    // Heart rate
-    translate([heart_rate_position.x,
-               heart_rate_position.y,
-               heart_rate_position.z-bottom_thickness])
-        cube([heart_rate_size.x, heart_rate_size.y, heart_rate_size.z+bottom_thickness+nothing]);
+    for(args = cube_cutouts) {
+        translate([args[0].x - x_overextrusion,
+                   args[0].y - x_overextrusion,
+                   args[0].z])
+            cube([args[1].x + x_overextrusion*2,
+                  args[1].y + x_overextrusion*2,
+                  args[1].z]);
+    }
 
     // Temperature
     translate([temperature_position.x,
                temperature_position.y,
                temperature_position.z-bottom_thickness])
-        cylinder(d = temperature_diameter, h = temperature_height+bottom_thickness+nothing);
+        cylinder(d = temperature_diameter + x_overextrusion*2,
+                 h = temperature_height+bottom_thickness+nothing);
 }
 
 module enclosure_body() {
     difference(){
         cube(outer_size);
         translate([wall_thickness, wall_thickness, bottom_thickness])
-            cube([pcb_size.x, pcb_size.y, 100]);
-        translate([wall_thickness, wall_thickness, bottom_thickness])
+            cube([pcb_size.x+x_overextrusion*2, pcb_size.y+x_overextrusion*2, 100]);
+        translate([inner_offset, inner_offset, bottom_thickness])
             enclosure_cutouts();
     }
-    translate([outer_size.x/2, -nub_size.y, -nub_size.z/2])
-        watch_nubs();
-    translate([outer_size.x/2, outer_size.y, -nub_size.z/2])
-        watch_nubs();
+    // TODO
+    // translate([outer_size.x/2, -nub_size.y, -nub_size.z/2])
+    //     watch_nubs();
+    // translate([outer_size.x/2, outer_size.y, -nub_size.z/2])
+    //     watch_nubs();
 }
 
 module main_board() {
-    union() {
+    components = [heart_rate, sd_card, usb, jumpers, nrf];
+    for(component = components) {
+        color(component[2])
+            translate(component[0])
+                cube(component[1]);
+    }
+
     // Main pcb
     color("green")
         cube(pcb_size);
-
-    // SD Card
-    color("grey")
-        translate(sd_card_position)
-            cube(sd_card_size);
-
-    // USB
-    color("grey")
-        translate(usb_position)
-            cube(usb_size);
-
-    // Heart rate
-    color("blue")
-        translate(heart_rate_position)
-            cube(heart_rate_size);
 
     // Temperature
     color("red")
         translate(temperature_position)
             cylinder(d = temperature_diameter, h = temperature_height);
-    }
 }
 
 if(render_enclosure) {
@@ -123,6 +137,6 @@ if(render_enclosure) {
  }
 
 if(render_pcb) {
-    translate([wall_thickness, wall_thickness, bottom_thickness])
+    translate([inner_offset, inner_offset, bottom_thickness])
         main_board();
  }
