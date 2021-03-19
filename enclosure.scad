@@ -16,7 +16,7 @@ top_thickness = 3;
 
 pcb_size = [57, 35, 1.6];
 
-x_overextrusion = 0.75;
+x_overextrusion = 0.4;
 
 outer_size = [pcb_size.x + wall_thickness * 2 + x_overextrusion * 2,
               pcb_size.y + wall_thickness * 2 + x_overextrusion * 2,
@@ -35,9 +35,11 @@ temperature_position = [33.5, 17.5, -temperature_height];
 // item[2] - color
 heart_rate = [[24, 15.5, -1.3], [5.6, 3.3, 1.3], "hotpink"];
 sd_card = [[7, 17.5, -3], [16, 17.5, 3], "silver"];
-usb = [[0, 25, pcb_size.z], [7, 9, 4], "gray"];
-jumpers = [[23, pcb_size.y-12, -2], [5, 12, 2], "white"];
+usb = [[0, 24, pcb_size.z], [7, 10, 4], "gray"];
+jumpers = [[23, pcb_size.y-11, -2], [5, 11, 2], "white"];
 nrf = [[pcb_size.x-16, (pcb_size.y-11)/2, -2], [16, 11, 2], "yellow"];
+jst_pins = [[0, 0, -2], [7, 4, 2], "white"];
+resistors = [[sd_card[0].x+sd_card[1].x, jumpers[0].y-4, -1], [13, 4, 1], "white"];
 
 // cube_cutouts[0] - position
 // cube_cutouts[1] - size
@@ -62,6 +64,13 @@ cube_cutouts =
      // NRF
      [nrf[0],
       [nrf[1].x, nrf[1].y, nrf[1].z + nothing]],
+
+     [jst_pins[0],
+      [jst_pins[1].x, jst_pins[1].y, jst_pins[1].z + nothing]],
+
+     [resistors[0],
+      [resistors[1].x, resistors[1].y, resistors[1].z + nothing]],
+
      ];
 
 // A set of two spaced nubs that can hold a watch pin
@@ -115,7 +124,7 @@ module enclosure_body() {
 }
 
 module main_board() {
-    components = [heart_rate, sd_card, usb, jumpers, nrf];
+    components = [heart_rate, sd_card, usb, jumpers, nrf, jst_pins, resistors];
     for(component = components) {
         color(component[2])
             translate(component[0])
