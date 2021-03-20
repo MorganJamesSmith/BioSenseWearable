@@ -16,7 +16,7 @@ top_thickness = 3;
 
 pcb_size = [57, 35, 1.6];
 
-x_overextrusion = 0.4;
+x_overextrusion = 0.3;
 
 outer_size = [pcb_size.x + wall_thickness * 2 + x_overextrusion * 2,
               pcb_size.y + wall_thickness * 2 + x_overextrusion * 2,
@@ -33,13 +33,17 @@ temperature_position = [33.5, 17.5, -temperature_height];
 // item[0] - position
 // item[1] - size
 // item[2] - color
-heart_rate = [[24, 15.5, -1.3], [5.6, 3.3, 1.3], "hotpink"];
+heart_rate = [[23.75, 15.25, -1.3], [6.1, 3.8, 1.3], "hotpink"];
 sd_card = [[7, 17.5, -3], [16, 17.5, 3], "silver"];
-usb = [[0, 24, pcb_size.z], [7, 10, 4], "gray"];
+usb = [[0, 23, pcb_size.z], [7, 10, 4], "gray"];
 jumpers = [[23, pcb_size.y-11, -2], [5, 11, 2], "white"];
-nrf = [[pcb_size.x-16, (pcb_size.y-11)/2, -2], [16, 11, 2], "yellow"];
+nrf = [[pcb_size.x-20, (pcb_size.y-11)/2, -2], [20, 11, 2], "yellow"];
 jst_pins = [[0, 0, -2], [7, 4, 2], "white"];
 resistors = [[sd_card[0].x+sd_card[1].x, jumpers[0].y-4, -1], [13, 4, 1], "white"];
+something =  [[30, 3, -1], [8, 10, 1], "white"];
+blah =  [[0, 6, -1], [9, 10, 1], "white"];
+bleh =  [[30, 3, -1], [8, 10, 1], "white"];
+blbh =  [[11, 0, -1], [8, 11, 1], "white"];
 
 // cube_cutouts[0] - position
 // cube_cutouts[1] - size
@@ -70,6 +74,18 @@ cube_cutouts =
 
      [resistors[0],
       [resistors[1].x, resistors[1].y, resistors[1].z + nothing]],
+
+     [something[0],
+      [something[1].x, something[1].y, something[1].z + nothing]],
+
+     [blah[0],
+      [blah[1].x, blah[1].y, blah[1].z + nothing]],
+
+     [bleh[0],
+      [bleh[1].x, bleh[1].y, bleh[1].z + nothing]],
+
+     [blbh[0],
+      [blbh[1].x, blbh[1].y, blbh[1].z + nothing]],
 
      ];
 
@@ -124,7 +140,7 @@ module enclosure_body() {
 }
 
 module main_board() {
-    components = [heart_rate, sd_card, usb, jumpers, nrf, jst_pins, resistors];
+    components = [heart_rate, sd_card, usb, jumpers, nrf, jst_pins, resistors, something, blah, bleh, blbh];
     for(component = components) {
         color(component[2])
             translate(component[0])
