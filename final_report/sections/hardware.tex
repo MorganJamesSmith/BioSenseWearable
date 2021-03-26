@@ -59,7 +59,7 @@ outside of SparkFun's Artemis module, and the MAX32668 which is a newly
 available part and could only be ordered as a sample from Maxim's
 website.
 
-\begin{table*}[htb]
+\begin{table*}[!htb]
 \centering
 \begin{tabular}{>{\centering\arraybackslash}m{2.2cm}|
                 >{\centering\arraybackslash}m{2.5cm}|
@@ -71,7 +71,7 @@ website.
 \toprule
 Part Number & Manufacturer & CPU & Program Memory & SRAM & Friendliest Package & Cost \\
 \midrule
-nRF52840 & Nordic Semiconductor & ARM Cortex-M4 at 64 MHz & 1 MiB & 256 KiB  & aQFN73 & \$9.34 \\
+\textbf{nRF52840} & \textbf{Nordic Semiconductor} & \textbf{ARM Cortex-M4 at 64 MHz} & \textbf{1 MiB} & \textbf{256 KiB}  & \textbf{aQFN73} & \textbf{\$9.34} \\
 nRF52832 & Nordic Semiconductor & ARM Cortex-M4 at 64 MHz & 512 KiB & 64 KiB  & QFN48 & \$8.19 \\
 nRF5340 & Nordic Semiconductor & Dual ARM Cortex-M33 at 96/64 MHz & 1 MiB & 512 KiB & aQFN94 & \$13.85 \\
 Apollo3 Blue & Ambiq & ARM Cortex-M4 at 48 MHz & 1 MiB & 384 KiB & BGA81 & N/A \\
@@ -99,7 +99,7 @@ UART chip, using one of the microcontrollers with a built-in USB interface
 gives us greater integration saving us cost, board space, complexity and
 power usage.
 
-\begin{table*}[htb]
+\begin{table*}[!htb]
 \centering
 \begin{tabular}{>{\centering\arraybackslash}m{3.0cm}|
                 >{\centering\arraybackslash}m{1.8cm}|
@@ -110,7 +110,7 @@ power usage.
 \toprule
 Part Number & I2C Master Interfaces & SPI Master Interfaces & SD/MMC Interface & BLE Version & USB \\
 \midrule
-nRF52840 & 2 & 4 & None & 5.2  & 2.0 Full Speed \\
+\textbf{nRF52840} & \textbf{2} & \textbf{4} & \textbf{None} & \textbf{5.2}  & \textbf{2.0 Full Speed} \\
 nRF52832 & 2 & 3 & None & 5.2  & None \\
 nRF5340 & 4 & 5 & None & 5.1 & None \\
 Apollo3 Blue & 6 & 6 & None & 5.0 & None \\
@@ -133,7 +133,7 @@ hardware accelerated cryptography features with the exception of the nRF52832
 which lacks any modular arithmetic acceleration for public key cryptography and
 the Apollo3 Blue which has no hardware cryptography accelerator.
 
-\begin{table*}[htb]
+\begin{table*}[!hb]
 \centering
 \begin{tabular}{>{\centering\arraybackslash}m{2.5cm}|
                 >{\centering\arraybackslash}m{2.0cm}|
@@ -144,7 +144,7 @@ the Apollo3 Blue which has no hardware cryptography accelerator.
 \toprule
 Part Number & Hashes & Public Key Algorithms & Symmetric Key Algorithms & AES Modes & True Random Number Generator \\
 \midrule
-nRF52840 & SHA-1, SHA-2 up to 256 bits, HMAC & RSA up to 2048 bit key, ECC & AES128, ChaCha20, Poly1305 & ECB, CBC, CMAC/CBC-MAC, CTR, CCM/CCM* & Yes \\
+\textbf{nRF52840} & \textbf{SHA-1, SHA-2 up to 256 bits, HMAC} & \textbf{RSA up to 2048 bit key, ECC} & \textbf{AES128, ChaCha20, Poly1305} & \textbf{ECB, CBC, CMAC/CBC-MAC, CTR, CCM/CCM*} & \textbf{Yes} \\
 nRF52832 & None & None & AES128 & ECB, CCM & No \\
 nRF5340 & SHA-1, SHA-1 up to 256 bits, HMAC & RSA up to 3072 bit key, ECC & AES128, AES256 & ECB, CBC, CMAC/CBC-MAC, CTR, CCM/CCM*, GCM & Yes \\
 Apollo3 Blue & None & None & None & None & No \\
@@ -188,17 +188,29 @@ sensor will indicate the temperature of the user’s environment while the
 infrared temperature sensor measures the user’s body temperature. The air 
 quality sensor and UV light sensor will provide additional information about 
 the user’s environment. The IMU will provide information about the user’s 
-movements, and the heart rate sensor will measure the user’s heart rate. A 
-listing of the exact components used for each of these sensors is provided 
-below.
+movements, and the heart rate sensor will measure the user’s heart rate. A
+summary of the exact part numbers selected for each type of component discussed 
+in this section is provided in Table \ref{tab:component-summary}.
 
-\begin{itemize}
-   \item ICM-20948: Inertial Measurement Unit (IMU)
-   \item MAX86150EFF+T: Heart rate sensor
-   \item ZTP-148SR: Infrared and ambient temperature sensor
-   \item BME680: Air quality sensor
-   \item SI1133-AA00-GM: UV light sensor
-\end{itemize}
+\begin{table*}[!htb]
+\centering
+\begin{tabular}{>{\centering\arraybackslash}m{7.0cm}|
+                >{\centering\arraybackslash}m{3.5cm}|
+                >{\centering\arraybackslash}m{3.5cm}}
+\toprule
+Component & Manufacturer & Part Number \\
+\midrule
+Prossor module (with nRF52840) & U-Blox & BMD-340 \\
+Inertial Measurement Unit (IMU) & TDK & ICM-20948 \\
+Heart rate sensor & Maxim Integrated & MAX86150EFF \\
+Infrared \& ambient temperature sensor & Amphenol & ZTP-148SR \\
+Air quality sensor & Bosch Sensortec & BME680 \\
+UV light sensor & Silicon Labs & SI1133-AA00-GM \\
+\bottomrule
+\end{tabular}
+\caption{Summary of component choices}
+\label{tab:component-summary}
+\end{table*}
 
 \subsection{Schematic}
 
@@ -234,7 +246,7 @@ diagram.
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{images/BlockDiagram_PowerSupply.png}
+\includegraphics[scale=0.4]{images/BlockDiagram_PowerSupply.png}
 \caption{Block diagram of power supply.}
 \label{fig:BlockDiagram_PowerSupply}
 \end{figure}
@@ -290,11 +302,11 @@ of time the microcontroller will go through a shutdown routine ended by turning
 off the GPIO pin that latched the power supply on. As soon as the user releases 
 the power button all power will be lost and the device is off. A simplified 
 schematic view of this arrangement can be seen in 
-Figure \ref{fig:BlockDiagram_OnOff} below.
+Figure \ref{fig:BlockDiagram_OnOff}.
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{images/BlockDiagram_OnOff.png}
+\includegraphics[scale=0.35]{images/BlockDiagram_OnOff.png}
 \caption{Simplified power on/off circuit.}
 \label{fig:BlockDiagram_OnOff}
 \end{figure}
@@ -307,7 +319,7 @@ between power source and load when powered off means that standby power
 consumption should be extremely low. This implementation is slightly more 
 complex and costly than the others because it uses some additional hardware 
 components and relies on both hardware and software to work together, but it 
-was decided that the benefits greatly outweigh the costs.
+was decided that the benefits greatly outweigh the costs. \\
 
 The implementation of the processor section of the schematic followed what was 
 outlined in the proposal very closely. As described in 
@@ -320,7 +332,7 @@ is a block diagram showing how everything connects together.
 
 \begin{figure}[!htb]
 \centering
-\includegraphics[width=\textwidth]{images/BlockDiagram_Processor.png}
+\includegraphics[scale=0.46]{images/BlockDiagram_Processor.png}
 \caption{Block diagram of processor and connected components.}
 \label{fig:BlockDiagram_Processor}
 \end{figure}
