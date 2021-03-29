@@ -9,7 +9,7 @@ try:
     from . import log_parser
 except ImportError:
     import log_parser
-
+# TODO: clean up CLI code
 class LiveLogFile():
     def __init__(self, serial_device_name: str="/dev/ttyACM0", initial_file_offset = -1,
                  callback_to_call_right_before_grabbing_new_data=lambda:None,

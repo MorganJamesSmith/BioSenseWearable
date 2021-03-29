@@ -43,9 +43,11 @@ def parse_raw_entries(fileio: typing.BinaryIO) -> typing.Iterator[typing.Tuple[E
     def next_header(): return fileio.read(header_size)
     # iterate over headers until empty string is returned meaning end of file is reached.
     for header_bytes in iter(next_header, b''):
+        # TODO: change to warning
         assert len(header_bytes) == header_size, f"got unexpected trailing data: {header_bytes!r}"
         header = EntryHeader.from_bytes(header_bytes)
-        # VAIDATION
+        # VALIDATION
+        # TODO: check that offset corresponds with entry in P21_OFF for all resets
         if header.type != 0 and header.timestamp < last_timestamp:
             import warnings
             warnings.warn(f"timestamp decreased from {last_timestamp} to {header.timestamp}")
@@ -128,6 +130,7 @@ def parse_data(entries_iterator: typing.Iterator[typing.Tuple[EntryHeader, bytes
             if entry_type_payloads[header.type] is ResetDataPayload:
                 break # break out of inner loop and go back to while True loop
             # else: handle data entry
+            # TODO: handle unrecognized entry type and error in from_bytes (length)
             payload: AnyEntry = entry_type_payloads[header.type].from_bytes(payload_bytes)
 
             yield (header.type, reset_idx, header.timestamp, *payload)
