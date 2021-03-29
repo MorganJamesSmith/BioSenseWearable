@@ -19,3 +19,26 @@ additionally `struct_types.py` contains some relevent code for parsing the struc
 - bluetooth is used because it is ubiquitus
 - go into more detail for what the graph is actually showing (units are not done yet)
 - moving forward units are not done yet,
+
+# TEST PLAN
+
+- bluetooth
+- CLI
+    - read in smaller chunks
+    - detect "failed to open file"
+    - when first character goes missing figure out better solution
+    - fails first time sometimes because of weird symbol that is sent from nowhere
+- headers
+    - test that timestamps don't go down by more than a few milliseconds
+    - ensure first command is reset - is hard because only applicable when starting from reset
+    - test behaviour when file is corrupted (wrong size)
+        - last entry in file is incorrect size
+        - entry right before reset is invalid
+- payloads
+    - test invalid entry types
+    - invalid entry length
+- units
+    - make unit conversion code
+- plotting
+
+- checking that offsets actually line up with all the resets
