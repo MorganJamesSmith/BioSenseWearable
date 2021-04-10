@@ -182,10 +182,10 @@ int main(void)
 
     // IMU SPI Interface
     nrfx_spim_config_t imu_spi_config = NRFX_SPIM_DEFAULT_CONFIG;
-    imu_spi_config.ss_pin   = ICM_20948_I2C_SS_PIN;
-    imu_spi_config.miso_pin = ICM_20948_I2C_MISO_PIN;
-    imu_spi_config.mosi_pin = ICM_20948_I2C_MOSI_PIN;
-    imu_spi_config.sck_pin  = ICM_20948_I2C_SCK_PIN;
+    imu_spi_config.ss_pin   = ICM_20948_SPI_SS_PIN;
+    imu_spi_config.miso_pin = ICM_20948_SPI_MISO_PIN;
+    imu_spi_config.mosi_pin = ICM_20948_SPI_MOSI_PIN;
+    imu_spi_config.sck_pin  = ICM_20948_SPI_SCK_PIN;
 
     nrfx_spim_init(&imu_spi, &imu_spi_config, &icm_20948_spim_event_handler,
                    (void*)&imu);

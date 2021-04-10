@@ -8,10 +8,10 @@
 
 #include "data_logger.h"
 
-#define ICM_20948_I2C_MISO_PIN      28
-#define ICM_20948_I2C_MOSI_PIN      29
-#define ICM_20948_I2C_SCK_PIN       30
-#define ICM_20948_I2C_SS_PIN        31
+#define ICM_20948_SPI_MISO_PIN      28
+#define ICM_20948_SPI_MOSI_PIN      29
+#define ICM_20948_SPI_SCK_PIN       30
+#define ICM_20948_SPI_SS_PIN        31
 
 #define ICM_20948_INT_PORT          NRF_P0
 #define ICM_20948_INT_PIN           27

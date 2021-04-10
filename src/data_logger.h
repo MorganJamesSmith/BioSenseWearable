@@ -51,13 +51,13 @@ struct imu_data_entry {
 };
 
 struct voltage_data_entry {
-    uint16_t supply_voltage;    // 1 mV per LSB
-    uint16_t battery_voltage;   // 1 mV per LSB
+    int16_t supply_voltage;     // 1 mV per LSB
+    int16_t battery_voltage;    // 1 mV per LSB
 };
 
 struct temperature_data_entry {
-    uint16_t ir_temp;       // 10 milladegrees Celsius per LSB (0.01 °C/LSB)
-    uint16_t ambient_temp;  // 10 milladegrees Celsius per LSB (0.01 °C/LSB)
+    int16_t ir_temp;        // 10 milladegrees Celsius per LSB (0.01 °C/LSB)
+    int16_t ambient_temp;   // 10 milladegrees Celsius per LSB (0.01 °C/LSB)
 };
 
 struct time_data_entry {
