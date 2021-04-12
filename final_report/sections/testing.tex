@@ -32,7 +32,7 @@ Test & Mean Time & 98th Percentile of Deviation & Standard Deviation &
 Maximum \\
 \midrule
 Time between system ticks (millis)  & 998.868 microseconds & 98\% of results
-within 257 nanoseconds of the mean & 1.185e-5 & 1.077 milliseconds \\
+within 250 nanoseconds of the mean & 1.185e-5 & 1.077 milliseconds \\
 Time spent executing body of main loop & 5.625 microseconds & 98\% of results
 within 16 microseconds of the mean & 6.327e-4 & 35.071 milliseconds \\
 Time spend sleeping per iteration of main loop & 931.475 microseconds & 98\% of
@@ -66,7 +66,7 @@ of milliseconds ('millis'), is reasonably accurate and precise.
 
 While the average period between SysTick interrupts is slightly less then the 1
 millisecond target, the count is very precise. All of the measured samples were
-within 750 microseconds of the mean value and 99\% of them where within 382
+within 750 microseconds of the mean value and 99\% of them where within 375
 nanoseconds of the mean which indicates that there is very little jitter in our
 millis value.
 
