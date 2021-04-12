@@ -197,6 +197,10 @@ static void debug_imu (uint8_t argc, char **argv,
 static void debug_ls(uint8_t argc, char **argv,
                      const struct cli_io_funcs_t *console)
 {
+#ifndef ENABLE_SD_CARD
+    console->write_string_blocking("SD card is not enabled.\n");
+    return;
+#else
     char str[16];
 
     if (filesystem_init_status != 0) {
@@ -254,6 +258,7 @@ static void debug_ls(uint8_t argc, char **argv,
         console->write_string_blocking("Failed to close directory\n");
         return;
     }
+#endif
 }
 
 #define DEBUG_CAT_NAME "cat"
@@ -263,6 +268,10 @@ static void debug_ls(uint8_t argc, char **argv,
 static void debug_cat(uint8_t argc, char **argv,
                       const struct cli_io_funcs_t *console)
 {
+#ifndef ENABLE_SD_CARD
+    console->write_string_blocking("SD card is not enabled.\n");
+    return;
+#else
     if (filesystem_init_status != 0) {
         console->write_string_blocking("SD card is not initialized.\n");
         return;
@@ -312,6 +321,7 @@ static void debug_cat(uint8_t argc, char **argv,
         console->write_string_blocking("Failed to close file\n");
         return;
     }
+#endif
 }
 
 #define DEBUG_HCAT_NAME "hcat"
@@ -321,6 +331,10 @@ static void debug_cat(uint8_t argc, char **argv,
 static void debug_hcat(uint8_t argc, char **argv,
                        const struct cli_io_funcs_t *console)
 {
+#ifndef ENABLE_SD_CARD
+    console->write_string_blocking("SD card is not enabled.\n");
+    return;
+#else
     char str[16];
 
     unsigned offset = 0;
@@ -428,6 +442,7 @@ static void debug_hcat(uint8_t argc, char **argv,
         console->write_string_blocking("Failed to close file\n");
         return;
     }
+#endif
 }
 
 #define DEBUG_LOG_NAME  "log"
@@ -436,6 +451,10 @@ static void debug_hcat(uint8_t argc, char **argv,
 static void debug_log (uint8_t argc, char **argv,
                        const struct cli_io_funcs_t *console)
 {
+#ifndef ENABLE_SD_CARD
+    console->write_string_blocking("SD card is not enabled.\n");
+    return;
+#else
     if (log_init_status != 0) {
         console->write_string_blocking("Data logger not initialized (");
         char str[8];
@@ -459,6 +478,7 @@ static void debug_log (uint8_t argc, char **argv,
         console->write_string_blocking(str);
         console->write_string_blocking(")\n");
     }
+#endif
 }
 
 #define DEBUG_TIME_NAME  "time"
@@ -467,6 +487,10 @@ static void debug_log (uint8_t argc, char **argv,
 static void debug_time (uint8_t argc, char **argv,
                         const struct cli_io_funcs_t *console)
 {
+#ifndef ENABLE_SD_CARD
+    console->write_string_blocking("SD card is not enabled.\n");
+    return;
+#else
     if (log_init_status != 0) {
         console->write_string_blocking("Data logger not initialized (");
         char str[8];
@@ -498,6 +522,7 @@ static void debug_time (uint8_t argc, char **argv,
         console->write_string_blocking(str);
         console->write_string_blocking(")\n");
     }
+#endif
 }
 
 
