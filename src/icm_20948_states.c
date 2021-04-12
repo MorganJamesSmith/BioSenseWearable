@@ -2,6 +2,7 @@
 #include "icm_20948_registers.h"
 
 #include "global.h"
+#include "config.h"
 
 // MARK: Helpers
 
@@ -503,7 +504,7 @@ static int icm_20948_handler_idle (struct icm_20948_desc *inst)
 //    }
 
     static uint32_t last_time = 0;
-    if ((millis - last_time) > 100) {
+    if ((millis - last_time) > IMU_PERIOD) {
         inst->state = ICM_20948_READ_DATA;
         inst->time = millis;
         last_time = millis;

@@ -5,9 +5,9 @@
 #include <nrfx_saadc.h>
 
 #include "global.h"
+#include "config.h"
 
 #define ADC_NUM_CHANNELS        4
-#define ADC_SAMPLE_PERIOD       500
 
 static nrf_saadc_value_t adc_buffers[2][ADC_NUM_CHANNELS];
 static uint8_t adc_calibration_complete;
@@ -244,7 +244,7 @@ int init_adc(struct data_logger_descriptor *logger)
 void adc_service(void)
 {
     if (adc_calibration_complete && !adc_sample_in_progress &&
-            ((millis - adc_last_sample_time) > ADC_SAMPLE_PERIOD)) {
+            ((millis - adc_last_sample_time) > ADC_PERIOD)) {
         adc_sample_in_progress = 1;
         // Start a conversion
         nrfx_saadc_sample();

@@ -9,7 +9,7 @@
 #include "nrf_block_dev_sdc.h"
 
 #include "global.h"
-#include "sensors.h"
+#include "config.h"
 #include "usb_serial.h"
 #include "bluetooth.h"
 #include "cli.h"
@@ -59,13 +59,12 @@ static struct cli_desc_t ble_cli;
 
 static const nrfx_spim_t imu_spi = NRFX_SPIM_INSTANCE(0);
 
+#ifdef ENABLE_IMU
 struct icm_20948_desc imu;
+#endif
 
-#define SDC_SCK_PIN     19
-#define SDC_MOSI_PIN    21
-#define SDC_MISO_PIN    20
-#define SDC_CS_PIN      17
 
+#ifdef ENABLE_SD_CARD
 NRF_BLOCK_DEV_SDC_DEFINE(block_dev_sdc,
                          NRF_BLOCK_DEV_SDC_CONFIG(SDC_SECTOR_SIZE,
                          APP_SDCARD_CONFIG(SDC_MOSI_PIN, SDC_MISO_PIN,
@@ -117,6 +116,7 @@ int initialize_sd_card_fs(void)
 
     return 0;
 }
+#endif
 
 int main(void)
 {
@@ -156,6 +156,7 @@ int main(void)
     init_usb_cdc();
     init_cli(&usb_cli, &usb_io_funcs, "> ", debug_commands_funcs, '\r');
 
+#ifdef ENABLE_BLUETOOTH
     /* Use this to turn LED on when bluetooth is connected 
     BSP_LED_0_PORT->DIRSET = BSP_LED_0_MASK;
     BSP_LED_0_PORT->OUT |= BSP_LED_0_MASK;
@@ -165,21 +166,27 @@ int main(void)
     bluetooth_set_disconnected_callback(ble_disconnected);*/
     bluetooth_init(); //UNCOMMENT THIS TO TURN ON BLUETOOTH
     init_cli(&ble_cli, &bluetooth_io_funcs, "> ", debug_commands_funcs, '\n');
+#endif
 
+    struct data_logger_descriptor *logger = NULL;
+#ifdef ENABLE_SD_CARD
     // Filesystem
     filesystem_init_status = initialize_sd_card_fs();
 
     // Data logging service
     log_init_status = init_data_logger(&data_logger);
 
-    struct data_logger_descriptor *logger = NULL;
     if ((filesystem_init_status == 0) && (log_init_status == 0)) {
         logger = &data_logger;
     }
+#endif
 
+#ifdef ENABLE_ADC
     // ADC service
     init_adc(logger);
+#endif
 
+#ifdef ENABLE_IMU
     // IMU SPI Interface
     nrfx_spim_config_t imu_spi_config = NRFX_SPIM_DEFAULT_CONFIG;
     imu_spi_config.ss_pin   = ICM_20948_SPI_SS_PIN;
@@ -193,6 +200,7 @@ int main(void)
     // IMU
     init_icm_20948(&imu, &imu_spi, ICM_20948_INT_PORT, ICM_20948_INT_PIN,
                    logger);
+#endif
 
     uint32_t last_blink;
 
@@ -206,9 +214,13 @@ int main(void)
 //            NRF_P0->OUT ^= (1 << 24);
         }
 
+#ifdef ENABLE_ADC
         adc_service();
+#endif
 
+#ifdef ENABLE_IMU
         icm_20948_service(&imu);
+#endif
 
         usb_cdc_service();
         cli_service(&usb_cli);
@@ -216,7 +228,9 @@ int main(void)
         bluetooth_service();
         cli_service(&ble_cli);
 
+#ifdef ENABLE_SD_CARD
         data_logger_service(&data_logger);
+#endif
 
         __WFI();
     }

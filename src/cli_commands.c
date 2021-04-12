@@ -7,9 +7,9 @@
 #include <ff.h>
 
 #include "global.h"
+#include "config.h"
 #include "fs.h"
 #include "data_logger.h"
-#include "sensors.h"
 #include "adc.h"
 #include "icm_20948.h"
 
