@@ -17,6 +17,7 @@
 #include "data_logger.h"
 #include "adc.h"
 #include "icm_20948.h"
+#include "profiling.h"
 
 // MARK: Variable Definitions
 //const nrfx_rtc_t rtc = NRFX_RTC_INSTANCE(2);
@@ -125,6 +126,10 @@ int main(void)
     /* Enable SysTick for an interupt every millisecond */
     SysTick_Config(64000);
     NVIC_SetPriority(SysTick_IRQn, 2);
+
+#ifdef ENABLE_PROFILING
+    init_profiling(PROFILING_TIMER, 1);
+#endif
 
     /* Enable RTC */
 //    nrfx_rtc_config_t config = NRFX_RTC_DEFAULT_CONFIG;

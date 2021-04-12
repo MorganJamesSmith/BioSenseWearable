@@ -50,4 +50,14 @@ extern struct icm_20948_desc imu;
 #define ADC_PERIOD MS_TO_MILLIS(500)
 
 
+//
+//
+//  Profiling
+//
+//
+#define ENABLE_PROFILING
+
+#define PROFILER_NUM_SAMPLES    4096
+#define PROFILING_TIMER NRF_TIMER2
+
 #endif /* config_h */

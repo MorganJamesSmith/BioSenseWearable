@@ -12,6 +12,7 @@
 #include "data_logger.h"
 #include "adc.h"
 #include "icm_20948.h"
+#include "profiling.h"
 
 // MARK: Helpers
 void debug_print_fixed_point (const struct cli_io_funcs_t *console,
@@ -499,6 +500,63 @@ static void debug_time (uint8_t argc, char **argv,
     }
 }
 
+
+#define DEBUG_PROF_NAME  "prof"
+#define DEBUG_PROF_HELP  "Get profiling results."
+
+static void debug_prof (uint8_t argc, char **argv,
+                        const struct cli_io_funcs_t *console)
+{
+#ifndef ENABLE_PROFILING
+    console->write_string_blocking("Profiling is not enabled.\n");
+#else
+
+    int raw = 0;
+    if ((argc == 2) && (strcmp(argv[1], "raw") == 0)) {
+        raw = 1;
+    } else if (argc > 1) {
+        console->write_string_blocking("Invalid arguments.\n");
+        return;
+    }
+
+    char str[8];
+
+    if (!raw) {
+        // Print summary
+        console->write_string_blocking("Num samples: ");
+        utoa(profiler_count, str, 10);
+        console->write_string_blocking(str);
+
+        console->write_string_blocking("\nAverage value: ");
+        uint64_t a = profiler_samples[0];
+        for (uint16_t i = 1; i < PROFILER_NUM_SAMPLES; i++) {
+            a += profiler_samples[i];
+        }
+        a = a / profiler_count;
+        utoa((uint32_t)a, str, 10);
+        console->write_string_blocking(str);
+
+        console->write_string_blocking("\nFirst value: ");
+        utoa(profiler_samples[0], str, 10);
+        console->write_string_blocking(str);
+
+        if (profiler_count != 0) {
+            console->write_string_blocking("\nLast value: ");
+            utoa(profiler_samples[profiler_count - 1], str, 10);
+            console->write_string_blocking(str);
+            console->write_string_blocking("\n");
+        }
+    } else {
+        // Print raw data
+        for (uint16_t i = 0; i < profiler_count; i++) {
+            utoa(profiler_samples[i], str, 10);
+            console->write_string_blocking(str);
+            console->write_string_blocking("\n");
+        }
+    }
+#endif
+}
+
 // MARK: Commands table
 
 const struct cli_func_desc_t debug_commands_funcs[] = {
@@ -515,5 +573,7 @@ const struct cli_func_desc_t debug_commands_funcs[] = {
     {.func = debug_log, .name = DEBUG_LOG_NAME, .help_string = DEBUG_LOG_HELP},
     {.func = debug_time, .name = DEBUG_TIME_NAME,
         .help_string = DEBUG_TIME_HELP},
+    {.func = debug_prof, .name = DEBUG_PROF_NAME,
+        .help_string = DEBUG_PROF_HELP},
     {.func = NULL, .name = NULL, .help_string = NULL}
 };

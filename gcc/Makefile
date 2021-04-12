@@ -92,6 +92,7 @@ SRC_FILES += \
   $(PROJ_DIR)/icm_20948.c \
   $(PROJ_DIR)/icm_20948_states.c \
   $(PROJ_DIR)/data_logger.c \
+  $(PROJ_DIR)/profiling.c \
 
 # Include folders common to all targets
 INC_FOLDERS += \
