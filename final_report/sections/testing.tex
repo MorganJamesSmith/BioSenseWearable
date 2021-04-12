@@ -194,6 +194,21 @@ services in the main loop.
 
 
 
+
+\subsubsection{Companion App Tests}
+
+Most erroneous cases handled by the companion app are not fatal errors but warnings about skipped data. One example is that if an entry has an unrecognized type such as adding a new sensor then it is skipped and all other recognized entries are still parsed.
+
+One notable case is that if an entry specifies it has a length of 28 bytes then
+writes 10 bytes and loses power, upon reset the reset offsets file is updated with 
+the length of the file and a reset command is written after the 10 bytes.  
+In this case it is desirable to use the offset information in offsets to 
+identify that the previous entry was not written in its entirety and discard it without allowing it to corrupt all subsequent entries.  Almost all tests for the companion app test scenarios like this where it is asserted that no fatal error was raised, the expected warning messages were given and all valid data is output as expected. As such there are no test cases to test "totally valid" data.
+
+One case which correspond to fatal errors is when the offset specified by offsets file does not correspond to a reset command, in this case there is nothing reasonable the companion app can do to try to identify entry boundaries from the file so it gives up.  A second case which causes a fatal error is when the CLI returns the string "Failed to open file" when reading the file, as there is nothing that can be done if the SD card is corrupted and the file cannot be read, these are the only 2 fatal error cases that are tested for.
+
+The CLI interaction is tested by creating a mock serial interface which follows the same protocols as the bluetooth or usb serial connection.  The bluetooth connection or USB serial connection are hard to write automated tests for so they are not covered by the test suite.
+
 %We didn't do this stuff yet 
 \iffalse
 
