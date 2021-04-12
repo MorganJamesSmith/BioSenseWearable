@@ -15,7 +15,9 @@ static uint8_t ignore_first;
 void init_profiling(NRF_TIMER_Type *timer, int ignore_first_stop)
 {
     profile_timer = timer;
+#ifdef ENABLE_PROFILING
     ignore_first = !!ignore_first_stop;
+#endif
 
     // Shutdown timer in case it is running
     profile_timer->TASKS_SHUTDOWN = 1;

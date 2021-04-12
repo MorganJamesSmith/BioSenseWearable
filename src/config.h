@@ -55,7 +55,7 @@ extern struct icm_20948_desc imu;
 //  Profiling
 //
 //
-#define ENABLE_PROFILING
+//#define ENABLE_PROFILING
 
 #define PROFILER_NUM_SAMPLES    4096
 #define PROFILING_TIMER NRF_TIMER2
