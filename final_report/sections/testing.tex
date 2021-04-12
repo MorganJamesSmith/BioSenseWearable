@@ -1,10 +1,197 @@
+\subsection{Integration Testing}
+
+\subsection{Performance Measurements}
+
+We made a number of timing measurements for various properties of our firmware
+in order to get an understanding of whether our system is able to consistently
+meet its timing requirements.
+
+Measurements where taken using a hardware timer configured to run at 8 MHz. Code
+to start the timer and stop the timer and store the current count was added in
+places of interest. For each of the measured quantities 4096 samples where
+recorded.
+
+Table \ref{table:timing-results} shows the results of our timing measurements.
+For each result the mean value of all recorded samples is given as well as the
+standard deviation, and maximum recorded value. For many of the recorded values
+almost all of the samples where within a very small range with only a handful
+of outliers, because of this a 98th percentile of deviation value is given for
+each measured quantity which gives the offset from the mean in which 98\% of the
+samples fall.
+
+Later in this section some of the more illuminating measurements are described
+in detail.
+
+\begin{longtable}{>{\centering\arraybackslash}m{3.1cm}|
+                >{\centering\arraybackslash}m{2.2cm}|
+                >{\centering\arraybackslash}m{3.5cm}|
+                >{\centering\arraybackslash}m{1.8cm}|
+                >{\centering\arraybackslash}m{2.2cm}}
+\toprule
+Test & Mean Time & 98th Percentile of Deviation & Standard Deviation &
+Maximum \\
+\midrule
+Time between system ticks (millis)  & 998.868 microseconds & 98\% of results
+within 257 nanoseconds of the mean & 1.185e-5 & 1.077 milliseconds \\
+Time spent executing body of main loop & 5.625 microseconds & 98\% of results
+within 16 microseconds of the mean & 6.327e-4 & 35.071 milliseconds \\
+Time spend sleeping per iteration of main loop & 931.475 microseconds & 98\% of
+results are within 872 microseconds of the mean & 2.14e-4 & 994.624 microseconds
+\\
+Time to perform a filesystem write operation & 16.722 milliseconds & 98\% of
+results are within 31.484 microseconds of the mean & 1.362e-4 & 270.318
+milliseconds \\
+Time between data-logging write operations & 1.196 seconds & 98\% of results are
+within 32 milliseconds of the mean & 9.156e-3 & 1.378 seconds \\
+Time to perform an ADC sweep (tigger to data logging call) & 154.842
+microseconds & 98\% of results are within 9 microseconds of the mean & 3.359e-4
+& 14 milliseconds \\
+Time between ADC interrupt and handling of ADC results in main loop & 17.435
+microseconds & 98\% of results are within 12.934 microseconds of the mean &
+4.171e-4 & 15.854 milliseconds \\
+Time to retrieve IMU sample & 42.009 microseconds & 98\% of results are within
+1.249 microseconds of the mean & 2.801e-5 & 1 millisecond \\
+Time between IMU samples & 101.059 milliseconds & 98\% of results are within
+60.184 microseconds of the mean & 3.005e-3 & 288.711 milliseconds \\
+\bottomrule
+
+\caption{Timing Results}
+\label{table:timing-results}
+\end{longtable}
+
+\subsubsection{System Tick}
+
+The timing results show that our system tick, which is use to maintain a count
+of milliseconds ('millis'), is reasonably accurate and precise.
+
+While the average period between SysTick interrupts is slightly less then 1
+millisecond, the count is very precise. All of the measured samples where within
+750 microseconds of the mean value and 99\% of them where within 382 nanoseconds
+of the mean which indicates that there is very little jitter in our millis
+value.
+
+It is also important to note that for those samples which fell further from the
+mean we generally see a delayed interrupt which is immediately followed by a
+shorter interrupt period, so over time the average millisecond period remains
+accurate even when there is some jitter. This happens because the SysTick timer
+is configured in free running mode where it is automatically cleared after each
+period and continues counting without needing to be restarted in the SysTick
+interrupt handler.
+
+\subsubsection{Data-logging}
+
+Writes to the SD card are the longest blocking operation that happens in the
+main loop. On average, a write operation takes about 16.7 milliseconds, but this
+is far from the whole picture.
+
+Figure \ref{fig:write-op-hist} is a histogram showing the distribution of write
+operation lengths. To make the histogram legible the data has been trimmed to
+remove outliers. Only samples within the 98th percentile of deviation where
+kept, leaving 4014 samples in the dataset.
 
 
-Unfortunately, software has progressed much slower than expected.  At this point
-in time we have do not have any formal or informal tests.  We have plans for
-unit tests and automated integration testing that will make use of our existing
-CLI interface available over serial.  We believe these will be in place for the
-proper final report.
+\begin{figure}[!htb]
+\centering
+
+\begin{gnuplot}[terminal=pdf,terminaloptions=color]
+set xlabel "Length of write operation (s)"
+set ylabel "Number of occurrences"
+
+Min = 0.00709125 # where binning starts
+Max = 0.037765875 # where binning ends
+n = 100 # the number of bins
+
+width = (Max-Min)/n
+bin(x) = width*(floor((x-Min)/width)+0.5) + Min
+
+unset key
+set style fill solid 0.5
+set xrange [Min:Max]
+
+plot 'data/data_log_write_trimmed' using (bin($2)):(1.0) smooth freq with boxes
+\end{gnuplot}
+
+\caption{Distribution of Filesystem Write Operation Lengths}
+\label{fig:write-op-hist}
+\end{figure}
+
+The majority of filesystem write operations take about 12.7 milliseconds, but
+the distribution is multimodal and there are also a number of write operations
+that take between 25 and 30 milliseconds and around 35 milliseconds. The large
+number of writes that take around 12.7 milliseconds are single block writes, the
+other groups of write times are 2 and 3 block write operations. This timing data
+shows that most of the write operations to the SD card only need to update a
+single block, but that occasionally it is necessary to update 2 or 3 blocks at
+once.
+
+\subsubsection{Main Loop}
+
+The loop body is made up of a number of service functions which implement the
+various software modules that make up the system. Ideally the main loop would
+run frequently in order to provide a responsive system. This cooperative
+multitasking scheme relies on each of the modules not to block for long periods
+in the main loop.
+
+For the most part the loop is very short. The vast majority of loop iterations
+measured (more than 90\%) took about 5.5 microseconds. These would be loop
+iterations where none of the service functions had any work to do.
+
+Similarly, for about 90\% of loop iterations the processor spends approximately
+1 millisecond sleeping. This indicates that the main interrupt source is the
+SysTick timer that is used to generate interrupts every millisecond.
+
+The fact that so many iterations are not performing any work is a sign that the
+processor is being woken more often than it needs to be. It would likely we
+worth investigating alternative ways of generating our system time value other
+than with regular SysTick interrupts such as using a hardware RTC in order to
+reduce how often the processor is woken.
+
+\subsubsection{Sensor Sampling}
+
+ADC sweeps where generally quite quick. In over 99\% of measurements the time
+from when the sweep was triggered to when the results where processed was only
+about 155 microseconds. The time from ADC interrupt to ADC results processing
+in the main loop was less than 30 microseconds in 99\% of measurements.
+
+There were however some outliers where ADC sweeps took significantly longer.
+The longest delay between ADC interrupt and the results being processed in the
+main loop was about 15.8 milliseconds. This time happens to correspond with the
+delay for a single block write to the SD card and it is likely that in these
+outlier cases the ADC interrupt occurred while a block write was in progress.
+This implies that we could see delays of up to around 38 milliseconds in
+processing ADC data, but this is not a large concern because our ADC sampling
+rate is quite low.
+
+For the IMU, the time required to read a sample from the IMU was measured. This
+non-blocking operation is spread out across several iterations of the main
+loop. The operation started, then later calls to the IMU service function
+check whether it has completed.
+
+In all but a handful of samples it took about 42 microseconds to read a sample
+from the IMU. In the remaining samples it took slightly more than a millisecond.
+These longer sample occur when the interrupt at the end of the SPI transaction
+occurs while the CPU is running code in the main loop after the IMU service
+function has been called. In these cases the processor will sleep again before
+starting at the top of the main loop and reaching the IMU service function.
+
+These slightly delayed IMU read operations are not a large concern to us, the
+IMU sample rate is low enough that a millisecond delay will not cause us to
+miss a sample and since the IMU read operation is non-blocking it does not delay
+anything else happening in the main loop.
+
+What is more concerning is the possibility of an IMU sample being delayed by
+coinciding with an SD card write operation. While we did not see this in our
+testing, it remains a theoretical possibility and could cause IMU samples to be
+significantly delayed. It would likely be worth investigating ways to make the
+SD card write operations non-blocking so that they do not interfere with other
+services in the main loop.
+
+\subsection{Power Measurements}
+
+\subsection{Companion App Testing}
+
+
+
 
 %We didn't do this stuff yet 
 \iffalse
