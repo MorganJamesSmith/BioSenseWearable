@@ -43,6 +43,8 @@ static const struct cli_io_funcs_t usb_io_funcs = {
 
 static struct cli_desc_t usb_cli;
 
+#ifdef ENABLE_BLUETOOTH
+
 static const struct cli_io_funcs_t bluetooth_io_funcs = {
     .set_ready_callback = bluetooth_set_ready_callback,
     .write_string = bluetooth_put_string,
@@ -57,6 +59,8 @@ static const struct cli_io_funcs_t bluetooth_io_funcs = {
 };
 
 static struct cli_desc_t ble_cli;
+
+#endif
 
 static const nrfx_spim_t imu_spi = NRFX_SPIM_INSTANCE(0);
 
@@ -230,8 +234,10 @@ int main(void)
         usb_cdc_service();
         cli_service(&usb_cli);
 
+#ifdef ENABLE_BLUETOOTH
         bluetooth_service();
         cli_service(&ble_cli);
+#endif
 
 #ifdef ENABLE_SD_CARD
         data_logger_service(&data_logger);
