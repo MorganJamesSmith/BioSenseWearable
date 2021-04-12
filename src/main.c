@@ -62,9 +62,9 @@ static struct cli_desc_t ble_cli;
 
 #endif
 
+#ifdef ENABLE_IMU
 static const nrfx_spim_t imu_spi = NRFX_SPIM_INSTANCE(0);
 
-#ifdef ENABLE_IMU
 struct icm_20948_desc imu;
 #endif
 

@@ -150,6 +150,10 @@ static void debug_analog (uint8_t argc, char **argv,
 static void debug_imu (uint8_t argc, char **argv,
                        const struct cli_io_funcs_t *console)
 {
+#ifndef ENABLE_IMU
+    console->write_string_blocking("IMU is not enabled.\n");
+    return;
+#else
     char str[16];
 
     // Print Who Am I value
@@ -189,6 +193,7 @@ static void debug_imu (uint8_t argc, char **argv,
     console->write_string_blocking(" °/s\nTemperature: ");
     debug_print_fixed_point(console, icm_20948_get_last_temp(&imu), 3);
     console->write_string_blocking(" °C\n");
+#endif
 }
 
 #define DEBUG_LS_NAME "ls"
