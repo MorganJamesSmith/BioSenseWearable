@@ -7,14 +7,14 @@ in order to get an understanding of whether our system is able to consistently
 meet its timing requirements.
 
 Measurements where taken using a hardware timer configured to run at 8 MHz. Code
-to start the timer and stop the timer and store the current count was added in
-places of interest. For each of the measured quantities 4096 samples where
-recorded.
+to start the timer and code to stop the timer and store the current count was
+added in places of interest. For each of the measured quantities 4096 samples
+were recorded.
 
 Table \ref{table:timing-results} shows the results of our timing measurements.
 For each result the mean value of all recorded samples is given as well as the
 standard deviation, and maximum recorded value. For many of the recorded values
-almost all of the samples where within a very small range with only a handful
+almost all of the samples were within a very small range with only a handful
 of outliers, because of this a 98th percentile of deviation value is given for
 each measured quantity which gives the offset from the mean in which 98\% of the
 samples fall.
@@ -64,11 +64,11 @@ Time between IMU samples & 101.059 milliseconds & 98\% of results are within
 The timing results show that our system tick, which is use to maintain a count
 of milliseconds ('millis'), is reasonably accurate and precise.
 
-While the average period between SysTick interrupts is slightly less then 1
-millisecond, the count is very precise. All of the measured samples where within
-750 microseconds of the mean value and 99\% of them where within 382 nanoseconds
-of the mean which indicates that there is very little jitter in our millis
-value.
+While the average period between SysTick interrupts is slightly less then the 1
+millisecond target, the count is very precise. All of the measured samples were
+within 750 microseconds of the mean value and 99\% of them where within 382
+nanoseconds of the mean which indicates that there is very little jitter in our
+millis value.
 
 It is also important to note that for those samples which fell further from the
 mean we generally see a delayed interrupt which is immediately followed by a
@@ -108,7 +108,7 @@ unset key
 set style fill solid 0.5
 set xrange [Min:Max]
 
-plot 'data/data_log_write_trimmed' using (bin($2)):(1.0) smooth freq with boxes
+%plot 'data/data_log_write_trimmed' using (bin($2)):(1.0) smooth freq with boxes
 \end{gnuplot}
 
 \caption{Distribution of Filesystem Write Operation Lengths}
@@ -137,8 +137,9 @@ measured (more than 90\%) took about 5.5 microseconds. These would be loop
 iterations where none of the service functions had any work to do.
 
 Similarly, for about 90\% of loop iterations the processor spends approximately
-1 millisecond sleeping. This indicates that the main interrupt source is the
-SysTick timer that is used to generate interrupts every millisecond.
+1 millisecond sleeping. This indicates that interrupt source which wakes the
+processor most frequently is the SysTick timer that is used to generate
+interrupts every millisecond.
 
 The fact that so many iterations are not performing any work is a sign that the
 processor is being woken more often than it needs to be. It would likely we
@@ -148,7 +149,7 @@ reduce how often the processor is woken.
 
 \subsubsection{Sensor Sampling}
 
-ADC sweeps where generally quite quick. In over 99\% of measurements the time
+ADC sweeps were generally quite quick. In over 99\% of measurements the time
 from when the sweep was triggered to when the results where processed was only
 about 155 microseconds. The time from ADC interrupt to ADC results processing
 in the main loop was less than 30 microseconds in 99\% of measurements.
@@ -163,9 +164,9 @@ processing ADC data, but this is not a large concern because our ADC sampling
 rate is quite low.
 
 For the IMU, the time required to read a sample from the IMU was measured. This
-non-blocking operation is spread out across several iterations of the main
-loop. The operation started, then later calls to the IMU service function
-check whether it has completed.
+non-blocking operation is spread out across several iterations of the main loop.
+The operation started, then later calls to the IMU service function check
+whether it has completed.
 
 In all but a handful of samples it took about 42 microseconds to read a sample
 from the IMU. In the remaining samples it took slightly more than a millisecond.
