@@ -27,22 +27,34 @@ that integration tests can be run on the microcontroller.
 \label{fig:fw_block_diag}
 \end{figure}
 
-When discussing options on operating systems to use we came to the conclusion 
-that most of the benefits of using a RTOS are unnecessary for our application.
-Because most of the sensors have internal buffers we can periodically poll
-for data without needing formal scheduling pattern.  Other features of 
-operating systems such as memory management or preemption would not be
-necessary as the services to handle reading data from the sensors and logging
-to the SD card using co-operative multi-tasking will be good enough and require
-less effort and less ways to go wrong compared to using an RTOS.
+\subsection{Super Loop}
 
-The software was written on the bare metal and follows a structure where there
-is a central loop which calls services for all components.  Each sensor as well
-as the data logging component are implemented as a separate component
-to be updated periodically. The drivers read and process the data from the
-sensors and write it to a buffer to be written to the SD card. The logging service
-maintains a few of these buffers and ensures they get written to the SD card
-at reasonable intervals.
+We chose to use a super loop architecture for our firmware because we predicted
+that the approach would be sufficient for our needs and would be easier for us
+to implement then making use of a realtime operating system. Our firmware
+consists of an initialization section followed by an infinite main loop.
+
+Our code is separated in to a number of software modules (as shown in figure
+\ref{fig:fw_block_diag}). The software modules that we wrote have an
+initialization function which is called once on system startup. Some of our
+firmware module are entirely interrupt based, but many have a service function
+which is run in each iteration of the main loop.
+
+Figure \ref{fig:fw_flow} shows the flow of our firmware. We start with a number
+of initialization tasks before starting to loop through the service functions
+for our modules. Each service function will check if there is any work to be
+done for a specific module and start and tasks that are ready to begin. After
+each iteration of the main loop the wait for interrupt instruction is used to
+cause the processor to enter a sleep mode until an interrupt occurs. We have a
+timer configured to generate interrupts every millisecond to increment a count
+which is used as a time reference throughout the firmware, because of this the
+processor will sleep for at most one millisecond at a time.
+
+
+
+\subsection{Interrupts and Bluetooth Soft Device}
+
+\subsection{Data Logging}
 
 \subsection{Drivers}
 
@@ -112,3 +124,8 @@ Our driver for the ICM 20948 IMU is written from scratch. The driver is a finite
 state machine that makes use of the nRF5 SDK's SPI driver. The state machine
 controls the process of initializing the sensor and of periodically taking
 readings, which are then handed off to the data logging service to be recorded.
+
+
+\subsection{Command Line Interface}
+
+
