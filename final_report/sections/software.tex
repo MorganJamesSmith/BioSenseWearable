@@ -241,9 +241,15 @@ hexadecimal format.
 
 The companion app is a desktop application written in python to connect to the device, extract the log data and convert it into a plain text format convenient for further analysis.
 
-Since during development there were a number of things that were likely to change or unknown, the companion software was designed to be highly modular so that each part was isolated for sake of testing and updating.  The flow of data is described by the following flow diagram:
+Since during development there were a number of things that were likely to change or unknown, the companion software was designed to be highly modular so that each part was isolated for sake of testing and updating.  The flow of data is described by \ref{fig:companion_app}
 
-% TODO Flow diagram
+\begin{figure}[!htb]
+    \centering
+    \includegraphics[width=\textwidth+5cm,height=\textheight,keepaspectratio]{images/companion_app_flow.png}
+    \caption{Companion app flow diagram}
+    \label{fig:companion_app}
+\end{figure}
+    
 
 \subsubsection{Extracting log file}
 
