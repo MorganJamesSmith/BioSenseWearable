@@ -1,6 +1,6 @@
 Our original timeline was very optimistic.  Our original timeline can be seen
 in figure \ref{fig:original-project-timeline} and our actual timeline can be
-seen in figure \ref{fig:actual-project-timeline}.
+seen in figure \ref{fig:final-project-timeline}.
 
 Software development was started much later than intended. There are a few
 explanations for this.  The software development environment was more
@@ -19,37 +19,60 @@ hand off of the PCB to the case designer happened much later than expected.
 
 
 \ganttset{
-    calendar week text={\currentweek}
+    calendar week text={\currentweek},
+    y unit title=0.5cm, y unit chart=0.5cm,
+    vgrid,
+    x unit = 1mm,
+    time slot format=isodate,
+    time slot unit=day,
+    title/.append style={draw=none, fill=RoyalBlue!50!black},
+    title label font=\sffamily\scriptsize\color{white},
+    title label node/.append style={below=-1.6ex},
+    title left shift=.05,
+    title right shift=-.05,
+    title height=1,
+    bar height=.6,
+    group right shift=0,
+    group top shift=.6,
+    group height=.3,
+    group peaks height=.2,
+    bar incomplete/.append style={fill=Maroon},
+    bar label node/.style={text width=3cm,align=right,font=\scriptsize\RaggedLeft,anchor=east},
+    milestone label node/.style={text width=2cm,align=right,font=\scriptsize\RaggedLeft,anchor=east},
+    group label node/.style={text width=3cm,align=right,font=\textbf\scriptsize\RaggedLeft,anchor=east},
+    bar/.append style={opacity=0.5}
 }
+
+\newcommand\mygantttitle {
+    \gantttitlecalendar{year} \\
+    \gantttitlecalendar{month} \\
+    \gantttitlecalendar{week}
+}
+
+\newcommand\proposalColor{blue!70}
+\newcommand\progressColor{red!70}
+\newcommand\finalColor{green!70}
+
+\newcommand\proposalBar[3]
+{\ganttbar[bar/.append style={fill=\proposalColor}]{#1}{#2}{#3}}
+\newcommand\progressBar[3]
+{\ganttbar[bar/.append style={fill=\progressColor}]{#1}{#2}{#3}}
+\newcommand\finalBar[3]
+{\ganttbar[bar/.append style={fill=\finalColor}]{#1}{#2}{#3}}
+
+\newcommand\ProposalProgressBar[5]
+{\proposalBar{#1}{#2}{#3}\progressBar{}{#4}{#5}}
+
+\newcommand\ProgressFinalBar[5]
+{\progressBar{#1}{#2}{#3}\finalBar{}{#4}{#5}}
+
+\newcommand\ProposalFinalBar[5]
+{\proposalBar{#1}{#2}{#3}\finalBar{}{#4}{#5}}
 
 \begin{figure}[!htb]
 \makebox[\textwidth][r]{
-\begin{ganttchart}[
-        y unit title=0.5cm, y unit chart=0.5cm,
-        vgrid,
-        x unit = 1mm,
-        time slot format=isodate,
-        time slot unit=day,
-        title/.append style={draw=none, fill=RoyalBlue!50!black},
-        title label font=\sffamily\scriptsize\color{white},
-        title label node/.append style={below=-1.6ex},
-        title left shift=.05,
-        title right shift=-.05,
-        title height=1,
-        bar height=.6,
-        group right shift=0,
-        group top shift=.6,
-        group height=.3,
-        group peaks height=.2,
-        bar incomplete/.append style={fill=Maroon},
-        bar label node/.style={text width=3cm,align=right,font=\scriptsize\RaggedLeft,anchor=east},
-        milestone label node/.style={text width=2cm,align=right,font=\scriptsize\RaggedLeft,anchor=east},
-        group label node/.style={text width=3cm,align=right,font=\textbf\scriptsize\RaggedLeft,anchor=east}
-    ]{2020-11-02}{2021-03-20}
-    \gantttitlecalendar{year} \\
-    \gantttitlecalendar{month} \\
-    \gantttitlecalendar{week} \\
-
+\begin{ganttchart}[]{2020-11-02}{2021-03-20}
+    \mygantttitle \\
 % Software
     \ganttgroup{Software}{2020-11-02}{2021-02-20} \\
     \ganttbar{Setup Dev. Env.}{2020-11-02}{2020-11-07} \\
@@ -83,34 +106,87 @@ hand off of the PCB to the case designer happened much later than expected.
 
 \begin{figure}[!htb]
 \makebox[\textwidth][r]{
-\begin{ganttchart}[
-        y unit title=0.5cm, y unit chart=0.5cm,
-        vgrid,
-        x unit = 1mm,
-        time slot format=isodate,
-        time slot unit=day,
-        title/.append style={draw=none, fill=RoyalBlue!50!black},
-        title label font=\sffamily\scriptsize\color{white},
-        title label node/.append style={below=-1.6ex},
-        title left shift=.05,
-        title right shift=-.05,
-        title height=1,
-        bar height=.6,
-        group right shift=0,
-        group top shift=.6,
-        group height=.3,
-        group peaks height=.2,
-        bar incomplete/.append style={fill=Maroon},
-        bar label node/.style={text width=3cm,align=right,font=\scriptsize\RaggedLeft,anchor=east},
-        milestone label node/.style={text width=2cm,align=right,font=\scriptsize\RaggedLeft,anchor=east},
-        group label node/.style={text width=3cm,align=right,font=\textbf\scriptsize\RaggedLeft,anchor=east}
-    ]{2020-11-02}{2021-03-20}
-    \gantttitlecalendar{year} \\
-    \gantttitlecalendar{month} \\
-    \gantttitlecalendar{week} \\
-
+\begin{ganttchart}[]{2020-11-02}{2021-03-20}
+    \mygantttitle \\
 % Software
-    \ganttgroup{Software}{2020-11-02}{2021-02-20} \\
+    \ganttgroup{Software}{2020-11-02}{2021-03-08} \\
+    \ganttbar{Setup Dev. Env.}{2020-11-02}{2020-12-24} \\
+    \ganttbar{USB Debugging Interface}{2020-12-25}{2021-01-22} \\
+    \ganttbar{SD Card Driver}{2021-01-15}{2021-02-01} \\
+    \ganttbar{Sensor Drivers}{2021-01-15}{2021-02-12} \\
+    \ganttbar{Filesystem}{2021-01-22}{2021-02-19} \\
+    \ganttbar{Bluetooth Interface}{2021-01-29}{2021-02-26} \\
+    \ganttbar{Data Logging}{2021-02-05}{2021-02-19} \\
+    \ganttbar{Companion Software}{2021-02-12}{2021-03-08} \\
+
+% Testing
+    \ganttbar{Sensor Driver Tests}{2021-02-05}{2021-03-08} \\
+
+% Elec
+    \ganttgroup{Hardware}{2020-11-02}{2021-03-06} \\
+    \ganttbar{Electrical Schematic}{2020-11-02}{2020-12-24} \\
+    \ganttbar{PCB Layout}{2020-12-24}{2020-12-31} \\
+    \ganttbar{PCB Assembly}{2021-01-20}{2021-02-10} \\
+
+% Mech
+    \ganttgroup{Enclosure}{2021-01-01}{2021-02-26} \\
+    \ganttbar{Enclosure Prototype}{2021-01-01}{2021-01-25} \\
+    \ganttbar{Final Enclosure}{2021-02-12}{2021-02-26} \\
+\end{ganttchart}
+}
+\caption{Progress Report Timeline}
+\label{fig:progress-timeline}
+\end{figure}
+
+\begin{figure}[!htb]
+\makebox[\textwidth][r]{
+\begin{ganttchart}[]{2020-11-02}{2021-03-20}
+    \mygantttitle \\
+% Software
+    \ganttgroup{Software}{2020-11-02}{2021-03-08} \\
+    \ProposalProgressBar{Setup Dev. Env.}{2020-11-02}{2020-11-07}{2020-11-02}{2020-12-24} \\
+    \ProposalProgressBar{USB Debugging Interface}{2020-11-08}{2020-12-19}{2020-12-25}{2021-01-22} \\
+    \ProposalProgressBar{SD Card Driver}{2020-11-08}{2021-01-02}{2021-01-15}{2021-02-01} \\
+    \ProposalProgressBar{Sensor Drivers}{2020-11-08}{2021-01-09}{2021-01-15}{2021-02-12} \\
+    \ProposalProgressBar{Filesystem}{2020-12-12}{2021-01-16}{2021-01-22}{2021-02-19} \\
+    \ProposalProgressBar{Bluetooth Interface}{2020-12-19}{2021-01-30}{2021-01-29}{2021-02-26} \\
+    \ProposalProgressBar{Data Logging}{2020-12-26}{2021-01-30}{2021-02-05}{2021-02-19} \\
+    \ProposalProgressBar{Companion Software}{2021-01-02}{2021-02-20}{2021-02-12}{2021-03-08} \\
+
+% Testing
+    \ProposalProgressBar{Sensor Driver Tests}{2021-01-09}{2021-02-13}{2021-02-05}{2021-03-08} \\
+
+% Elec
+    \ganttgroup{Hardware}{2020-11-02}{2021-03-06} \\
+    \ProposalProgressBar{Electrical Schematic}{2020-11-02}{2020-12-12}{2020-11-02}{2020-12-24} \\
+    \proposalBar{PCB Rev. A}{2020-12-13}{2021-01-30} \\
+    \proposalBar{PCB Rev. B}{2021-01-31}{2021-03-06} \\
+    \progressBar{PCB Layout}{2020-12-24}{2020-12-31} \\
+    \progressBar{PCB Assembly}{2021-01-20}{2021-02-10} \\
+
+% Mech
+    \ganttgroup{Enclosure}{2020-11-02}{2021-03-08} \\
+    \ProposalProgressBar{Enclosure Prototype A}{2020-11-02}{2020-12-19}{2021-01-01}{2021-01-25} \\
+    \proposalBar{Enclosure Prototype B}{2021-01-23}{2021-02-03} \\
+    \ProposalProgressBar{Final Enclosure}{2021-02-27}{2021-03-08}{2021-02-12}{2021-02-26} \\
+\end{ganttchart}
+}
+\begin{itemize}
+    \item \colorbox{rgb:\proposalColor,1;white,1}{Proposal Report Timeline}
+    \item \colorbox{rgb:\progressColor,1;white,1}{Progress Timeline}
+    \item \colorbox{rgb:\progressColor,1;\proposalColor,1;white,2}{Overlap}
+\end{itemize}
+\caption{Timeline changes from progress report}
+\label{fig:proposal-progress-timeline}
+\end{figure}
+
+
+\begin{figure}[!htb]
+\makebox[\textwidth][r]{
+\begin{ganttchart}[]{2020-11-02}{2021-03-20}
+    \mygantttitle \\
+% Software
+    \ganttgroup{Software}{2020-11-02}{2021-03-08} \\
     \ganttbar{Setup Dev. Env.}{2020-11-02}{2020-12-24} \\
     \ganttbar{USB Debugging Interface}{2020-12-25}{2021-01-22} \\
     \ganttbar{SD Card Driver}{2021-01-15}{2021-02-01} \\
@@ -124,7 +200,7 @@ hand off of the PCB to the case designer happened much later than expected.
     \ganttbar{Sensor Driver Tests}{2021-02-05}{2021-03-08} \\
 
 % Elec
-    \ganttgroup{Hardware}{2020-11-02}{2021-03-06} \\
+    \ganttgroup{Hardware}{2020-11-02}{2021-02-27} \\
     \ganttbar{Electrical Schematic}{2020-11-02}{2020-12-24} \\
     \ganttbar{PCB Layout}{2020-12-24}{2020-12-31} \\
     \ganttbar{PCB Assembly}{2021-01-20}{2021-02-27} \\
@@ -135,7 +211,89 @@ hand off of the PCB to the case designer happened much later than expected.
     \ganttbar{Final Enclosure}{2021-03-05}{2021-03-15} \\
 \end{ganttchart}
 }
-\caption{Actual Project Timeline}
-\label{fig:actual-project-timeline}
+\caption{Final Project Timeline}
+\label{fig:final-project-timeline}
 \end{figure}
 
+\begin{figure}[!htb]
+\makebox[\textwidth][r]{
+\begin{ganttchart}[]{2020-11-02}{2021-03-20}
+    \mygantttitle \\
+% Software
+    \ganttgroup{Software}{2020-11-02}{2021-03-08} \\
+    \ProgressFinalBar{Setup Dev. Env.}{2020-11-02}{2020-12-24}{2020-11-02}{2020-12-24} \\
+    \ProgressFinalBar{USB Debugging Interface}{2020-12-25}{2021-01-22}{2020-12-25}{2021-01-22} \\
+    \ProgressFinalBar{SD Card Driver}{2021-01-15}{2021-02-01}{2021-01-15}{2021-02-01} \\
+    \ProgressFinalBar{Sensor Drivers}{2021-01-15}{2021-02-12}{2021-01-20}{2021-03-05} \\
+    \ProgressFinalBar{Filesystem}{2021-01-22}{2021-02-19}{2021-01-22}{2021-02-19} \\
+    \ProgressFinalBar{Bluetooth Interface}{2021-01-29}{2021-02-26}{2021-01-29}{2021-02-26} \\
+    \ProgressFinalBar{Data Logging}{2021-02-05}{2021-02-19}{2021-02-05}{2021-02-19} \\
+    \ProgressFinalBar{Companion Software}{2021-02-12}{2021-03-08}{2021-02-12}{2021-03-08} \\
+
+% Testing
+    \ProgressFinalBar{Sensor Driver Tests}{2021-02-05}{2021-03-08}{2021-02-05}{2021-03-08} \\
+
+% Elec
+    \ganttgroup{Hardware}{2020-11-02}{2021-02-27} \\
+    \ProgressFinalBar{Electrical Schematic}{2020-11-02}{2020-12-24}{2020-11-02}{2020-12-24} \\
+    \ProgressFinalBar{PCB Layout}{2020-12-24}{2020-12-31}{2020-12-24}{2020-12-31} \\
+    \ProgressFinalBar{PCB Assembly}{2021-01-20}{2021-02-10}{2021-01-20}{2021-02-27} \\
+
+% Mech
+    \ganttgroup{Enclosure}{2021-02-01}{2021-03-15} \\
+    \ProgressFinalBar{Enclosure Prototype}{2021-01-01}{2021-01-25}{2021-02-01}{2021-02-27} \\
+    \ProgressFinalBar{Final Enclosure}{2021-02-12}{2021-02-26}{2021-03-05}{2021-03-15} \\
+\end{ganttchart}
+}
+\begin{itemize}
+    \item \colorbox{rgb:\finalColor,1;white,1}{Final Timeline}
+    \item \colorbox{rgb:\progressColor,1;white,1}{Progress Timeline}
+    \item \colorbox{rgb:\progressColor,1;\finalColor,1;white,2}{Overlap}
+\end{itemize}
+\caption{Final timeline changes from progress report}
+\label{fig:progress-final-timeline}
+\end{figure}
+
+
+\begin{figure}[!htb]
+\makebox[\textwidth][r]{
+\begin{ganttchart}[]{2020-11-02}{2021-03-20}
+    \mygantttitle \\
+% Software
+    \ganttgroup{Software}{2020-11-02}{2021-03-08} \\
+    \ProposalFinalBar{Setup Dev. Env.}{2020-11-02}{2020-11-07}{2020-11-02}{2020-12-24} \\
+    \ProposalFinalBar{USB Debugging Interface}{2020-11-08}{2020-12-19}{2020-12-25}{2021-01-22} \\
+    \ProposalFinalBar{SD Card Driver}{2020-11-08}{2021-01-02}{2021-01-15}{2021-02-01} \\
+    \ProposalFinalBar{Sensor Drivers}{2020-11-08}{2021-01-09}{2021-01-20}{2021-03-05} \\
+    \ProposalFinalBar{Filesystem}{2020-12-12}{2021-01-16}{2021-01-22}{2021-02-19} \\
+    \ProposalFinalBar{Bluetooth Interface}{2020-12-19}{2021-01-30}{2021-01-29}{2021-02-26} \\
+    \ProposalFinalBar{Data Logging}{2020-12-26}{2021-01-30}{2021-02-05}{2021-02-19} \\
+    \ProposalFinalBar{Companion Software}{2021-01-02}{2021-02-20}{2021-02-12}{2021-03-08} \\
+
+% Testing
+    \ProposalFinalBar{Sensor Driver Tests}{2021-01-09}{2021-02-13}{2021-02-05}{2021-03-08} \\
+
+% Elec
+    \ganttgroup{Hardware}{2020-11-02}{2021-03-06} \\
+    \ProposalFinalBar{Electrical Schematic}{2020-11-02}{2020-12-12}{2020-11-02}{2020-12-24} \\
+    \proposalBar{PCB Rev. A}{2020-12-13}{2021-01-30} \\
+    \proposalBar{PCB Rev. B}{2021-01-31}{2021-03-06} \\
+    \ganttgroup{Hardware}{2020-11-02}{2021-02-27} \\
+    \finalBar{PCB Layout}{2020-12-24}{2020-12-31} \\
+    \finalBar{PCB Assembly}{2021-01-20}{2021-02-27} \\
+
+% Mech
+    \ganttgroup{Enclosure}{2021-02-01}{2021-03-15} \\
+    \ProposalFinalBar{Enclosure Prototype}{2020-11-02}{2020-12-19}{2021-02-01}{2021-02-27} \\
+    \proposalBar{Enclosure Prototype B}{2021-01-23}{2021-02-03} \\
+    \ProposalFinalBar{Final Enclosure}{2021-02-27}{2021-03-08}{2021-03-05}{2021-03-15} \\
+\end{ganttchart}
+}
+\begin{itemize}
+    \item \colorbox{rgb:\finalColor,1;white,1}{Final Timeline}
+    \item \colorbox{rgb:\proposalColor,1;white,1}{Proposal Timeline}
+    \item \colorbox{rgb:\proposalColor,1;\finalColor,1;white,2}{Overlap}
+\end{itemize}
+\caption{Final timeline changes from proposal}
+\label{fig:proposal-final-timeline}
+\end{figure}
