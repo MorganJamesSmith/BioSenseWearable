@@ -1,24 +1,25 @@
 We have split our firmware into a number of separate modules, as shown in figure
 \ref{fig:fw_block_diag}. All of the drivers for microcontroller peripherals
-such as serial interfaces and the ADC are provided by the nRF52 SDK's hardware
-abstraction layer. We are also using some higher level components from the
-nRF52 SDK such as the USB CDC-ACM stack, a FAT32 filesystem driver and Nordic's
-soft device 140 which is a Bluetooth LE peripheral stack.
+such as serial interfaces and the ADC are provided by the nRF52 SDK, which is a
+library provided by Nordic Semiconductor, the manufacturer of the nRF52840
+microcontroller we are using. We are also using some higher level components
+from the nRF52 SDK such as the USB CDC-ACM stack, a FAT32 filesystem driver and
+Nordic's soft device S140 which is a Bluetooth LE peripheral stack.
 
-These third party components will be used by the software we are planing to
-write ourselves which includes the drivers for all of our sensors (IMU, optical
-heart rate sensor, air quality sensor and UV light sensor) as well as the signal
-processing code required to derive a heart rate from the raw data we receive
-from our optical heart rate sensor. While we plan to use a third party file
-system implementation we will still need to write the code that allows blocks
-to be written to and read from an SD card over an SPI interface.
+These third party components will be used by the software we wrote ourselves
+which includes the drivers for all of our sensors (IMU, optical heart rate
+sensor, air quality sensor and UV light sensor) as well as the signal processing
+code required to derive a heart rate from the raw data we receive from our
+optical heart rate sensor. While we plan to use a third party file system
+implementation we will still need to write the code that allows blocks to be
+written to and read from an SD card over an SPI interface.
 
-At the application layer we have three modules. Our data logging service will be
-responsible for most of the operation of our device and will continually collect
-and log sensor data. The Bluetooth data transfer service will facilitate
-accessing the logged data over a Bluetooth interface. Our debugging interface is
-intended to expose our firmware functionality over a USB serial interface so
-that integration tests can be run on the microcontroller.
+At the application layer we have three modules. Our data logging service is
+responsible for most of the operation of our device and continually collects
+and logs sensor data. The Bluetooth data transfer service facilitates accessing
+the logged data over a Bluetooth interface. Our debugging interface exposes our
+firmware functionality over a USB serial interface so that integration tests can
+be run on the microcontroller.
 
 \begin{figure}[!htb]
 \centering
@@ -50,11 +51,95 @@ timer configured to generate interrupts every millisecond to increment a count
 which is used as a time reference throughout the firmware, because of this the
 processor will sleep for at most one millisecond at a time.
 
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.4\textwidth]{images/fw_flow.png}
+\caption{Firmware flow chart.}
+\label{fig:fw_flow}
+\end{figure}
 
+The super loop architecture is a cooperative multitasking system. This makes it
+important that the service function which are called in the main loop do not
+block for long periods. If a service function was to block it would prevent the
+other software modules on the system from operating correctly. In order to meet
+this requirement our service functions are written as state machines. Modules
+keep track of their current state and are able to determine what, if anything,
+needs to be done in each iteration of the main loop based on their state.
+
+We were not able to completely avoid blocking in the main loop because of our
+use of a third party FAT filesystem implementation. The filesystem implementation
+blocks while writing to the SD card. The performance implication of this are
+discussed in section \ref{subsec:testing-data-logging}.
 
 \subsection{Interrupts and Bluetooth Soft Device}
 
+Our firmware makes use of a bluetooth stack provided by Nordic Semiconductor
+know as the S140 Soft Device. This "soft device" is distributed as a binary
+blob which is flashed to the microcontroller separately from the application
+software. The soft device takes ownership of number of microcontroller
+peripherals including the radio hardware, clock and power management peripherals,
+multiple timers, non-volatile memory controller and cryptography accelerators.
+The soft device schedules itself independently of the application using on of
+the microcontroller's real time clocks and application software interacts with
+the soft device using supervisor calls.
+
+All interrupts are received by a piece of code called the master boot record
+(MBR). The MBR then forwards them to the soft device if there is one installed
+on the microcontroller. The soft device uses some interrupts for its own
+purposes, interrupts which the soft device does not use are forwarded to the
+application. Nordic Semiconductor specifies that this forwarding process adds
+less than three microseconds of latency to peripheral interrupts which are to
+handled by the application.
+
+Figure \ref{fig:fw_int_prio} shows the interrupt priorities used in our system.
+The priority levels shown in red are reserved by the soft device bluetooth
+stack, those shown in blue are available for use by application software. The
+soft device uses the highest interrupt priority level for its timing critical
+interrupts. The second highest interrupt priority level is reserved for the
+soft device's peripheral access control fault handler so that the soft device
+can safely handle any faults which are caused by application interrupts. The
+soft device also used priority level four for API calls and processing tasks
+that are not time critical.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.5\textwidth]{images/fw_int_prio.png}
+\caption{Interrupt priorities.}
+\label{fig:fw_int_prio}
+\end{figure}
+
+Most of our application interrupts are configure at priority levels two and
+three. Our interrupts are grouped into SysTick and and serial interface
+interrupts at priority two and USB and ADC interrupts at priority three.
+
+The priority two interrupts are those which we expect to be very short. The
+SysTick interrupt is at a high priority to avoid help avoid hitter in our system
+time and the serial interrupts are placed at priority two to achieve the best
+possible serial interface performance.
+
 \subsection{Data Logging}
+
+The core of our firmware is the data logging service. Sensor drivers push data
+to this software module which is buffered and then later stored to the SD card
+using the FAT filesystem. The data logging module has two 512 byte buffers. The
+module fills one buffer, then writes it to the SD card as it begins to fill the
+other.
+
+Figure \ref{fig:fw_data_flow} illustrates the flow of data through the data
+logging service. Each sensor driver pushes data to the data logging service at a
+rate selected based on the type of data that the sensor produces. Every sample
+of sensor data is wrapped in a header that indicates the current system time
+when the value was collected, the type of data and the length of the data and
+the resulting packet is added to the data logging service buffer. Approximately
+once per second the data logging buffer will be written to the SD card using the
+filesystem driver.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth]{images/fw_data_flow.png}
+\caption{Data flow.}
+\label{fig:fw_data_flow}
+\end{figure}
 
 \subsection{Drivers}
 
@@ -105,7 +190,7 @@ that Bluetooth Low Energy would be very fast however, since it is optimized for
 power consumption instead of speed. This trade-off is well suited to this project 
 because it is battery powered.
 
-\subsubsection{Heart Rate}
+\subsubsection{Heart Rate Sensor}
 
 Our heart rate driver is based on an open source implementation written in
 C++ \cite{max86150-ardino}. Since the SDK we are using falls under the nRF5
@@ -125,9 +210,32 @@ state machine that makes use of the nRF5 SDK's SPI driver. The state machine
 controls the process of initializing the sensor and of periodically taking
 readings, which are then handed off to the data logging service to be recorded.
 
+A simplified state diagram for the IMU driver is shown in figure
+\ref{fig:fw_imu_fsm}.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=0.8\textwidth]{images/fw_imu_fsm.png}
+\caption{IMU driver state machine.}
+\label{fig:fw_imu_fsm}
+\end{figure}
 
 \subsection{Command Line Interface}
 
+Our firmware provides a command line interface (CLI) which is available via the
+USB or bluetooth serial interfaces. This command line interface is used for
+debugging, testing and for interaction with the companion app. Our CLI
+abstraction provides an identical interface over USB or bluetooth.
+
+The CLI provides a number of commands which are intended for human interaction
+including commands for printing out sensor data, accessing profiling information,
+writing test messages to the SD card and reading directories and files from the
+SD card.
+
+The CLI also has a number of commands which are intended to interact with our
+companion software. These functions allow the companion software to read files
+from the SD card. The files are written out over the serial interface in
+hexadecimal format.
 
 \subsection{Companion App}
 
