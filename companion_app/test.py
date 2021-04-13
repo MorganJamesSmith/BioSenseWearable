@@ -225,6 +225,7 @@ def test_timestamp_out_of_order():
         (0, 100, *valid_entry_data_after_timestamp)
     ]
     assert not error
+    # TODO this should actually throw warnings???
     assert not thrown_warnings
 @testcase
 def ensure_starting_at_reset_but_not_at_beginning_works_as_expected():
