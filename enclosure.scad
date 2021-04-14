@@ -16,7 +16,7 @@ top_thickness = 3;
 
 pcb_size = [57, 35, 1.6];
 
-x_overextrusion = 0.3;
+x_overextrusion = 0.2;
 
 outer_size = [pcb_size.x + wall_thickness * 2 + x_overextrusion * 2,
               pcb_size.y + wall_thickness * 2 + x_overextrusion * 2,
@@ -24,7 +24,7 @@ outer_size = [pcb_size.x + wall_thickness * 2 + x_overextrusion * 2,
 
 inner_offset = wall_thickness + x_overextrusion;
 
-nub_size = [3, 3, 3];
+nub_size = [5, 5, 5];
 
 temperature_diameter = 5.4;
 temperature_height = 2.9;
@@ -33,8 +33,8 @@ temperature_position = [33.5, 17.5, -temperature_height];
 // item[0] - position
 // item[1] - size
 // item[2] - color
-heart_rate = [[23.75, 15.25, -1.3], [6.1, 3.8, 1.3], "hotpink"];
-sd_card = [[7, 17.5, -3], [16, 17.5, 3], "silver"];
+heart_rate = [[24, 15.5, -1.3], [6.1+1, 3.8, 1.3], "hotpink"];
+sd_card = [[7, 17.5, -2], [16, 17.5, 2], "silver"];
 usb = [[0, 23, pcb_size.z], [7, 10, 4], "gray"];
 jumpers = [[23, pcb_size.y-11, -2], [5, 11, 2], "white"];
 nrf = [[pcb_size.x-20, (pcb_size.y-11)/2, -2], [20, 11, 2], "yellow"];
@@ -90,7 +90,7 @@ cube_cutouts =
      ];
 
 // A set of two spaced nubs that can hold a watch pin
-module watch_nubs(strap_width=20, pin_hole_diameter=1) {
+module watch_nubs(strap_width=20, pin_hole_diameter=1.5) {
     module nub() {
         translate([strap_width/2, 0, 0])
         difference() {
@@ -133,10 +133,10 @@ module enclosure_body() {
             enclosure_cutouts();
     }
     // TODO
-    // translate([outer_size.x/2, -nub_size.y, -nub_size.z/2])
-    //     watch_nubs();
-    // translate([outer_size.x/2, outer_size.y, -nub_size.z/2])
-    //     watch_nubs();
+    translate([outer_size.x/2, -nub_size.y, 0])
+        watch_nubs();
+    translate([outer_size.x/2, outer_size.y, 0])
+        watch_nubs();
 }
 
 module main_board() {
