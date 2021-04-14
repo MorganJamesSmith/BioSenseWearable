@@ -3,11 +3,10 @@ The enclosure was difficult to construct for multiple reasons.  In order to
 minimize the size of the PCB, we decided to forgo traditional mounting holes.
 Additionally, we avoided using adhesive to mount the PCB in order to maintain
 easy access for debugging and repair purposes.  This means the enclosure needed
-tight tolerances around the PCB to prevent horizontal movement.  Vertical
-movement can be easily countered by sandwiching the PCB between the bottom and
-top half of the enclosure.  Additionally, the sensors mounted on the bottom of
-the PCB need to be a precise distance away from the users wrist.  This means
-the thickness of the bottom of the enclosure needed to be accurately tuned.
+tight tolerances around the PCB to prevent horizontal and vertical movement.
+Additionally, the sensors mounted on the bottom of the PCB need to be a precise
+distance away from the users wrist.  This means the thickness of the bottom of
+the enclosure needed to be accurately tuned.
 
 To add difficulty to the situation, the enclosure was manufactured by a (rather
 cheap) desktop FDM 3D printer.  These printers are known for over extruding
@@ -38,4 +37,22 @@ scripting language which is executed to produce 3D printable files.  Since
 every usage of a parameter is written out explicitly, it is easy to determine
 all the valid values for the parameters.
 
-The model can be seen in figure \ref{fig:enclosure} in the appendix.
+In the end, 7 iterations where needed to achieve the final enclosure. The 3D
+render of the result can bee seen in Figure \ref{fig:enclosure} and the final
+fabricated enclosure can be seen in Figure \ref{fig:enclosure-fab}.  Although
+the board is held in place solely using friction, it is secure enough to stay in
+place even during a rigorous jog while wearing the device.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{images/enclosure.png}
+\caption{Enclosure Render}
+\label{fig:enclosure}
+\end{figure}
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=\textwidth,height=\textheight,keepaspectratio]{images/biosense.jpg}
+\caption{Fabricated Enclosure with watch straps and a board installed}
+\label{fig:enclosure-fab}
+\end{figure}
