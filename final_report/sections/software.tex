@@ -6,13 +6,11 @@ microcontroller we are using. We are also using some higher level components
 from the nRF52 SDK such as the USB CDC-ACM stack, a FAT32 filesystem driver and
 Nordic's soft device S140 which is a Bluetooth LE peripheral stack.
 
-These third party components will be used by the software we wrote ourselves
+These third party components are be used by the software we wrote ourselves
 which includes the drivers for all of our sensors (IMU, optical heart rate
 sensor, air quality sensor and UV light sensor) as well as the signal processing
 code required to derive a heart rate from the raw data we receive from our
-optical heart rate sensor. While we plan to use a third party file system
-implementation we will still need to write the code that allows blocks to be
-written to and read from an SD card over an SPI interface.
+optical heart rate sensor.
 
 At the application layer we have three modules. Our data logging service is
 responsible for most of the operation of our device and continually collects
