@@ -36,13 +36,13 @@ consists of an initialization section followed by an infinite main loop.
 Our code is separated in to a number of software modules (as shown in figure
 \ref{fig:fw_block_diag}). The software modules that we wrote have an
 initialization function which is called once on system startup. Some of our
-firmware module are entirely interrupt based, but many have a service function
+firmware modules are entirely interrupt based, but many have a service function
 which is run in each iteration of the main loop.
 
 Figure \ref{fig:fw_flow} shows the flow of our firmware. We start with a number
 of initialization tasks before starting to loop through the service functions
 for our modules. Each service function will check if there is any work to be
-done for a specific module and start and tasks that are ready to begin. After
+done for a specific module and start tasks that are ready to begin. After
 each iteration of the main loop the wait for interrupt instruction is used to
 cause the processor to enter a sleep mode until an interrupt occurs. We have a
 timer configured to generate interrupts every millisecond to increment a count
@@ -57,7 +57,7 @@ processor will sleep for at most one millisecond at a time.
 \end{figure}
 
 The super loop architecture is a cooperative multitasking system. This makes it
-important that the service function which are called in the main loop do not
+important that the service functions which are called in the main loop do not
 block for long periods. If a service function was to block it would prevent the
 other software modules on the system from operating correctly. In order to meet
 this requirement our service functions are written as state machines. Modules
@@ -77,14 +77,14 @@ blob which is flashed to the microcontroller separately from the application
 software. The soft device takes ownership of number of microcontroller
 peripherals including the radio hardware, clock and power management peripherals,
 multiple timers, non-volatile memory controller and cryptography accelerators.
-The soft device schedules itself independently of the application using on of
+The soft device schedules itself independently of the application using one of
 the microcontroller's real time clocks and application software interacts with
 the soft device using supervisor calls.
 
 All interrupts are received by a piece of code called the master boot record
 (MBR). The MBR then forwards them to the soft device if there is one installed
 on the microcontroller. The soft device uses some interrupts for its own
-purposes, interrupts which the soft device does not use are forwarded to the
+purposes, and interrupts which the soft device does not use are forwarded to the
 application. Nordic Semiconductor specifies that this forwarding process adds
 less than three microseconds of latency to peripheral interrupts which are to
 handled by the application.
@@ -106,12 +106,12 @@ that are not time critical.
 \label{fig:fw_int_prio}
 \end{figure}
 
-Most of our application interrupts are configure at priority levels two and
+Most of our application interrupts are configured at priority levels two and
 three. Our interrupts are grouped into SysTick and and serial interface
 interrupts at priority two and USB and ADC interrupts at priority three.
 
 The priority two interrupts are those which we expect to be very short. The
-SysTick interrupt is at a high priority to avoid help avoid hitter in our system
+SysTick interrupt is at a high priority to avoid help avoid jitter in our system
 time and the serial interrupts are placed at priority two to achieve the best
 possible serial interface performance.
 
@@ -127,8 +127,8 @@ Figure \ref{fig:fw_data_flow} illustrates the flow of data through the data
 logging service. Each sensor driver pushes data to the data logging service at a
 rate selected based on the type of data that the sensor produces. Every sample
 of sensor data is wrapped in a header that indicates the current system time
-when the value was collected, the type of data and the length of the data and
-the resulting packet is added to the data logging service buffer. Approximately
+when the value was collected, the type of data, and the length of the data.
+The resulting packet is then added to the data logging service buffer. Approximately
 once per second the data logging buffer will be written to the SD card using the
 filesystem driver.
 
