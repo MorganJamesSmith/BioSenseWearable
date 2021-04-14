@@ -49,7 +49,7 @@ Time spend sleeping per iteration of main loop & 931.475 microseconds & 98\% of
 results are within 872 microseconds of the mean & 2.14e-4 & 994.624 microseconds
 \\
 Time to perform a filesystem write operation & 16.722 milliseconds & 98\% of
-results are within 31.484 microseconds of the mean & 1.362e-4 & 270.318
+results are within 31.5 microseconds of the mean & 1.362e-4 & 270.318
 milliseconds \\
 Time between data-logging write operations & 1.196 seconds & 98\% of results are
 within 32 milliseconds of the mean & 9.156e-3 & 1.378 seconds \\
@@ -57,12 +57,12 @@ Time to perform an ADC sweep (tigger to data logging call) & 154.842
 microseconds & 98\% of results are within 9 microseconds of the mean & 3.359e-4
 & 14 milliseconds \\
 Time between ADC interrupt and handling of ADC results in main loop & 17.435
-microseconds & 98\% of results are within 12.934 microseconds of the mean &
+microseconds & 98\% of results are within 13 microseconds of the mean &
 4.171e-4 & 15.854 milliseconds \\
 Time to retrieve IMU sample & 42.009 microseconds & 98\% of results are within
-1.249 microseconds of the mean & 2.801e-5 & 1 millisecond \\
+1.25 microseconds of the mean & 2.801e-5 & 1 millisecond \\
 Time between IMU samples & 101.059 milliseconds & 98\% of results are within
-60.184 microseconds of the mean & 3.005e-3 & 288.711 milliseconds \\
+60.25 microseconds of the mean & 3.005e-3 & 288.711 milliseconds \\
 \bottomrule
 
 \caption{Timing Results}
@@ -289,7 +289,20 @@ Maximum assembled width & 4.8 cm \\
 Maximum assembled thickness & 1 cm \\
 \bottomrule
 
-\caption{Physical Dimentions}
-\label{table:physical-dimentions}
+\caption{Physical Dimensions}
+\label{table:physical-dimensions}
 \end{longtable}
+
+
+\subsection{Cost}
+
+Our prototypes cost approximately \$100 to manufacture. We spend \$49.58 on
+five copies of our printed circuit board (\$10.10 in manufacturing costs and
+\$39.49 in shipping costs). The components for each copy of the board cost
+approximately \$88. This does not include the cost of the air quality sensor we 
+were planning to use as we where unable to purchase it, the air quality sensor
+would added approximately an additional \$15 per copy of the board assembled.
+
+Appendix \ref{sec:appendix_bom} contains a list of components used in the
+device.
 
