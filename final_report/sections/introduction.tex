@@ -81,13 +81,10 @@ including skin temperature and heart rate.
 The solution provided by this project is a wrist mounted wearable health 
 monitoring device. The device provides a sensor platform that is suitable for 
 early detection of disease. The included sensors can measure skin temperature, 
-ambient temperature, heart rate, pulse oximetry, air quality, UV light, and motion.  
-The software for UV light, heart rate and pulse oximetry were not completed and
-the air quality sensor was never acquired due to availability issues. The electronic
-components fit into a comfortable, wearable 3D printed plastic enclosure.
+ambient temperature, motion, heart rate, pulse oximetry, UV light, and air quality.  
+The electronic components fit into a comfortable, wearable 3D printed plastic enclosure.
 The device is powered by a lithium polymer battery which can be recharged
-through the USB-C connector.
-% \todo{missing UV light sensor?}
+through the USB-C connector.  The final cost of the full device ends up being \costofboard.
 
 The wearable device has limited user interfaces consisting of an indicator
 LED for power, notifications, and debugging. It also features a power button
@@ -97,9 +94,9 @@ USB. It is limited to simply receiving and decoding data received from the
 wearable device, and exporting it in an analyzable format such as a csv or json 
 file.
 
-The device will store the collected sensor information to a micro SD card
+The device stores the collected sensor information to a micro SD card
 in the device which is then read back when requested via the companion software.
-The SD card will be replaceable, and the capacity of the card used will dictate
+The SD card is replaceable, and the capacity of the card used will dictate
 how long the device can record data before needing to off load to the companion
 software.
 
@@ -125,10 +122,10 @@ on top of the work we have done for this project.
 
 Our team successfully created a wrist mounted wearable health monitoring device
 that is capable of measuring skin temperature, ambient temperature, and motion.
-The PCB accommodate additional sensors for UV light, air quality
-and pulse oximetry, however the software drivers for these were not completed 
-and the hardware for the air quality sensor could not be obtained because of 
-availability issues. The hardware is fully functional and correctly
+The hardware for heart rate, pulse oximetry, and UV light sensors are in place
+however the software drivers were not completed in time. 
+The air quality sensor was never available so the driver was not started and was
+never populated on the PCB. The hardware is fully functional and correctly
 connects all the selected components together.  The software is able to connect
 the device to companion software located on a separate device using Bluetooth
 and USB.  We are able to log motion and temperature sensor to the SD Card.

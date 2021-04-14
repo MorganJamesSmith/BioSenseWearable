@@ -2,11 +2,15 @@ Early detection of illness could limit the spread of infection, save lives, and
 save money.  One possible method of early detection is to continuously measure
 someones physiological state.  Here we detail our creation of such a continuous
 biometric measurement device.  The device is in the form factor of a watch and
-contains sensors to measure skin temperature, ambient temperature, and motion.  
-The hardware layout for pulse oximetry, and UV light was also completed and 
-hardware assembled for pulse oximetry but the drivers were not completed on time.
+contains sensors to measure skin temperature, ambient temperature, motion, 
+heart rate, pulse oximetry, and UV light. The software drivers for UV light,
+heart rate and pulse oximetry were not completed in time so data is only
+recorded from motion and temperature sensors. The PCB also supports an air
+quality sensor which was never populated due to lack of availability.
 The device is powered by lithium ion battery that is charged
-through a USB port and lasts two days of normal operation.  Sensor data can be
+through a USB port and lasts two days of normal operation.  
+The device with sensors, enclosure, battery, and wrist strap costs a total of
+\costofboard.  Sensor data can be
 obtained through the USB port or Bluetooth by using the appropriate companion
 software.  The companion software can then produce graphs to display the output
 of the sensors.  The focus of this solution is on the collection of biometrics
