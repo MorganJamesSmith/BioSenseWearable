@@ -25,6 +25,7 @@
 \usepackage{pdflscape}
 \usepackage{longtable}
 \usepackage{gnuplottex}
+\usepackage[toc,page,title]{appendix}
 
 \title{BioSense Wearable}
 \author{Samuel Dewan, Tadhg Mcdonald-Jensen, Jason Nyentap, and Morgan Smith}
@@ -214,7 +215,7 @@ Supervisor: Dr. Paulo Garcia
 \bibliographystyle{plain}
 \clearpage
 
-\appendix
+\begin{appendices}
 \section{Timelines}
 \label{sec:appendix-timelines}
 \input{sections/timeline_appendix.tex}
@@ -231,73 +232,6 @@ Supervisor: Dr. Paulo Garcia
 \input{sections/pictures_appendix.tex}
 \end{landscape}
 \clearpage
-
-%
-%   Front matter:
-%       - Title page
-%       - Abstract?
-%       - ToC
-%       - Lists of figures and tables?
-%   1 - Overview:
-%       - Background section
-%       - Current overview section
-%       - Scope section
-%   2 - The Engineering Project
-%       - Health and Safety
-%       - Engineering Professionalism
-%       - Project Management
-%       - Justification of Suitability for Degree Program
-%       - Individual Contributions
-%           - Project Contributions
-%           - Report Contributions
-%   3 - State of the Art
-%   4 - Hardware Implementation
-%       - Component choices
-%       - Hardware Tools
-%   5 - Software Implementation
-%       - Software Tools
-%   6 - Enclosure
-%   7 - Test Plan
-%   8 - Challenges
-%   9 - Timeline
-%   10 - Reflections
-%   11 - References
-%   A - Schematics
-%   B - Source code?
-%   C - Enclosure Renders
-%   D - Pictures
-%
-
-%
-%   TODO:
-%       Morgan:
-%           - DONE: Heart rate software
-%           - DONE: Enclosure
-%           - Testing
-%           - DONE: Timeline
-%           - DONE: Reflection
-%       Jason:
-%           - Copy stuff from proposal repo
-%               - DONE: Overview
-%               - DONE: Suitability for degree program
-%               - DONE: State of the art
-%               - DONE: Some hardware challenges
-%               - DONE: Challenges with build system
-%               - DONE: Copy software diagrams from progress report
-%           - DONE: Hardware section
-%           - DONE: Bluetooth software
-%           - DONE: Bluetooth + USB challenge
-%           - DONE: Update schematics
-%       Tadhg:
-%           - Section 2 stuff:
-%               - Health and safety
-%               - Engineering Profesionalism
-%               - Project Managment
-%       Sam:
-%           - Hardware assembly challenges
-%           - Parts availability challenges
-%           - Assemble appendicies
-%           - Try to flesh out software design a little more
-%
+\end{appendices}
 
 \end{document}
