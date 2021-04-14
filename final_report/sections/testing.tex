@@ -119,7 +119,7 @@ unset key
 set style fill solid 0.5
 set xrange [Min:Max]
 
-%plot 'data/data_log_write_trimmed' using (bin($2)):(1.0) smooth freq with boxes
+plot 'data/data_log_write_trimmed' using (bin($2)):(1.0) smooth freq with boxes
 \end{gnuplot}
 
 \caption{Distribution of filesystem write operation lengths.}

@@ -121,7 +121,7 @@ ANCILLARYFILES =
 MOSTLYCLEANFILES =
 
 # Additional files to clean.
-CLEANFILES =
+CLEANFILES = final-report.gnuploterrors final-report-gnuplottex-fig1.pdf final-report-gnuplottex-fig1.gnuplot
 
 # Additional directories to mostly-clean.
 MOSTLYCLEANDIRS =
@@ -169,7 +169,7 @@ WGET =
 CURL =
 
 # Command options.
-LATEX_OPT = -interaction=nonstopmode -halt-on-error
+LATEX_OPT = -interaction=nonstopmode -halt-on-error -shell-escape
 PDFLATEX_DVI_OPT = -output-format=dvi
 DVIPS_OPT = -Ppdf -z
 DVIPDF_OPT =
